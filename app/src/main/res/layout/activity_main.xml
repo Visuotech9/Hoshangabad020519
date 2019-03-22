@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registration_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true"
+    android:scrollbars="none"
+    android:scrollIndicators="none"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/mpgovt_icon"
+            android:layout_height="150dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:text="Madhya Pradesh,Government"
+            android:textSize="20dp"
+            android:textColor="@color/DarkRed"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="(Hoshangabad)"
+            android:textSize="20dp"
+            android:textColor="@color/DarkRed"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content" />
+
+
+            <!--android:layout_alignParentTop="true"/>-->
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginTop="20dp"
+            android:paddingRight="5dp"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:id="@+id/lay1"
+                android:layout_weight=".5"
+                android:layout_marginLeft="7dp"
+                android:background="@color/lightyellow"
+                android:layout_height="140dp"
+                android:layout_marginTop="5dp">
+                <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/bg_circular_imageview"
+                    android:layout_gravity="center_horizontal">
+
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:layout_width="65dp"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_marginTop="2.5dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/election_image"
+                        app:civ_border_color="@color/Gray"
+                        app:civ_border_width="0dp"
+                        app:civ_shadow="true"
+                        app:civ_shadow_radius="0"
+                        app:civ_shadow_color="@color/colorPrimary"/>
+
+                </LinearLayout>
+                <!--<View-->
+                <!--android:background="@color/Gray_light"-->
+                <!--android:layout_width = "fill_parent"-->
+                <!--android:layout_height="1dip"-->
+                <!--android:layout_centerVertical ="true"></View>-->
+
+
+                <TextView
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:padding="5dp"
+                    android:gravity="center_vertical"
+                    android:text="About Hoshangabad"
+                    android:background="@color/yellow"
+                    android:textAlignment="center"
+                    android:hint="Electronics"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:id="@+id/lay2"
+                android:layout_marginLeft="7dp"
+                android:background="@color/lightnevy_blue"
+                android:layout_height="140dp"
+                android:layout_marginTop="5dp">
+                <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/bg_circular_imageview"
+                    android:layout_gravity="center_horizontal">
+
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:layout_width="65dp"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_marginTop="2.5dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/election_image"
+                        app:civ_border_color="@color/Gray"
+                        app:civ_border_width="0dp"
+                        app:civ_shadow="true"
+                        app:civ_shadow_radius="0"
+                        app:civ_shadow_color="@color/colorPrimary"/>
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:padding="5dp"
+                    android:gravity="center_vertical"
+                    android:text="Collector Express"
+                    android:textAlignment="center"
+                    android:background="@color/nevy_blue"
+                    android:hint="Electronics"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:paddingRight="5dp"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:id="@+id/lay3"
+                android:background="@color/lightGreen"
+                android:layout_weight=".5"
+                android:layout_marginLeft="7dp"
+                android:layout_height="140dp"
+                android:layout_marginTop="5dp">
+                <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/bg_circular_imageview"
+                    android:layout_gravity="center_horizontal">
+
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:layout_width="65dp"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_marginTop="2.5dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/election_image"
+                        app:civ_border_color="@color/Gray"
+                        app:civ_border_width="0dp"
+                        app:civ_shadow="true"
+                        app:civ_shadow_radius="0"
+                        app:civ_shadow_color="@color/colorPrimary"/>
+
+                </LinearLayout>
+                <!--<View-->
+                <!--android:background="@color/Gray_light"-->
+                <!--android:layout_width = "fill_parent"-->
+                <!--android:layout_height="1dip"-->
+                <!--android:layout_centerVertical ="true"></View>-->
+
+                <TextView
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:padding="5dp"
+                    android:gravity="center_vertical"
+                    android:text="Jansunwai"
+                    android:textAlignment="center"
+                    android:background="@color/Green"
+                    android:hint="Electronics"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:id="@+id/lay4"
+                android:layout_marginLeft="7dp"
+                android:background="@color/lightDarkRed"
+                android:layout_height="140dp"
+                android:layout_marginTop="5dp">
+                <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/bg_circular_imageview"
+                    android:layout_gravity="center_horizontal">
+
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:layout_width="65dp"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_marginTop="2.5dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/election_image"
+                        app:civ_border_color="@color/Gray"
+                        app:civ_border_width="0dp"
+                        app:civ_shadow="true"
+                        app:civ_shadow_radius="0"
+                        app:civ_shadow_color="@color/colorPrimary"/>
+
+                </LinearLayout>
+                <!--<View-->
+                <!--android:background="@color/Gray_light"-->
+                <!--android:layout_width = "fill_parent"-->
+                <!--android:layout_height="1dip"-->
+                <!--android:layout_centerVertical ="true"></View>-->
+
+                <TextView
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:padding="5dp"
+                    android:gravity="center_vertical"
+                    android:text="Directory"
+                    android:background="@color/DarkRed"
+                    android:textAlignment="center"
+                    android:hint="Electronics"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginBottom="10dp"
+            android:paddingRight="5dp"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:id="@+id/lay5"
+                android:layout_weight=".5"
+                android:layout_marginLeft="7dp"
+                android:background="@color/lightyellow"
+                android:layout_height="140dp"
+                android:layout_marginTop="5dp">
+                <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/bg_circular_imageview"
+                    android:layout_gravity="center_horizontal">
+
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:layout_width="65dp"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_marginTop="2.5dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/election_image"
+                        app:civ_border_color="@color/Gray"
+                        app:civ_border_width="0dp"
+                        app:civ_shadow="true"
+                        app:civ_shadow_radius="0"
+                        app:civ_shadow_color="@color/colorPrimary"/>
+
+                </LinearLayout>
+                <!--<View-->
+                <!--android:background="@color/Gray_light"-->
+                <!--android:layout_width = "fill_parent"-->
+                <!--android:layout_height="1dip"-->
+                <!--android:layout_centerVertical ="true"></View>-->
+
+
+                <TextView
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:padding="5dp"
+                    android:gravity="center_vertical"
+                    android:text="Election"
+                    android:background="@color/yellow"
+                    android:textAlignment="center"
+                    android:hint="Electronics"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:id="@+id/lay6"
+                android:layout_marginLeft="7dp"
+                android:background="@color/lightnevy_blue"
+                android:layout_height="140dp"
+                android:layout_marginTop="5dp">
+                <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/bg_circular_imageview"
+                    android:layout_gravity="center_horizontal">
+
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:layout_width="65dp"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_marginTop="2.5dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/election_image"
+                        app:civ_border_color="@color/Gray"
+                        app:civ_border_width="0dp"
+                        app:civ_shadow="true"
+                        app:civ_shadow_radius="0"
+                        app:civ_shadow_color="@color/colorPrimary"/>
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:padding="5dp"
+                    android:gravity="center_vertical"
+                    android:text="Directory"
+                    android:textAlignment="center"
+                    android:background="@color/nevy_blue"
+                    android:hint="Electronics"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+</ScrollView>

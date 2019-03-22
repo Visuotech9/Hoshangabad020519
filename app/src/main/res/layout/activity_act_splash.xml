@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient"
+    android:gravity="center_vertical"
+    android:id="@+id/lin_spl_layout"
+    android:orientation="vertical"
+    tools:context=".Activities.Act_splash">
+
+    <LinearLayout
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:gravity="center_horizontal"
+        android:background="@drawable/bg_circular_imageview"
+        android:layout_gravity="center_horizontal">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="100dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_marginTop="10dp"
+            android:layout_height="100dp"
+            android:src="@drawable/voting"
+            app:civ_border_color="@color/Gray"
+            app:civ_border_width="0dp"
+            app:civ_shadow="true"
+            app:civ_shadow_radius="0"
+            app:civ_shadow_color="@color/colorPrimary"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text="Election"
+        android:textSize="30dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/White"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/White"
+        android:layout_height="1dp"></View>
+
+
+</LinearLayout>

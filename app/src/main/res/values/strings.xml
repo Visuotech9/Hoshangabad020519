@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Hoshangabad</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="google_maps_api_key">AIzaSyARh7mWnFM-LDcmXylbmpr47LjEHX_5RO0</string>
+    <string name="title_activity_maps">Map</string>
+</resources>

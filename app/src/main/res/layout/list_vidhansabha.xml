@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/lin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight=".7"
+                android:orientation="vertical"
+                android:paddingLeft="15dp"
+                tools:ignore="Suspicious0dp">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Name"
+                    android:text="Mr khanna kumr"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/tv_designation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Designation"
+                    android:text="Tehsildar"
+                    android:textColor="@color/Black"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/tv_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Email"
+                    android:text="tehsildar@gmail.com"
+                    android:textColor="#403f3f"
+                    android:textSize="12dp" />
+
+
+                <TextView
+                    android:id="@+id/tv_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Mobile"
+                    android:text="4567876543"
+                    android:textColor="#403f3f"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/tv_resp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Mobile"
+                    android:text="hsdushadisdh sdsjdjsd sdasid"
+                    android:textColor="#403f3f"
+                    android:textSize="12dp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:gravity="center_vertical"
+                android:layout_weight=".15"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                tools:ignore="Suspicious0dp">
+
+                <LinearLayout
+                    android:id="@+id/lay_message"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/bg_circular_imageview"
+                    android:layout_gravity="center_horizontal">
+
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:layout_width="25dp"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_marginTop="7.5dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/message_icon"
+                        app:civ_border_width="0dp"
+                        app:civ_shadow="true"
+                        app:civ_shadow_radius="0"
+                        app:civ_shadow_color="@color/colorPrimary"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:gravity="center_vertical"
+                android:layout_weight=".15"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                tools:ignore="Suspicious0dp">
+
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/lay_call"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/bg_circular_imageview"
+                    android:layout_gravity="center_horizontal">
+
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:layout_width="25dp"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_marginTop="7.5dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/call_icon"
+                        app:civ_border_width="0dp"
+                        app:civ_shadow="true"
+                        app:civ_shadow_radius="0"
+                        app:civ_shadow_color="@color/colorPrimary"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <View android:id="@+id/separator"
+        android:background="@color/lightgrey"
+        android:layout_width = "fill_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_height="1dip"
+        android:layout_centerVertical ="true"
+        android:layout_alignParentTop="true"/>
+</LinearLayout>
+
