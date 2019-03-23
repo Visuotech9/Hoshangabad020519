@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import com.visuotech.hoshangabad.Activities.Election.Act_election;
 import com.visuotech.hoshangabad.MarshMallowPermission;
 import com.visuotech.hoshangabad.Model.Designation_Details;
@@ -33,7 +34,8 @@ import java.util.ArrayList;
 
 public class Act_polling_station extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     LinearLayout container;
-    Spinner spinner_station, spinner_designation;
+//    Spinner spinner_station, spinner_designation;
+    SearchableSpinner spinner_station;
     String station, designation, booth_name, mobile, name, desig, lat, log;
     Button btn_submit;
     int designation_no;
@@ -178,10 +180,15 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
                     booth_list1=baseRequest.getDataList(jsonArray,PollingBooth.class);
 
                     for (int i=0;i<booth_list1.size();i++){
-                        booth_list.add(booth_list1.get(i).getEleBoothName());
+                        int j=i+1;
+                        booth_list.add(j+"- "+booth_list1.get(i).getEleBoothName());
 //                       department_id.add(department_list1.get(i).getDepartment_id());
                     }
-                    ArrayAdapter adapter_booth = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list);
+//                    ArrayAdapter adapter_booth = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list);
+//                    adapter_booth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    spinner_station.setAdapter(adapter_booth);
+
+                    ArrayAdapter<CharSequence> adapter_booth = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_spinner_item,booth_list);
                     adapter_booth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_station.setAdapter(adapter_booth);
 

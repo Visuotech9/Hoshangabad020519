@@ -36,6 +36,7 @@
             android:layout_width="match_parent"
             android:text="(Hoshangabad)"
             android:textSize="20dp"
+            android:layout_marginBottom="40dp"
             android:textColor="@color/DarkRed"
             android:gravity="center_horizontal"
             android:layout_height="wrap_content" />
@@ -49,6 +50,7 @@
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:weightSum="1"
+            android:visibility="gone"
             android:layout_marginTop="20dp"
             android:paddingRight="5dp"
             android:layout_height="wrap_content">
@@ -161,6 +163,8 @@
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:weightSum="1"
+            android:visibility="gone"
+
             android:paddingRight="5dp"
             android:layout_height="wrap_content">
 
@@ -370,7 +374,7 @@
                     android:textSize="16sp"
                     android:padding="5dp"
                     android:gravity="center_vertical"
-                    android:text="Directory"
+                    android:text="Notification"
                     android:textAlignment="center"
                     android:background="@color/nevy_blue"
                     android:hint="Electronics"

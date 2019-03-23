@@ -13,9 +13,6 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:background="@drawable/gradient"
             android:layout_height="match_parent">
 
 
@@ -25,6 +22,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="4dp"
                 app:cardUseCompatPadding="false"
@@ -58,11 +57,21 @@
                         android:orientation="horizontal">
 
 
-                        <Spinner
+                        <!--<Spinner-->
+                            <!--android:id="@+id/spinner_station"-->
+                            <!--android:paddingLeft="20dp"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"/>-->
+
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                             android:id="@+id/spinner_station"
-                            android:paddingLeft="20dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:paddingTop="10dp"
+                            android:textColor="#000000"
+                            android:paddingBottom="10dp"
+                            android:layout_height="match_parent"
+                            />
+
                         <!--android:entries="@array/user_type"-->
 
 

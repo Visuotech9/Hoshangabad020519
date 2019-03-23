@@ -23,6 +23,7 @@ import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
 import com.visuotech.hoshangabad.retrofit.RequestReciever;
+import com.visuotech.hoshangabad.retrofit.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,9 +40,9 @@ public class Frag_list extends Fragment {
     String AC;
     String booth_name;
     EditText inputSearch;
+    Activity activity;
 
     Context context;
-    Activity activity;
     SessionParam sessionParam;
     MarshMallowPermission marshMallowPermission;
     private BaseRequest baseRequest;
@@ -70,13 +71,15 @@ public class Frag_list extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
        View view = inflater.inflate(R.layout.fragment_frag_list, container, false);
-
+//        activity=this;
         rv = (RecyclerView) view.findViewById(R.id.rv_list);
         inputSearch = (EditText) view.findViewById(R.id.inputSearch);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(linearLayoutManager);
         rv.setItemAnimator(new DefaultItemAnimator());
+//        Utility.hideKeyBoard(activity);
         Apigetboothlist();
+
 
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override

@@ -119,7 +119,7 @@ public class Act_Polling_list extends AppCompatActivity {
 
         adapter.addFragment(frag_list, "List");
         adapter.addFragment(frag_map, "Map");
-        adapter.addFragment(frag_location, "Location");
+        adapter.addFragment(frag_location, "Queue status");
 //        adapter.addFragment(new Frag_Send_Gift(), "Send Items");
         viewPager.setAdapter(adapter);
     }

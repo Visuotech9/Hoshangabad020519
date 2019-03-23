@@ -4,6 +4,7 @@ package com.visuotech.hoshangabad.Adapter;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -66,6 +67,7 @@ public class Ad_designation_details extends RecyclerView.Adapter<Ad_designation_
 
 
         holder.tv_designation.setText(designation_list[i]);
+        holder.tv_name.setHint(designation_list[i]+" "+"Name");
 
 
         if (i == 0) {
@@ -139,6 +141,7 @@ public class Ad_designation_details extends RecyclerView.Adapter<Ad_designation_
             }
 
         });
+
 
 
 

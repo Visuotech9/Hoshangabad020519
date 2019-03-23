@@ -3,6 +3,7 @@ package com.visuotech.hoshangabad.Adapter;
 
 
         import android.Manifest;
+        import android.content.ActivityNotFoundException;
         import android.content.Context;
         import android.content.Intent;
         import android.content.pm.PackageManager;
@@ -96,6 +97,20 @@ public class Ad_Vidhansabha extends RecyclerView.Adapter<Ad_Vidhansabha.MyViewHo
             }
 
         });
+        holder.tv_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("POSITION>>>>", holder.tv_mobile.getText().toString());
+                try{
+                    Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + holder.tv_email.getText().toString()));
+                    context.startActivity(intent);
+                }catch(ActivityNotFoundException e){
+                    //TODO smth
+                }
+            }
+
+        });
+
 
     }
 
