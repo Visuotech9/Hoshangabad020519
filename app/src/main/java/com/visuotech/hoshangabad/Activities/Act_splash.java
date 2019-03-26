@@ -2,7 +2,9 @@ package com.visuotech.hoshangabad.Activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -99,7 +101,8 @@ public class Act_splash extends AppCompatActivity {
             case READ_PHONE_STATE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     permissionPhone();
-
+                }else{
+                    alertDialog();
                 }
                 break;
         }
@@ -132,6 +135,21 @@ public class Act_splash extends AppCompatActivity {
 
         baseRequest.callAPILoginStatus(1,"http://collectorexpress.in/",device_id_);
 
+    }
+    private void alertDialog() {
+        new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_warning)
+                .setTitle("Attention")
+                .setCancelable(false)
+                .setMessage("You need grant READ_PHONE_STATE permission for device id.")
+                .setPositiveButton("Continue", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        permissionPhone();
+                    }
+                })
+                .show();
     }
 
 

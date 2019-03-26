@@ -1,6 +1,7 @@
-package com.visuotech.hoshangabad.Activities.Election.Pipariya;
+package com.visuotech.hoshangabad.Activities.Election;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,80 +11,109 @@ import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.visuotech.hoshangabad.Activities.Election.Act_election;
-import com.visuotech.hoshangabad.Activities.Election.Hoshangabad.Act_hoshangabad;
-import com.visuotech.hoshangabad.Activities.Election.Seoni_malwa.Act_polling_station;
-import com.visuotech.hoshangabad.Activities.Election.Seoni_malwa.Act_vidhansabha;
+import com.visuotech.hoshangabad.Adapter.Ad_Vidhansabha;
+import com.visuotech.hoshangabad.Adapter.Ad_district_officers;
+import com.visuotech.hoshangabad.MarshMallowPermission;
+import com.visuotech.hoshangabad.Model.District_officers;
+import com.visuotech.hoshangabad.Model.Vidhanasabha_list;
 import com.visuotech.hoshangabad.R;
+import com.visuotech.hoshangabad.SessionParam;
+import com.visuotech.hoshangabad.retrofit.BaseRequest;
+import com.visuotech.hoshangabad.retrofit.RequestReciever;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Act_pipariya extends AppCompatActivity {
-    LinearLayout lay1,lay2,lay3,lay4,lay5,lay6;
+public class Act_district_officers extends AppCompatActivity {
     LinearLayout container;
-    String AC="139- Pipariya";
+    LinearLayoutManager linearLayoutManager;
+    RecyclerView rv;
+    ArrayList<District_officers> district_officers_list1;
+    ArrayList<String>district_officers_list=new ArrayList<>();
+    Ad_district_officers adapter;
+    String AC;
+    String booth_name;
+    EditText inputSearch;
+    String designation,samitee_name;
     public boolean datafinish = false;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
-
+    Context context;
+    Activity activity;
+    SessionParam sessionParam;
+    MarshMallowPermission marshMallowPermission;
+    private BaseRequest baseRequest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act_election);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor((Color.parseColor("#FFFFFF")));
-        getSupportActionBar().setTitle("139- Pipariya");
+        getSupportActionBar().setTitle("District officers");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        context=this;
 
         container = (LinearLayout)findViewById(R.id.container);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View rowView = inflater.inflate(R.layout.contain_main_seonimalwa, null);
+        final View rowView = inflater.inflate(R.layout.activity_act_district_officers, null);
 
         permission();
 
-        lay1=rowView.findViewById(R.id.lay1);
-        lay2=rowView.findViewById(R.id.lay2);
-        lay3=rowView.findViewById(R.id.lay3);
+        rv = (RecyclerView) rowView.findViewById(R.id.rv_list);
+        inputSearch = (EditText) rowView.findViewById(R.id.inputSearch);
+        linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.setItemAnimator(new DefaultItemAnimator());
 
         container.addView(rowView, container.getChildCount());
 
-        lay1.setOnClickListener(new View.OnClickListener() {
+
+        Intent intent=getIntent();
+        designation=intent.getStringExtra("designation");
+        AC=intent.getStringExtra("CITY");
+
+
+
+//        Apigetboothlist();
+
+        inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Act_pipariya.this, Act_polling_station.class);
-                i.putExtra("CITY",AC);
-                startActivity(i);
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-        });
-        lay2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Act_pipariya.this, Act_vidhansabha.class);
-                i.putExtra("CITY",AC);
-                startActivity(i);
-            }
-        });
 
-        lay3.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Act_pipariya.this, Act_vidhansabha.class);
-                startActivity(i);
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //after the change calling the method and passing the search input
+                filter(editable.toString());
+            }
         });
+        ApigetVidhan_detail_list();
+
     }
 
     private void permission() {
@@ -140,7 +170,7 @@ public class Act_pipariya extends AppCompatActivity {
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(Act_pipariya.this)
+        new AlertDialog.Builder(Act_district_officers.this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
                 .setCancelable(false)
@@ -215,8 +245,76 @@ public class Act_pipariya extends AppCompatActivity {
 
     }
 
+    private void ApigetVidhan_detail_list(){
+        baseRequest = new BaseRequest(context);
+        baseRequest.setBaseRequestListner(new RequestReciever() {
+            @Override
+            public void onSuccess(int requestCode, String Json, Object object) {
+                try {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    JSONArray jsonArray=jsonObject.optJSONArray("user");
+
+                    district_officers_list1=baseRequest.getDataList(jsonArray,District_officers.class);
+
+//                    for (int i=0;i<sam_mem_list1.size();i++){
+//                        booth_list.add(sam_mem_list1.get(i).getEleBoothName());
+////                       department_id.add(department_list1.get(i).getDepartment_id());
+//                    }
+
+                    adapter=new Ad_district_officers(context,district_officers_list1);
+                    rv.setAdapter(adapter);
+
+//                    ArrayAdapter adapter_booth = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list);
+//                    adapter_booth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    spinner_station.setAdapter(adapter_booth);
+//
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int requestCode, String errorCode, String message) {
+
+            }
+            @Override
+            public void onNetworkFailure(int requestCode, String message) {
+
+            }
+        });
+        String remainingUrl2="/Election/Api2.php?apicall=district_officer_list";
+        baseRequest.callAPIGETData(1, remainingUrl2);
+    }
+
+    private void filter(String text) {
+        //new array list that will hold the filtered data
+        String[] designation_list2;
+        ArrayList<District_officers>district_officers_list=new ArrayList<>();
+
+        //looping through existing elements
+        for (int i=0;i<district_officers_list1.size();i++) {
+            if (district_officers_list1.get(i).getOfficer_name().toLowerCase().contains(text.toLowerCase())) {
+                District_officers vd = new District_officers();
+                vd.setOfficer_name(district_officers_list1.get(i).getOfficer_name());
+                vd.setOfficer_email(district_officers_list1.get(i).getOfficer_email());
+                vd.setOfficer_mobile(district_officers_list1.get(i).getOfficer_mobile());
+                vd.setOfficer_phone(district_officers_list1.get(i).getOfficer_phone());
+                vd.setOfficer_post(district_officers_list1.get(i).getOfficer_post());
+                vd.setOfficer_responsibility(district_officers_list1.get(i).getOfficer_responsibility());
+                district_officers_list.add(vd);
+            }
+        }
+
+        //calling a method of the adapter class and passing the filtered list
+        adapter.filterList(district_officers_list);
+    }
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i = new Intent(Act_pipariya.this, Act_election.class);
+        Intent i = new Intent(Act_district_officers.this, Act_election.class);
         startActivity(i);
         finish();
         return true;
@@ -225,7 +323,7 @@ public class Act_pipariya extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(Act_pipariya.this, Act_election.class);
+        Intent i = new Intent(Act_district_officers.this, Act_election.class);
         startActivity(i);
         finish();
     }

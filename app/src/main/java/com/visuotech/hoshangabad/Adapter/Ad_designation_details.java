@@ -14,6 +14,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,6 +75,8 @@ public class Ad_designation_details extends RecyclerView.Adapter<Ad_designation_
         if (i == 0) {
             holder.tv_name.setText(list.get(0).getElePZero());
             holder.tv_mobile.setText(list.get(0).getElePZeroMobile());
+//            holder.tv_mobile.setText(Html.fromHtml("<a href='tel:"+list.get(0).getElePZeroMobile())+"'>"+list.get(0).getElePZeroMobile()+"</a>"));
+//            holder.tv_mobile.setMovementMethod(LinkMovementMethod.getInstance());
 
         }
         if (i == 1) {

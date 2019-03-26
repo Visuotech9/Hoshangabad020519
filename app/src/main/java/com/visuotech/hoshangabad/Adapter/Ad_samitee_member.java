@@ -60,6 +60,7 @@ public class Ad_samitee_member extends RecyclerView.Adapter<Ad_samitee_member.My
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
 
         holder.tv_samitee.setText(samitee_name);
+        holder.tv_resp.setText(list.get(i).getMember_responsibility());
         holder.tv_name.setText(list.get(i).getMember_name());
         holder.tv_designation.setText(list.get(i).getMember_designation());
         holder.tv_mobile.setText(list.get(i).getMember_mobile());
@@ -104,7 +105,7 @@ public class Ad_samitee_member extends RecyclerView.Adapter<Ad_samitee_member.My
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
 
-        TextView tv_name,tv_designation,tv_mobile,tv_samitee;
+        TextView tv_name,tv_designation,tv_mobile,tv_samitee,tv_resp;
         LinearLayout lin_layout;
         CircleImageView iv_profile_image;
         LinearLayout lay_message,lay_call;
@@ -115,6 +116,7 @@ public class Ad_samitee_member extends RecyclerView.Adapter<Ad_samitee_member.My
             tv_designation =  itemView.findViewById(R.id.tv_designation);
             tv_mobile =  itemView.findViewById(R.id.tv_mobile);
             tv_samitee =  itemView.findViewById(R.id.tv_samitee);
+            tv_resp =  itemView.findViewById(R.id.tv_resp);
             lay_message =  itemView.findViewById(R.id.lay_message);
             lay_call =  itemView.findViewById(R.id.lay_call);
             lin_layout=itemView.findViewById(R.id.lin_layout);

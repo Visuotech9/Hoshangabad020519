@@ -6,25 +6,39 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Geocoder;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.util.Linkify;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.visuotech.hoshangabad.Activities.Election.Act_election;
+import com.visuotech.hoshangabad.Location.GPSTracker;
 import com.visuotech.hoshangabad.MarshMallowPermission;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class Act_home extends AppCompatActivity {
@@ -36,6 +50,8 @@ public class Act_home extends AppCompatActivity {
     SessionParam sessionParam;
     MarshMallowPermission marshMallowPermission;
     private BaseRequest baseRequest;
+    TextView scrollingText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +67,6 @@ public class Act_home extends AppCompatActivity {
         sessionParam = new SessionParam(getApplicationContext());
         marshMallowPermission = new MarshMallowPermission(activity);
 
-
-
         permission();
 
         lay1=findViewById(R.id.lay1);
@@ -61,7 +75,14 @@ public class Act_home extends AppCompatActivity {
         lay4=findViewById(R.id.lay4);
         lay5=findViewById(R.id.lay5);
         lay6=findViewById(R.id.lay6);
+        scrollingText = (TextView)findViewById(R.id.scrollingtext);
+        scrollingText.setText(
+                Html.fromHtml(
+                        "निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए संपर्क करें" +
+                                " <a href='tel:1950'>1950</a> "));
+//        scrollingText.setMovementMethod(LinkMovementMethod.getInstance());
 
+        scrollingText.setSelected(true);
 
         lay1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +138,53 @@ public class Act_home extends AppCompatActivity {
         });
 
 
+//        SpannableString ss = new SpannableString("निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए संपर्क करें 1950");
+//        ClickableSpan clickableSpan = new ClickableSpan() {
+//            @Override
+//            public void onClick(View textView) {
+//                Toast.makeText(getApplicationContext(),"phone no clicked",Toast.LENGTH_SHORT).show();
+//            }
+//            @Override
+//            public void updateDrawState(TextPaint ds) {
+//                super.updateDrawState(ds);
+//                ds.setUnderlineText(false);
+//            }
+//        };
+//        ss.setSpan(clickableSpan, 50, 55, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+////        TextView textView = (TextView) findViewById(R.id.hello);
+//        scrollingText = (TextView)findViewById(R.id.scrollingtext);
+//        scrollingText.setSelected(true);
+//        scrollingText.setText(ss);
+//        scrollingText.setMovementMethod(LinkMovementMethod.getInstance());
+//        scrollingText.setHighlightColor(Color.TRANSPARENT);
+
+//        setClickableString("1950","निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए संपर्क करें 1950",scrollingText);
+
     }
+
+
+    public void setClickableString(String clickableValue, String wholeValue, TextView yourTextView){
+        String value = wholeValue;
+        SpannableString spannableString = new SpannableString(value);
+        int startIndex = value.indexOf(clickableValue);
+        int endIndex = startIndex + clickableValue.length();
+        spannableString.setSpan(new ClickableSpan() {
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false); // <-- this will remove automatic underline in set span
+            }
+
+            @Override
+            public void onClick(View widget) {
+                // do what you want with clickable value
+            }
+        }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        yourTextView.setText(spannableString);
+        yourTextView.setMovementMethod(LinkMovementMethod.getInstance()); // <-- important, onClick in ClickableSpan won't work without this
+    }
+
 
     private void permission() {
         datafinish = true;
@@ -255,5 +322,7 @@ public class Act_home extends AppCompatActivity {
 
 
     }
+
+
 
 }
