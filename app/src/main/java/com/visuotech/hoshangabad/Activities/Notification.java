@@ -7,184 +7,116 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Geocoder;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.util.Linkify;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.visuotech.hoshangabad.Activities.Election.Act_election;
-import com.visuotech.hoshangabad.Location.GPSTracker;
+import com.google.android.gms.games.Notifications;
+import com.visuotech.hoshangabad.Activities.Election.Act_sam_mem_list;
+import com.visuotech.hoshangabad.Activities.Election.Act_samaties;
+import com.visuotech.hoshangabad.Adapter.Ad_notifications;
+import com.visuotech.hoshangabad.Adapter.Ad_samitee_member;
 import com.visuotech.hoshangabad.MarshMallowPermission;
+import com.visuotech.hoshangabad.Model.Notificationss;
+import com.visuotech.hoshangabad.Model.Samitee_members;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
+import com.visuotech.hoshangabad.retrofit.RequestReciever;
 
-import java.io.IOException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-public class Act_home extends AppCompatActivity {
-    LinearLayout lay1,lay2,lay3,lay4,lay5,lay6;
-    public boolean datafinish = false;
-    final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
+public class Notification extends AppCompatActivity {
+    LinearLayout container;
+    LinearLayoutManager linearLayoutManager;
+    RecyclerView rv;
+    ArrayList<Notificationss> notifications_list1;
+    ArrayList<String>notifications_list=new ArrayList<>();
+    Ad_notifications adapter;
+    String booth_name;
+    EditText inputSearch;
+    String id,samitee_name;
+
     Context context;
     Activity activity;
     SessionParam sessionParam;
     MarshMallowPermission marshMallowPermission;
     private BaseRequest baseRequest;
-    TextView scrollingText;
-
+    public boolean datafinish = false;
+    final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_act_election);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor((Color.parseColor("#FFFFFF")));
+        getSupportActionBar().setTitle("Notifications");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //-------------------------toolbar------------------------------------------
+        context=this;
 
-
-
-        context = this;
-        activity = this;
-        sessionParam = new SessionParam(getApplicationContext());
-        marshMallowPermission = new MarshMallowPermission(activity);
+        container = (LinearLayout)findViewById(R.id.container);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View rowView = inflater.inflate(R.layout.activity_act_sam_mem_list, null);
 
         permission();
 
-        lay1=findViewById(R.id.lay1);
-        lay2=findViewById(R.id.lay2);
-        lay3=findViewById(R.id.lay3);
-        lay4=findViewById(R.id.lay4);
-        lay5=findViewById(R.id.lay5);
-        lay6=findViewById(R.id.lay6);
-        scrollingText = (TextView)findViewById(R.id.scrollingtext);
-        scrollingText.setText(
-                Html.fromHtml(
-                        "निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए संपर्क करें" +
-                                " <a href='tel:1950'>1950</a> "));
-//        scrollingText.setMovementMethod(LinkMovementMethod.getInstance());
+        rv = (RecyclerView) rowView.findViewById(R.id.rv_list);
+        inputSearch = (EditText) rowView.findViewById(R.id.inputSearch);
+        linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.setItemAnimator(new DefaultItemAnimator());
 
-        scrollingText.setSelected(true);
+        container.addView(rowView, container.getChildCount());
 
-        lay1.setOnClickListener(new View.OnClickListener() {
+
+//        Intent intent=getIntent();
+//        id=intent.getStringExtra("Id");
+//        samitee_name=intent.getStringExtra("Name");
+
+
+//        Apigetboothlist();
+
+        inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-//                Intent i = new Intent(Act_home.this, Act_course_list.class);
-//                startActivity(i);
-//                finish();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-        });
-        lay2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent i = new Intent(Act_home.this, Act_department_list.class);
-//                startActivity(i);
-//                finish();
-            }
-        });
 
-        lay3.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-//                Intent i = new Intent(Act_home.this, Act_director_list.class);
-//                startActivity(i);
-//                finish();
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-        });
 
-        lay4.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-//                Intent i = new Intent(Act_home.this, Act_hod_list.class);
-//                startActivity(i);
-//                finish();
+            public void afterTextChanged(Editable editable) {
+                //after the change calling the method and passing the search input
+                filter(editable.toString());
             }
         });
-        lay5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Act_home.this, Act_election.class);
-                startActivity(i);
-                finish();
-            }
-        });
-        lay6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Act_home.this, Notification.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-
-//        SpannableString ss = new SpannableString("निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए संपर्क करें 1950");
-//        ClickableSpan clickableSpan = new ClickableSpan() {
-//            @Override
-//            public void onClick(View textView) {
-//                Toast.makeText(getApplicationContext(),"phone no clicked",Toast.LENGTH_SHORT).show();
-//            }
-//            @Override
-//            public void updateDrawState(TextPaint ds) {
-//                super.updateDrawState(ds);
-//                ds.setUnderlineText(false);
-//            }
-//        };
-//        ss.setSpan(clickableSpan, 50, 55, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//
-////        TextView textView = (TextView) findViewById(R.id.hello);
-//        scrollingText = (TextView)findViewById(R.id.scrollingtext);
-//        scrollingText.setSelected(true);
-//        scrollingText.setText(ss);
-//        scrollingText.setMovementMethod(LinkMovementMethod.getInstance());
-//        scrollingText.setHighlightColor(Color.TRANSPARENT);
-
-//        setClickableString("1950","निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए संपर्क करें 1950",scrollingText);
-
+        Apigetsam_mem_list();
     }
-
-
-    public void setClickableString(String clickableValue, String wholeValue, TextView yourTextView){
-        String value = wholeValue;
-        SpannableString spannableString = new SpannableString(value);
-        int startIndex = value.indexOf(clickableValue);
-        int endIndex = startIndex + clickableValue.length();
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(false); // <-- this will remove automatic underline in set span
-            }
-
-            @Override
-            public void onClick(View widget) {
-                // do what you want with clickable value
-            }
-        }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        yourTextView.setText(spannableString);
-        yourTextView.setMovementMethod(LinkMovementMethod.getInstance()); // <-- important, onClick in ClickableSpan won't work without this
-    }
-
 
     private void permission() {
         datafinish = true;
@@ -240,7 +172,7 @@ public class Act_home extends AppCompatActivity {
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(Act_home.this)
+        new AlertDialog.Builder(Notification.this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
                 .setCancelable(false)
@@ -309,20 +241,91 @@ public class Act_home extends AppCompatActivity {
         }
         return true;
     }
-
-
-    private void init() {
-        lay1=findViewById(R.id.lay1);
-        lay2=findViewById(R.id.lay2);
-        lay3=findViewById(R.id.lay3);
-        lay4=findViewById(R.id.lay4);
-        lay5=findViewById(R.id.lay5);
-        lay6=findViewById(R.id.lay6);
+    public void init() {
 
 
 
     }
 
+    private void Apigetsam_mem_list(){
+        baseRequest = new BaseRequest(context);
+        baseRequest.setBaseRequestListner(new RequestReciever() {
+            @Override
+            public void onSuccess(int requestCode, String Json, Object object) {
+                try {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    JSONArray jsonArray=jsonObject.optJSONArray("user");
 
+                    notifications_list1=baseRequest.getDataList(jsonArray,Notificationss.class);
+
+//                    for (int i=0;i<sam_mem_list1.size();i++){
+//                        booth_list.add(sam_mem_list1.get(i).getEleBoothName());
+////                       department_id.add(department_list1.get(i).getDepartment_id());
+//                    }
+
+                    adapter=new Ad_notifications(context,notifications_list1);
+                    rv.setAdapter(adapter);
+
+//                    ArrayAdapter adapter_booth = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list);
+//                    adapter_booth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    spinner_station.setAdapter(adapter_booth);
+//
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int requestCode, String errorCode, String message) {
+
+            }
+            @Override
+            public void onNetworkFailure(int requestCode, String message) {
+
+            }
+        });
+        String remainingUrl2="/Election/Api2.php?apicall=push_noti";
+        baseRequest.callAPIGETData(1, remainingUrl2);
+    }
+    private void filter(String text) {
+        //new array list that will hold the filtered data
+        String[] designation_list2;
+        ArrayList<Notificationss>members_list2=new ArrayList<>();
+
+        //looping through existing elements
+        for (int i=0;i<notifications_list1.size();i++) {
+            if (notifications_list1.get(i).getPush_title().toLowerCase().contains(text.toLowerCase())) {
+                Notificationss samitee_members = new Notificationss();
+                samitee_members.setCreation_date(notifications_list1.get(i).getCreation_date());
+                samitee_members.setPush_activedevices(notifications_list1.get(i).getPush_activedevices());
+                samitee_members.setPush_delvrddevices(notifications_list1.get(i).getPush_delvrddevices());
+                samitee_members.setPush_desc(notifications_list1.get(i).getPush_desc());
+                samitee_members.setPush_title(notifications_list1.get(i).getPush_title());
+                members_list2.add(samitee_members);
+            }
+        }
+
+        //calling a method of the adapter class and passing the filtered list
+        adapter.filterList(members_list2);
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i = new Intent(Notification.this, Act_home.class);
+        startActivity(i);
+        finish();
+        return true;
+
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i = new Intent(Notification.this, Act_home.class);
+        startActivity(i);
+        finish();
+    }
 
 }

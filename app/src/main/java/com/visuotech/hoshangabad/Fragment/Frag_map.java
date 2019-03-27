@@ -126,8 +126,8 @@ public class Frag_map extends Fragment implements OnMapReadyCallback {
         View rootView=inflater.inflate(R.layout.fragment_frag_map, container, false);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
-        place1 = new MarkerOptions().position(new LatLng(27.658143, 85.3199503)).title("Location 1");
-        place2 = new MarkerOptions().position(new LatLng(27.667491, 85.3208583)).title("Location 2");
+        place1 = new MarkerOptions().position(new LatLng(22.7533, 75.8937)).title(booth_name).snippet(address);
+        place2 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat_current), Double.parseDouble(lon_current))).title("your location").snippet(address2);
         new FetchURL(mMap,getActivity()).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
 
         customInfoWindow = new CustomInfoWindowGoogleMap(getContext());
@@ -188,6 +188,21 @@ public class Frag_map extends Fragment implements OnMapReadyCallback {
         Log.d("mylog", "Added Markers");
         mMap.addMarker(place1);
         mMap.addMarker(place2);
+
+        LatLng sydney = new LatLng(22.7533, 75.8937);
+
+        mMap.setInfoWindowAdapter(customInfoWindow);
+        customInfoWindow.getInfoWindow(createMarker(22.7533, 75.8937,booth_name,address));
+        customInfoWindow.getInfoWindow(createMarker(Double.parseDouble(lat_current), Double.parseDouble(lon_current),"",address2));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        CameraPosition camPos = new CameraPosition.Builder()
+                .target(new LatLng(22.7533, 75.8937))
+                .zoom(20)
+//                .tilt(70)
+                .build();
+        CameraUpdate camUpd3 = CameraUpdateFactory.newCameraPosition(camPos);
+        googleMap.animateCamera(camUpd3);
     }
 
 

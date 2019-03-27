@@ -152,10 +152,14 @@ public class Act_election extends AppCompatActivity {
         lay9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("http://164.100.196.163/searchengine/SearchHN.aspx"));
-                startActivity(intent);
+//                Intent intent = new Intent(
+//                        Intent.ACTION_VIEW,
+//                        Uri.parse("http://164.100.196.163/searchengine/SearchHN.aspx"));
+//                startActivity(intent);
+
+                Intent i = new Intent(Act_election.this, Act_voter_info.class);
+                startActivity(i);
+                finish();
             }
         });
 

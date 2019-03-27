@@ -29,10 +29,8 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.ads.AdView;
-import com.visuotech.hoshangabad.Activities.Act_home;
-import com.visuotech.hoshangabad.Activities.Election.Act_election;
 import com.visuotech.hoshangabad.Fragment.Frag_list;
-import com.visuotech.hoshangabad.Fragment.Frag_location;
+import com.visuotech.hoshangabad.Fragment.Frag_queue;
 import com.visuotech.hoshangabad.Fragment.Frag_map;
 import com.visuotech.hoshangabad.Location.GPSTracker;
 import com.visuotech.hoshangabad.MarshMallowPermission;
@@ -70,7 +68,7 @@ public class Act_Polling_list extends AppCompatActivity {
     NavigationView navigationView;
     Dialog mDialog;
     Frag_list frag_list;
-    Frag_location frag_location;
+    Frag_queue frag_location;
     Frag_map frag_map;
     public boolean datafinish = false;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
@@ -106,7 +104,7 @@ public class Act_Polling_list extends AppCompatActivity {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
          frag_map = new Frag_map();
-         frag_location = new Frag_location();
+         frag_location = new Frag_queue();
          frag_list = new Frag_list();
 
         permission();
@@ -120,6 +118,7 @@ public class Act_Polling_list extends AppCompatActivity {
         bundle.putString("CITY",AC);
         frag_list.setArguments(bundle);
         frag_map.setArguments(bundle);
+        frag_location.setArguments(bundle);
 
 //        Bundle bundle2 = new Bundle();
 //        bundle.putString("NAME",booth_name);

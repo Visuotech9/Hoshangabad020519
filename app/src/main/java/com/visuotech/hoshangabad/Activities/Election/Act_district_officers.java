@@ -298,7 +298,7 @@ public class Act_district_officers extends AppCompatActivity {
 
         //looping through existing elements
         for (int i=0;i<district_officers_list1.size();i++) {
-            if (district_officers_list1.get(i).getOfficer_name().toLowerCase().contains(text.toLowerCase())) {
+            if (district_officers_list1.get(i).getOfficer_post().toLowerCase().contains(text.toLowerCase())) {
                 District_officers vd = new District_officers();
                 vd.setOfficer_name(district_officers_list1.get(i).getOfficer_name());
                 vd.setOfficer_email(district_officers_list1.get(i).getOfficer_email());

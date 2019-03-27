@@ -251,11 +251,6 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
             case R.id.spinner_station :
                 //Your Action Here.
                 station=booth_list1.get(i).getEleBoothName();
-//                lat=booth_list1.get(i).getEleLatitude();
-//                log=booth_list1.get(i).getEleLongitude();
-
-
-//                Toast.makeText(getApplicationContext(),course, Toast.LENGTH_LONG).show();
                 break;
         }
 
@@ -266,46 +261,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
 
     }
 
-//    private void ApigetDetailList() {
-//        baseRequest = new BaseRequest();
-//        baseRequest.setBaseRequestListner(new RequestReciever() {
-//            @Override
-//            public void onSuccess(int requestCode, String Json, Object object) {
-//                try {
-//                    JSONObject jsonObject = new JSONObject(Json);
-//                    JSONArray jsonArray=jsonObject.optJSONArray("user");
-//
-//                    desi_details_list1=baseRequest.getDataList(jsonArray,Designation_Details.class);
-//                    mobile=desi_details_list1.get(0).getEle_local1_mobile();
-//                    name=desi_details_list1.get(0).getEle_local1_name();
-//                    booth_name=desi_details_list1.get(0).getEle_booth_name();
-//                    desig=desi_details_list1.get(0).getDesignation();
-//
-//                    Intent i = new Intent(Act_polling_station.this, Act_Polling_list.class);
-//                    i.putExtra("NAME",booth_name);
-//                    startActivity(i);
-//                    finish();
 
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onFailure(int requestCode, String errorCode, String message) {
-//
-//            }
-//            @Override
-//            public void onNetworkFailure(int requestCode, String message) {
-//
-//            }
-//        });
-//        String remainingUrl2="/Election/Api2.php?apicall=polling_booth"+"&ac="+AC+"&booth_name="+station+"&designation="+designation_no;
-//        baseRequest.callAPIGETData(1, remainingUrl2);
-//    }
 
 
     private void Apigetboothlist(){
