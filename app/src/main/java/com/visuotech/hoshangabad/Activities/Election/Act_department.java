@@ -22,8 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
+import com.visuotech.hoshangabad.Activities.Election.Seoni_malwa.Act_Polling_list;
+import com.visuotech.hoshangabad.Activities.Election.Seoni_malwa.Act_polling_station;
 import com.visuotech.hoshangabad.MarshMallowPermission;
+import com.visuotech.hoshangabad.Model.Departments;
 import com.visuotech.hoshangabad.Model.Designation_Details;
+import com.visuotech.hoshangabad.Model.PollingBooth;
 import com.visuotech.hoshangabad.Model.Samities;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
@@ -39,16 +44,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Act_samaties extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class Act_department extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     LinearLayout container;
     TextView tv_text;
-    Spinner spinner_samities;
+    Spinner spinner_dept;
     String id,designation,booth_name,mobile,name,desig,lat,log;
     Button btn_cancel,btn_submit;
     int designation_no;
-    ArrayList<Samities> samiti_list1;
-    ArrayList<Designation_Details> desi_details_list1;
-    ArrayList<String>  samiti_list= new ArrayList<String>();
+    ArrayList<Departments> departments_list1;
+    ArrayList<String>  departments_list= new ArrayList<String>();
     Context context;
     Activity activity;
     SessionParam sessionParam;
@@ -66,8 +70,10 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor((Color.parseColor("#FFFFFF")));
-        getSupportActionBar().setTitle("Committees");
+        getSupportActionBar().setTitle("Departments");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
         context = this;
         activity = this;
@@ -81,20 +87,20 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
 
         permission();
 
-        spinner_samities = rowView.findViewById(R.id.spinner_samities);
+        spinner_dept = rowView.findViewById(R.id.spinner_samities);
         tv_text = rowView.findViewById(R.id.tv_text);
         btn_submit = rowView.findViewById(R.id.btn_submit);
 
-        tv_text.setText("Select Committee:");
+        tv_text.setText("Select Department :");
 
         container.addView(rowView, container.getChildCount());
-        spinner_samities.setOnItemSelectedListener(this);
+        spinner_dept.setOnItemSelectedListener(this);
 
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (samiti_list1!=null){
-                    Intent i = new Intent(Act_samaties.this, Act_sam_mem_list.class);
+                if (departments_list1!=null){
+                    Intent i = new Intent(Act_department.this, Act_dept_memb_list.class);
                     i.putExtra("Id",id);
                     i.putExtra("Name",name);
 //                    i.putExtra("LONGITUDE",log);
@@ -104,7 +110,8 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
         });
-        ApigetSamlist();
+        ApigetDepartment();
+
 
     }
 
@@ -162,7 +169,7 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(Act_samaties.this)
+        new AlertDialog.Builder(Act_department.this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
                 .setCancelable(false)
@@ -237,13 +244,14 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch(adapterView.getId()){
             case R.id.spinner_samities :
                 //Your Action Here.
-                id=samiti_list1.get(i).getSamitiId();
-                name=samiti_list1.get(i).getSamitiName();
+                id=departments_list1.get(i).getDepartmentId();
+                name=departments_list1.get(i).getDepartmentName();
 //                log=booth_list1.get(i).getEleLongitude();
 
 
@@ -258,7 +266,7 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    private void ApigetSamlist(){
+    private void ApigetDepartment(){
         baseRequest = new BaseRequest(context);
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
@@ -267,15 +275,15 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
                     JSONObject jsonObject = new JSONObject(Json);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
-                    samiti_list1=baseRequest.getDataList(jsonArray,Samities.class);
+                    departments_list1=baseRequest.getDataList(jsonArray,Departments.class);
 
-                    for (int i=0;i<samiti_list1.size();i++){
-                        samiti_list.add(samiti_list1.get(i).getSamitiName());
+                    for (int i=0;i<departments_list1.size();i++){
+                        departments_list.add(departments_list1.get(i).getDepartmentName());
 //                       department_id.add(department_list1.get(i).getDepartment_id());
                     }
-                    ArrayAdapter adapter_samitie = new ArrayAdapter(context,android.R.layout.simple_spinner_item,samiti_list);
-                    adapter_samitie.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner_samities.setAdapter(adapter_samitie);
+                    ArrayAdapter adapter_dept = new ArrayAdapter(context,android.R.layout.simple_spinner_item,departments_list);
+                    adapter_dept.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_dept.setAdapter(adapter_dept);
 
 
 
@@ -296,11 +304,11 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
 
             }
         });
-        String remainingUrl2="/Election/Api2.php?apicall=samiti_list";
+        String remainingUrl2="/Election/Api2.php?apicall=department_list";
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i = new Intent(Act_samaties.this, Act_election.class);
+        Intent i = new Intent(Act_department.this, Act_election.class);
         startActivity(i);
         finish();
         return true;
@@ -309,10 +317,9 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(Act_samaties.this, Act_election.class);
+        Intent i = new Intent(Act_department.this, Act_election.class);
         startActivity(i);
         finish();
     }
-
 
 }

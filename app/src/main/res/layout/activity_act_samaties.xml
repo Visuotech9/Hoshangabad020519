@@ -35,8 +35,9 @@
 
 
                 <TextView
+                    android:id="@+id/tv_text"
                     android:layout_width="match_parent"
-                    android:text="Select Polling station :"
+                    android:text=""
                     android:paddingLeft="5dp"
                     android:textColor="@color/Black"
                     android:layout_marginRight="10dp"

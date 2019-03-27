@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.visuotech.hoshangabad.MarshMallowPermission;
 import com.visuotech.hoshangabad.Model.Designation_Details;
 import com.visuotech.hoshangabad.Model.Samities;
+import com.visuotech.hoshangabad.Model.ServiceType;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
@@ -39,16 +40,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Act_samaties extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class Act_other_services extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     LinearLayout container;
     TextView tv_text;
-    Spinner spinner_samities;
+    Spinner spinner_services;
     String id,designation,booth_name,mobile,name,desig,lat,log;
     Button btn_cancel,btn_submit;
     int designation_no;
-    ArrayList<Samities> samiti_list1;
+    ArrayList<ServiceType> serviceTypes_list1;
     ArrayList<Designation_Details> desi_details_list1;
-    ArrayList<String>  samiti_list= new ArrayList<String>();
+    ArrayList<String>  serviceTypes_list= new ArrayList<String>();
     Context context;
     Activity activity;
     SessionParam sessionParam;
@@ -61,7 +62,6 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act_election);
-
         //-------------------------toolbar------------------------------------------
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -81,21 +81,20 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
 
         permission();
 
-        spinner_samities = rowView.findViewById(R.id.spinner_samities);
+        spinner_services = rowView.findViewById(R.id.spinner_samities);
         tv_text = rowView.findViewById(R.id.tv_text);
         btn_submit = rowView.findViewById(R.id.btn_submit);
 
-        tv_text.setText("Select Committee:");
+        tv_text.setText("Select service type :");
 
         container.addView(rowView, container.getChildCount());
-        spinner_samities.setOnItemSelectedListener(this);
+        spinner_services.setOnItemSelectedListener(this);
 
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (samiti_list1!=null){
-                    Intent i = new Intent(Act_samaties.this, Act_sam_mem_list.class);
-                    i.putExtra("Id",id);
+                if (serviceTypes_list1!=null){
+                    Intent i = new Intent(Act_other_services.this, Act_services_list.class);
                     i.putExtra("Name",name);
 //                    i.putExtra("LONGITUDE",log);
                     startActivity(i);
@@ -162,7 +161,7 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(Act_samaties.this)
+        new AlertDialog.Builder(Act_other_services.this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
                 .setCancelable(false)
@@ -242,8 +241,8 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
         switch(adapterView.getId()){
             case R.id.spinner_samities :
                 //Your Action Here.
-                id=samiti_list1.get(i).getSamitiId();
-                name=samiti_list1.get(i).getSamitiName();
+                name=serviceTypes_list1.get(i).getType();
+
 //                log=booth_list1.get(i).getEleLongitude();
 
 
@@ -267,15 +266,15 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
                     JSONObject jsonObject = new JSONObject(Json);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
-                    samiti_list1=baseRequest.getDataList(jsonArray,Samities.class);
+                    serviceTypes_list1=baseRequest.getDataList(jsonArray,ServiceType.class);
 
-                    for (int i=0;i<samiti_list1.size();i++){
-                        samiti_list.add(samiti_list1.get(i).getSamitiName());
+                    for (int i=0;i<serviceTypes_list1.size();i++){
+                        serviceTypes_list.add(serviceTypes_list1.get(i).getType());
 //                       department_id.add(department_list1.get(i).getDepartment_id());
                     }
-                    ArrayAdapter adapter_samitie = new ArrayAdapter(context,android.R.layout.simple_spinner_item,samiti_list);
-                    adapter_samitie.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner_samities.setAdapter(adapter_samitie);
+                    ArrayAdapter adapter_service = new ArrayAdapter(context,android.R.layout.simple_spinner_item,serviceTypes_list);
+                    adapter_service.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_services.setAdapter(adapter_service);
 
 
 
@@ -296,11 +295,11 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
 
             }
         });
-        String remainingUrl2="/Election/Api2.php?apicall=samiti_list";
+        String remainingUrl2="/Election/Api2.php?apicall=other_services_type_list";
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i = new Intent(Act_samaties.this, Act_election.class);
+        Intent i = new Intent(Act_other_services.this, Act_election.class);
         startActivity(i);
         finish();
         return true;
@@ -309,10 +308,8 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(Act_samaties.this, Act_election.class);
+        Intent i = new Intent(Act_other_services.this, Act_election.class);
         startActivity(i);
         finish();
     }
-
-
 }

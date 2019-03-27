@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import com.visuotech.hoshangabad.Activities.Election.Pipariya.Act_pipariya;
 import com.visuotech.hoshangabad.Activities.Election.Seoni_malwa.Act_seoni_malwa;
 import com.visuotech.hoshangabad.Activities.Election.Hoshangabad.Act_hoshangabad;
 import com.visuotech.hoshangabad.Activities.Election.Sohagpur.Act_sohagpur;
+import com.visuotech.hoshangabad.Activities.MapActivity;
 import com.visuotech.hoshangabad.MarshMallowPermission;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
@@ -33,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Act_election extends AppCompatActivity {
-    LinearLayout lay1,lay2,lay3,lay4,lay5,lay6,lay8;
+    LinearLayout lay1,lay2,lay3,lay4,lay5,lay6,lay8,lay7,lay9;
     LinearLayout container;
     Context context;
     Activity activity;
@@ -68,10 +70,13 @@ public class Act_election extends AppCompatActivity {
         permission();
         lay1=rowView.findViewById(R.id.lay1);
         lay2=rowView.findViewById(R.id.lay2);
+        lay6=rowView.findViewById(R.id.lay6);
         lay3=rowView.findViewById(R.id.lay3);
         lay4=rowView.findViewById(R.id.lay4);
         lay5=rowView.findViewById(R.id.lay5);
+        lay7=rowView.findViewById(R.id.lay7);
         lay8=rowView.findViewById(R.id.lay8);
+        lay9=rowView.findViewById(R.id.lay9);
 
         container.addView(rowView, container.getChildCount());
 
@@ -128,6 +133,33 @@ public class Act_election extends AppCompatActivity {
                 finish();
             }
         });
+        lay6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Act_election.this, Act_department.class);
+                startActivity(i);
+                finish();
+            }
+        });
+        lay7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Act_election.this, Act_other_services.class);
+                startActivity(i);
+                finish();
+            }
+        });
+        lay9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("http://164.100.196.163/searchengine/SearchHN.aspx"));
+                startActivity(intent);
+            }
+        });
+
+
 
 
 

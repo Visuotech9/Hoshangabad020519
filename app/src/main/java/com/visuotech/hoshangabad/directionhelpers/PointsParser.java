@@ -5,7 +5,9 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONObject;
@@ -21,9 +23,19 @@ import java.util.List;
 public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
     TaskLoadedCallback taskCallback;
     String directionMode = "driving";
+    private Polyline currentPolyline;
+    GoogleMap mMap;
 
-    public PointsParser(Context mContext, String directionMode) {
-        this.taskCallback = (TaskLoadedCallback) mContext;
+    public PointsParser(final GoogleMap mMap, Context mContext, String directionMode) {
+        taskCallback=new TaskLoadedCallback() {
+            @Override
+            public void onTaskDone(Object... values) {
+                if (currentPolyline != null)
+                    currentPolyline.remove();
+                currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+            }
+        };
+//        this.taskCallback = (TaskLoadedCallback) mContext;
         this.directionMode = directionMode;
     }
 

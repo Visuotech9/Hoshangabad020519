@@ -22,7 +22,7 @@ import com.visuotech.hoshangabad.directionhelpers.TaskLoadedCallback;
  * Created by Vishal on 10/20/2018.
  */
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private MarkerOptions place1, place2;
     Button getDirection;
@@ -36,15 +36,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         getDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FetchURL(MapActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+                new FetchURL(mMap, MapActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
             }
         });
         //27.658143,85.3199503
         //27.667491,85.3208583
         place1 = new MarkerOptions().position(new LatLng(27.658143, 85.3199503)).title("Location 1");
         place2 = new MarkerOptions().position(new LatLng(27.667491, 85.3208583)).title("Location 2");
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.mapNearBy);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapNearBy);
         mapFragment.getMapAsync(this);
     }
 
@@ -68,14 +67,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // Output format
         String output = "json";
         // Building the url to the web service
-        String url = "https://roads.googleapis.com/v1/snapToRoads?" + parameters + "&key=" + getString(R.string.google_maps_key);
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
         return url;
     }
 
-    @Override
-    public void onTaskDone(Object... values) {
-        if (currentPolyline != null)
-            currentPolyline.remove();
-        currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
-    }
+//    @Override
+//    public void onTaskDone(Object... values) {
+//        if (currentPolyline != null)
+//            currentPolyline.remove();
+//        currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+//    }
 }

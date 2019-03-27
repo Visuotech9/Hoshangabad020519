@@ -2,6 +2,7 @@ package com.visuotech.hoshangabad.Fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Address;
@@ -35,6 +36,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.visuotech.hoshangabad.Activities.MapActivity;
 import com.visuotech.hoshangabad.CustomInfoWindowGoogleMap;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.directionhelpers.FetchURL;
@@ -115,8 +117,6 @@ public class Frag_map extends Fragment implements OnMapReadyCallback {
             lat_current = getArguments().getString("CURRENT_LATITUDE");
             lon_current = getArguments().getString("CURRENT_LONGITUDE");
         }
-
-
     }
 
     @Override
@@ -124,10 +124,13 @@ public class Frag_map extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView=inflater.inflate(R.layout.fragment_frag_map, container, false);
-        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);  //use SuppoprtMapFragment for using in fragment instead of activity  MapFragment = activity   SupportMapFragment = fragment
-//         address= Utility.getAddressFromLatlong(getContext(),latitude1,longitude1);
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+
+        place1 = new MarkerOptions().position(new LatLng(27.658143, 85.3199503)).title("Location 1");
+        place2 = new MarkerOptions().position(new LatLng(27.667491, 85.3208583)).title("Location 2");
+        new FetchURL(mMap,getActivity()).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+
         customInfoWindow = new CustomInfoWindowGoogleMap(getContext());
-        markerPoints = new ArrayList<LatLng>();
 
         try {
             Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
@@ -149,35 +152,44 @@ public class Frag_map extends Fragment implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
         return rootView;
     }
+//    @Override
+//    public void onMapReady(GoogleMap googleMap) {
+//        mMap = googleMap;
+//        mMap.getUiSettings().setCompassEnabled(true);
+//        mMap.getUiSettings().setZoomGesturesEnabled(true);
+//        // Add a marker in Sydney and move the camera
+//        LatLng sydney = new LatLng(22.7533, 75.8937);
+////        mMap.addMarker(new MarkerOptions().position(sydney).title(address));
+//        if (address.isEmpty()){
+//            createMarker(22.7533, 75.8937,booth_name,"");
+//            createMarker(Double.parseDouble(lat_current), Double.parseDouble(lon_current), booth_name, "");
+//        }else{
+//            createMarker(22.7533, 75.8937,booth_name,address);
+//            createMarker(Double.parseDouble(lat_current), Double.parseDouble(lon_current), booth_name, address2);
+//            }
+//
+//        mMap.setInfoWindowAdapter(customInfoWindow);
+//        customInfoWindow.getInfoWindow(createMarker(22.7533, 75.8937,booth_name,address));
+//        customInfoWindow.getInfoWindow(createMarker(Double.parseDouble(lat_current), Double.parseDouble(lon_current),"",address2));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//
+//        CameraPosition camPos = new CameraPosition.Builder()
+//                .target(new LatLng(22.7533, 75.8937))
+//                .zoom(18)
+////                .tilt(70)
+//                .build();
+//        CameraUpdate camUpd3 = CameraUpdateFactory.newCameraPosition(camPos);
+//        googleMap.animateCamera(camUpd3);
+//    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.getUiSettings().setCompassEnabled(true);
-        mMap.getUiSettings().setZoomGesturesEnabled(true);
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(22.7533, 75.8937);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title(address));
-        if (address.isEmpty()){
-            createMarker(22.7533, 75.8937,booth_name,"");
-            createMarker(Double.parseDouble(lat_current), Double.parseDouble(lon_current), booth_name, "");
-        }else{
-            createMarker(22.7533, 75.8937,booth_name,address);
-            createMarker(Double.parseDouble(lat_current), Double.parseDouble(lon_current), booth_name, address2);
-            }
-
-        mMap.setInfoWindowAdapter(customInfoWindow);
-        customInfoWindow.getInfoWindow(createMarker(22.7533, 75.8937,booth_name,address));
-        customInfoWindow.getInfoWindow(createMarker(Double.parseDouble(lat_current), Double.parseDouble(lon_current),"",address2));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-        CameraPosition camPos = new CameraPosition.Builder()
-                .target(new LatLng(22.7533, 75.8937))
-                .zoom(18)
-//                .tilt(70)
-                .build();
-        CameraUpdate camUpd3 = CameraUpdateFactory.newCameraPosition(camPos);
-        googleMap.animateCamera(camUpd3);
+        Log.d("mylog", "Added Markers");
+        mMap.addMarker(place1);
+        mMap.addMarker(place2);
     }
+
 
     protected Marker createMarker(double latitude, double longitude, String title, String snippet) {
         return mMap.addMarker(new MarkerOptions()
@@ -200,6 +212,28 @@ public class Frag_map extends Fragment implements OnMapReadyCallback {
                 .build();
         map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
+    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
+        return url;
+    }
+
+//    @Override
+//    public void onTaskDone(Object... values) {
+//        if (currentPolyline != null)
+//            currentPolyline.remove();
+//        currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+//    }
 
 
 }
