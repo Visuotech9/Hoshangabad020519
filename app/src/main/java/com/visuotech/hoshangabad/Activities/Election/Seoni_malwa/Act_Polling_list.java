@@ -58,6 +58,7 @@ public class Act_Polling_list extends AppCompatActivity {
     String booth_name,lat,log,AC;
     private String lat_current = "";
     private String lon_current = "";
+    String address;
     private Boolean flag = false;
     private List<Address> addresses;
 
@@ -115,6 +116,7 @@ public class Act_Polling_list extends AppCompatActivity {
         bundle.putString("LONGITUDE",log);
         bundle.putString("CURRENT_LATITUDE",lat_current);
         bundle.putString("CURRENT_LONGITUDE",lon_current);
+        bundle.putString("ADDRESS",address);
         bundle.putString("CITY",AC);
         frag_list.setArguments(bundle);
         frag_map.setArguments(bundle);
@@ -351,13 +353,13 @@ public boolean onOptionsItemSelected(MenuItem item) {
         if (gpsTracker.canGetLocation()) {
             lat_current = String.valueOf(gpsTracker.getLatitude());
             lon_current = String.valueOf(gpsTracker.getLongitude());
-            if (lat_current == String.valueOf(0.0) && lon_current == String.valueOf(0.0)) {
+            if (lat.equals("0.0") && log.equals("0.0")) {
                 gpsTracker.showSettingsAlert();
             } else {
                 try {
                     Geocoder geocoder = new Geocoder(Act_Polling_list.this, Locale.getDefault());
-                    addresses = geocoder.getFromLocation(Double.parseDouble(lat_current), Double.parseDouble(lon_current), 1);
-                    String address = addresses.get(0).getAddressLine(0);
+                    addresses = geocoder.getFromLocation(Double.parseDouble(lat), Double.parseDouble(log), 1);
+                     address = addresses.get(0).getAddressLine(0);
                     // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                     String city = addresses.get(0).getLocality();
                     String state = addresses.get(0).getAdminArea();

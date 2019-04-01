@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,11 +24,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.visuotech.hoshangabad.Activities.Election.Act_election;
 import com.visuotech.hoshangabad.Adapter.Ad_Vidhansabha;
 import com.visuotech.hoshangabad.MarshMallowPermission;
 import com.visuotech.hoshangabad.Model.Vidhanasabha_list;
+import com.visuotech.hoshangabad.NetworkConnection;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
@@ -59,6 +63,8 @@ public class Act_vidhansabha_details_list extends AppCompatActivity {
     SessionParam sessionParam;
     MarshMallowPermission marshMallowPermission;
     private BaseRequest baseRequest;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    LinearLayout lin_spl_layout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +84,7 @@ public class Act_vidhansabha_details_list extends AppCompatActivity {
 
         permission();
 
+        mSwipeRefreshLayout=rowView.findViewById(R.id.activity_main_swipe_refresh_layout);
         rv = (RecyclerView) rowView.findViewById(R.id.rv_list);
         inputSearch = (EditText) rowView.findViewById(R.id.inputSearch);
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
@@ -112,7 +119,28 @@ public class Act_vidhansabha_details_list extends AppCompatActivity {
                 filter(editable.toString());
             }
         });
-        ApigetVidhan_detail_list();
+
+
+         lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
+        if (NetworkConnection.checkNetworkStatus(context) == true) {
+            ApigetVidhan_detail_list();
+        } else {
+            Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+        }
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkConnection.checkNetworkStatus(context)==true){
+                    ApigetVidhan_detail_list();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }else{
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
+
+
+            }
+        });
+
 
     }
 

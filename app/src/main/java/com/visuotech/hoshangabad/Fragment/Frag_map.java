@@ -30,6 +30,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -66,7 +67,7 @@ public class Frag_map extends Fragment implements OnMapReadyCallback {
     public double latitude1=75.8937;
     public double longitude2;
     public double latitude2;
-    public String address,address2;
+    public String add_booth;
     public String add;
     private static final String PREF_NAME = "logininf";
     private BaseRequest baseRequest;
@@ -86,13 +87,19 @@ public class Frag_map extends Fragment implements OnMapReadyCallback {
     private List<Address> addresses;
     private String lat_current = "";
     private String lon_current = "";
+    private String lat_booth = "";
+    private String lon_booth = "";
+    private String add_current = "";
     ArrayList<String> prgmName;
     LatLng location1;
     double radius = 100; // 100 meters
     private String mParam1;
     SharedPreferences shared;
     ArrayList<String> arrPackage;
-    String booth_name,lat,log,lat_curr,lon_curr;
+    String booth_name;
+    double lati_booth,long_booth;
+    double lat_curr,lon_curr;
+
     SupportMapFragment mapFragment;
     public CustomInfoWindowGoogleMap customInfoWindow;
     ArrayList<LatLng> markerPoints;
@@ -112,12 +119,17 @@ public class Frag_map extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             booth_name = getArguments().getString("NAME");
-            lat = getArguments().getString("LATITUDE");
-            log = getArguments().getString("LONGITUDE");
-            lat_current = getArguments().getString("CURRENT_LATITUDE");
-            lon_current = getArguments().getString("CURRENT_LONGITUDE");
+            lat_booth = (getArguments().getString("LATITUDE"));
+            lon_booth = (getArguments().getString("LONGITUDE"));
+            lat_current = (getArguments().getString("CURRENT_LATITUDE"));
+            lon_current = (getArguments().getString("CURRENT_LONGITUDE"));
+            add_current = getArguments().getString("ADDRESS");
         }
     }
+
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,22 +138,34 @@ public class Frag_map extends Fragment implements OnMapReadyCallback {
         View rootView=inflater.inflate(R.layout.fragment_frag_map, container, false);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
-        place1 = new MarkerOptions().position(new LatLng(22.7533, 75.8937)).title(booth_name).snippet(address);
-        place2 = new MarkerOptions().position(new LatLng(Double.parseDouble(lat_current), Double.parseDouble(lon_current))).title("your location").snippet(address2);
-        new FetchURL(mMap,getActivity()).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+        lat_curr=Double.valueOf(lat_booth);
+        lon_curr=Double.valueOf(lon_booth);
+//        lati_booth=Double.valueOf(lat_booth);
+//        long_booth=Double.valueOf(lon_booth);
 
-        customInfoWindow = new CustomInfoWindowGoogleMap(getContext());
+        Button btn_dirn=rootView.findViewById(R.id.btn_getLocation);
+        btn_dirn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri gmmIntentUri = Uri.parse("google.navigation:q="+lat_curr+","+lon_curr);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getContext().getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+            }
+        });
 
         try {
             Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-            List<Address> addresses   = geocoder.getFromLocation(22.7533, 75.8937, 1);
-            address= addresses.get(0).getAddressLine(0);
-            List<Address> addresses2   = geocoder.getFromLocation(Double.parseDouble(lat_current), Double.parseDouble(lon_current), 1);
-            address2= addresses2.get(0).getAddressLine(0);
+            List<Address> addresses   = geocoder.getFromLocation(lat_curr, lon_curr, 1);
+            add_booth= addresses.get(0).getAddressLine(0);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        customInfoWindow = new CustomInfoWindowGoogleMap(getContext());
 
         if (mapFragment== null){
             FragmentManager fm=getFragmentManager();
@@ -152,58 +176,35 @@ public class Frag_map extends Fragment implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
         return rootView;
     }
-//    @Override
-//    public void onMapReady(GoogleMap googleMap) {
-//        mMap = googleMap;
-//        mMap.getUiSettings().setCompassEnabled(true);
-//        mMap.getUiSettings().setZoomGesturesEnabled(true);
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(22.7533, 75.8937);
-////        mMap.addMarker(new MarkerOptions().position(sydney).title(address));
-//        if (address.isEmpty()){
-//            createMarker(22.7533, 75.8937,booth_name,"");
-//            createMarker(Double.parseDouble(lat_current), Double.parseDouble(lon_current), booth_name, "");
-//        }else{
-//            createMarker(22.7533, 75.8937,booth_name,address);
-//            createMarker(Double.parseDouble(lat_current), Double.parseDouble(lon_current), booth_name, address2);
-//            }
-//
-//        mMap.setInfoWindowAdapter(customInfoWindow);
-//        customInfoWindow.getInfoWindow(createMarker(22.7533, 75.8937,booth_name,address));
-//        customInfoWindow.getInfoWindow(createMarker(Double.parseDouble(lat_current), Double.parseDouble(lon_current),"",address2));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-//
-//        CameraPosition camPos = new CameraPosition.Builder()
-//                .target(new LatLng(22.7533, 75.8937))
-//                .zoom(18)
-////                .tilt(70)
-//                .build();
-//        CameraUpdate camUpd3 = CameraUpdateFactory.newCameraPosition(camPos);
-//        googleMap.animateCamera(camUpd3);
-//    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        Log.d("mylog", "Added Markers");
-        mMap.addMarker(place1);
-        mMap.addMarker(place2);
-
-        LatLng sydney = new LatLng(22.7533, 75.8937);
+        mMap.getUiSettings().setCompassEnabled(true);
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(Double.parseDouble(lat_booth), Double.parseDouble(lon_booth));
+//        mMap.addMarker(new MarkerOptions().position(sydney).title(address));
+        if (add_booth.isEmpty()){
+            createMarker(Double.parseDouble(lat_booth), Double.parseDouble(lon_booth), booth_name, "");
+        }else{
+            createMarker(Double.parseDouble(lat_booth), Double.parseDouble(lon_booth), booth_name, add_booth);
+            }
 
         mMap.setInfoWindowAdapter(customInfoWindow);
-        customInfoWindow.getInfoWindow(createMarker(22.7533, 75.8937,booth_name,address));
-        customInfoWindow.getInfoWindow(createMarker(Double.parseDouble(lat_current), Double.parseDouble(lon_current),"",address2));
+        customInfoWindow.getInfoWindow(createMarker(Double.parseDouble(lat_booth), Double.parseDouble(lon_booth),booth_name,add_booth));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         CameraPosition camPos = new CameraPosition.Builder()
-                .target(new LatLng(22.7533, 75.8937))
-                .zoom(20)
+                .target(new LatLng(Double.parseDouble(lat_booth), Double.parseDouble(lon_booth)))
+                .zoom(18)
 //                .tilt(70)
                 .build();
         CameraUpdate camUpd3 = CameraUpdateFactory.newCameraPosition(camPos);
         googleMap.animateCamera(camUpd3);
     }
+
 
 
     protected Marker createMarker(double latitude, double longitude, String title, String snippet) {

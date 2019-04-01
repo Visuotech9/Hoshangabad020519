@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import com.visuotech.hoshangabad.MarshMallowPermission;
 import com.visuotech.hoshangabad.Model.Designation_Details;
 import com.visuotech.hoshangabad.Model.Samities;
+import com.visuotech.hoshangabad.NetworkConnection;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
@@ -40,10 +42,10 @@ import java.util.List;
 import java.util.Map;
 
 public class Act_samaties extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    LinearLayout container;
-    TextView tv_text;
-    Spinner spinner_samities;
-    String id,designation,booth_name,mobile,name,desig,lat,log;
+    LinearLayout container,lay,lay1,lay2;
+    TextView tv_text,tv_text1,tv_text2;
+    Spinner spinner_samities,spinner_level,spinner_assembly;
+    String id,designation,booth_name,mobile,name,level,lat,log,assembly;
     Button btn_cancel,btn_submit;
     int designation_no;
     ArrayList<Samities> samiti_list1;
@@ -54,7 +56,9 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
     SessionParam sessionParam;
     MarshMallowPermission marshMallowPermission;
     private BaseRequest baseRequest;
-    String[] designation_list = { "P0","P1","BLO","GRS","SACHIV","THANA","Sector Officer","Local Contact Person-1","Local Contact Person-2"};
+    LinearLayout lin_spl_layout;
+    String[] level_list = { "District","Assembly"};
+    String[] assembly_list = { "136- Seoni malwa","137- Hoshangabad","138- Sohagpur","139- Pipariya"};
     public boolean datafinish = false;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
     @Override
@@ -80,15 +84,37 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
         final View rowView = inflater.inflate(R.layout.activity_act_samaties, null);
 
         permission();
-
+         lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
         spinner_samities = rowView.findViewById(R.id.spinner_samities);
+        spinner_assembly = rowView.findViewById(R.id.spinner_assembly);
         tv_text = rowView.findViewById(R.id.tv_text);
+        spinner_level = rowView.findViewById(R.id.spinner_level);
+        tv_text1 = rowView.findViewById(R.id.tv_text1);
+        tv_text2 = rowView.findViewById(R.id.tv_text2);
         btn_submit = rowView.findViewById(R.id.btn_submit);
 
-        tv_text.setText("Select Committee:");
+        lay = rowView.findViewById(R.id.lay);
+        lay1 = rowView.findViewById(R.id.lay1);
+        lay2 = rowView.findViewById(R.id.lay2);
+
+        tv_text2.setText("Select Committee:");
+        tv_text.setText("Select Level:");
+        tv_text1.setText("Select Assembly:");
 
         container.addView(rowView, container.getChildCount());
         spinner_samities.setOnItemSelectedListener(this);
+        spinner_level.setOnItemSelectedListener(this);
+        spinner_assembly.setOnItemSelectedListener(this);
+
+
+        ArrayAdapter adapter_level = new ArrayAdapter(context,android.R.layout.simple_spinner_item,level_list);
+        adapter_level.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_level.setAdapter(adapter_level);
+
+        ArrayAdapter adapter_assembly = new ArrayAdapter(context,android.R.layout.simple_spinner_item,assembly_list);
+        adapter_assembly.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_assembly.setAdapter(adapter_assembly);
+
 
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +130,7 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
         });
-        ApigetSamlist();
+
 
     }
 
@@ -240,15 +266,58 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch(adapterView.getId()){
+
+            case R.id.spinner_level :
+                //Your Action Here.
+                level=level_list[i];
+
+                if (level.equals("Assembly")){
+                    lay1.setVisibility(View.VISIBLE);
+                    tv_text1.setVisibility(View.VISIBLE);
+                    samiti_list.clear();
+
+                    if (NetworkConnection.checkNetworkStatus(context) == true) {
+                        ApigetSamlist2(level);
+                    } else {
+                        Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                    }
+
+
+                }else if (level.equals("District")){
+                    lay1.setVisibility(View.GONE);
+                    tv_text1.setVisibility(View.GONE);
+                    samiti_list.clear();
+
+                    if (NetworkConnection.checkNetworkStatus(context) == true) {
+                        ApigetSamlist(level);
+                    } else {
+                        Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                    }
+
+                }
+
+                break;
+
+            case R.id.spinner_assembly :
+                //Your Action Here.
+                assembly=assembly_list[i];
+                samiti_list.clear();
+
+                if (NetworkConnection.checkNetworkStatus(context) == true) {
+                    ApigetSamlist2(level);
+                } else {
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                }
+                break;
+
             case R.id.spinner_samities :
                 //Your Action Here.
                 id=samiti_list1.get(i).getSamitiId();
                 name=samiti_list1.get(i).getSamitiName();
-//                log=booth_list1.get(i).getEleLongitude();
-
-
-//                Toast.makeText(getApplicationContext(),course, Toast.LENGTH_LONG).show();
                 break;
+
+
+
         }
 
     }
@@ -258,7 +327,7 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    private void ApigetSamlist(){
+    private void ApigetSamlist2(String level){
         baseRequest = new BaseRequest(context);
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
@@ -296,7 +365,50 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
 
             }
         });
-        String remainingUrl2="/Election/Api2.php?apicall=samiti_list";
+        String remainingUrl2="/Election/Api2.php?apicall=samiti_list&samiti_level="+level +"&samiti_assembly="+assembly;
+        baseRequest.callAPIGETData(1, remainingUrl2);
+    }
+
+
+    private void ApigetSamlist(String level){
+        baseRequest = new BaseRequest(context);
+        baseRequest.setBaseRequestListner(new RequestReciever() {
+            @Override
+            public void onSuccess(int requestCode, String Json, Object object) {
+                try {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    JSONArray jsonArray=jsonObject.optJSONArray("user");
+
+                    samiti_list1=baseRequest.getDataList(jsonArray,Samities.class);
+
+                    for (int i=0;i<samiti_list1.size();i++){
+                        samiti_list.add(samiti_list1.get(i).getSamitiName());
+//                       department_id.add(department_list1.get(i).getDepartment_id());
+                    }
+                    ArrayAdapter adapter_samitie = new ArrayAdapter(context,android.R.layout.simple_spinner_item,samiti_list);
+                    adapter_samitie.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_samities.setAdapter(adapter_samitie);
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int requestCode, String errorCode, String message) {
+
+            }
+            @Override
+            public void onNetworkFailure(int requestCode, String message) {
+
+            }
+        });
+        String remainingUrl2="/Election/Api2.php?apicall=samiti_list&samiti_level="+level;
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
     public boolean onOptionsItemSelected(MenuItem item) {

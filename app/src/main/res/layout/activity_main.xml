@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/registration_view"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fillViewport="true"
     android:scrollbars="none"
     android:scrollIndicators="none"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,15 +17,14 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/mpgovt_icon"
-            android:layout_height="150dp" />
+            android:src="@drawable/app_icon2"
+            android:layout_height="250dp" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_marginTop="5dp"
             android:text="Madhya Pradesh Government"
             android:textSize="20dp"
             android:textColor="@color/DarkRed"
@@ -35,20 +35,22 @@
             android:layout_width="match_parent"
             android:text="(Hoshangabad)"
             android:textSize="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
             android:textColor="@color/DarkRed"
             android:gravity="center_horizontal"
             android:layout_height="wrap_content" />
 
-        <View android:id="@+id/separator"
-            android:background="@color/lightgrey"
-            android:layout_width = "fill_parent"
-            android:layout_marginBottom="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_height="1dip"
-            android:layout_centerVertical ="true"
-            android:layout_alignParentTop="true"/>
+
+        <!--<View android:id="@+id/separator"-->
+            <!--android:background="@color/colorPrimaryDark"-->
+            <!--android:layout_width = "fill_parent"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginRight="50dp"-->
+            <!--android:layout_marginLeft="50dp"-->
+            <!--android:layout_height="1dip"-->
+            <!--android:layout_centerVertical ="true"-->
+            <!--android:layout_alignParentTop="true"/>-->
 
 
 
@@ -289,6 +291,7 @@
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:weightSum="1"
+            android:visibility="gone"
             android:layout_marginBottom="10dp"
             android:paddingRight="5dp"
             android:layout_height="wrap_content">
@@ -369,7 +372,7 @@
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:layout_marginTop="2.5dp"
                         android:layout_height="65dp"
-                        android:src="@drawable/election_image"
+                        android:src="@drawable/img_exm_noti"
                         app:civ_border_color="@color/Gray"
                         app:civ_border_width="0dp"
                         app:civ_shadow="true"
@@ -393,6 +396,194 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<View android:id="@+id/separator"-->
+                <!--android:background="@color/colorPrimaryDark"-->
+                <!--android:layout_width = "1dp"-->
+                <!--android:layout_marginLeft="50dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_centerVertical ="true"-->
+                <!--android:layout_alignParentTop="true"/>-->
+            <!---->
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_height="wrap_content">-->
+
+                <!--<View android:id="@+id/separator2"-->
+                    <!--android:background="@color/colorPrimaryDark"-->
+                    <!--android:layout_width = "match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_centerVertical ="true"-->
+                    <!--android:layout_alignParentTop="true"/>-->
+
+                <!--<View android:id="@+id/separator3"-->
+                    <!--android:background="@color/colorPrimaryDark"-->
+                    <!--android:layout_width = "match_parent"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_gravity="bottom"-->
+                    <!--/>-->
+
+
+
+            <!--</LinearLayout>-->
+
+
+        <!--</LinearLayout>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/lay11"
+            android:background="@drawable/bg_home"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:id="@+id/lay_image"
+                android:gravity="center_horizontal"
+                android:background="@drawable/bg_circular_imageview"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:src="@drawable/male"
+                    />
+
+            </LinearLayout>
+
+
+
+            <TextView
+                android:id="@+id/tv_resp"
+                android:layout_width="match_parent"
+                android:text="Election Details"
+                android:textColor="@color/White"
+                android:layout_gravity="center_vertical"
+                android:textSize="18dp"
+                android:paddingLeft="10dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:id="@+id/lay12"
+            android:background="@drawable/bg_home"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:gravity="center_horizontal"
+                android:background="@drawable/bg_circular_imageview"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:src="@drawable/notifications_icon_color"
+                    />
+
+            </LinearLayout>
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Notification"
+                android:textColor="@color/White"
+                android:layout_gravity="center_vertical"
+                android:textSize="18dp"
+                android:paddingLeft="10dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginTop="10dp"
+            android:id="@+id/lay13"
+            android:background="@drawable/bg_home"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:gravity="center_horizontal"
+                android:background="@drawable/bg_circular_imageview"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:src="@drawable/responsibility_icon"
+                    />
+
+            </LinearLayout>
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Follow us"
+                android:textColor="@color/White"
+                android:layout_gravity="center_vertical"
+                android:textSize="18dp"
+                android:paddingLeft="10dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+
+        <!--<Button-->
+            <!--android:id="@+id/btn_follow"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:text="Follow  us"-->
+            <!--android:background="@drawable/background_btn"-->
+            <!--android:layout_marginLeft="80dp"-->
+            <!--android:layout_marginRight="80dp"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:layout_marginBottom="20dp"-->
+            <!--android:textColor="@color/colorPrimaryDark"-->
+            <!--android:layout_height="40dp" />-->
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_gravity="bottom"
@@ -402,7 +593,7 @@
     <TextView
         android:id="@+id/scrollingtext"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:textSize="15dp"
         android:textColorLink="@color/White"
         android:paddingRight="15dp"

@@ -13,4 +13,13 @@
         android:layout_height="match_parent"
         tools:context=".Activities.MapsActivity" />
 
+    <Button
+        android:id="@+id/btn_getLocation"
+        android:text="get direction"
+        android:textColor="@color/White"
+        android:background="@color/DarkRed"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </FrameLayout>

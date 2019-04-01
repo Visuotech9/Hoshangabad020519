@@ -54,7 +54,7 @@ public class Act_hoshangabad extends AppCompatActivity {
         permission();
         lay1=rowView.findViewById(R.id.lay1);
         lay2=rowView.findViewById(R.id.lay2);
-        lay3=rowView.findViewById(R.id.lay3);
+
 
         container.addView(rowView, container.getChildCount());
 
@@ -76,14 +76,6 @@ public class Act_hoshangabad extends AppCompatActivity {
             }
         });
 
-        lay3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Act_hoshangabad.this, Act_vidhansabha.class);
-                startActivity(i);
-
-            }
-        });
     }
 
     private void permission() {

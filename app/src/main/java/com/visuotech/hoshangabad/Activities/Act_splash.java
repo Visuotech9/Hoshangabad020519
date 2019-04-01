@@ -43,11 +43,15 @@ public class Act_splash extends AppCompatActivity {
     String other_device_active,user_typee,organization_id,user_id,login_status,payment_status,account_status;
     LinearLayout lin_spl_layout;
 
+    Handler handler;
+    Runnable refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act_splash);
+
+
 
         activity = this;
         sessionParam = new SessionParam(getApplicationContext());
@@ -57,7 +61,7 @@ public class Act_splash extends AppCompatActivity {
         user_id= sessionParam.userId;
         organization_id=sessionParam.org_id;
 
-        lin_spl_layout=findViewById(R.id.lin_spl_layout);
+//        lin_spl_layout=findViewById(R.id.lin_spl_layout);
         permissionPhone();
 
 
@@ -73,6 +77,12 @@ public class Act_splash extends AppCompatActivity {
 
             Log.d("API LEVEL>>>>>", String.valueOf(Build.VERSION.SDK_INT));
             Log.d("API LEVEL LOLISPOP>>>>>", String.valueOf(Build.VERSION_CODES.N));
+
+//            if (NetworkConnection.checkNetworkStatus(context) == true) {
+//                api_loginStatus();
+//            } else {
+////                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+//            }
             startTimer();
         }
 
@@ -81,12 +91,26 @@ public class Act_splash extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 if (NetworkConnection.checkNetworkStatus(context) == true) {
                     api_loginStatus();
-
                 } else {
-                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+//                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
                 }
+
+//                handler = new Handler();
+//                refresh = new Runnable() {
+//                    public void run() {
+//
+//
+//                        handler.postDelayed(refresh, 20000);
+//
+//                    }
+//                };
+//                handler.post(refresh);
+
+
+
             }
 
         }, SPLASH_TIME_OUT);
@@ -109,7 +133,7 @@ public class Act_splash extends AppCompatActivity {
     }
 
     public void api_loginStatus() {
-        baseRequest = new BaseRequest(context);
+        baseRequest = new BaseRequest();
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
@@ -121,12 +145,12 @@ public class Act_splash extends AppCompatActivity {
 
             @Override
             public void onFailure(int requestCode, String errorCode, String message) {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNetworkFailure(int requestCode, String message) {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
             }
         });

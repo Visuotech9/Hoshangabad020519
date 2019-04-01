@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.visuotech.hoshangabad.Activities.Election.Act_election;
 import com.visuotech.hoshangabad.MarshMallowPermission;
 import com.visuotech.hoshangabad.Model.Designation_Details;
 import com.visuotech.hoshangabad.Model.Vidhansabha_Design;
+import com.visuotech.hoshangabad.NetworkConnection;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
@@ -105,7 +107,13 @@ public class Act_vidhansabha extends AppCompatActivity implements AdapterView.On
             }
         });
 
-        ApigetDesiglist();
+
+        LinearLayout lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
+        if (NetworkConnection.checkNetworkStatus(context) == true) {
+            ApigetDesiglist();
+        } else {
+            Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     private void permission() {

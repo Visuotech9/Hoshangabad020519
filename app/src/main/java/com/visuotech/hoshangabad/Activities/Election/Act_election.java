@@ -128,7 +128,7 @@ public class Act_election extends AppCompatActivity {
         lay5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Act_election.this, Act_district_officers.class);
+                Intent i = new Intent(Act_election.this, Act_responsibility.class);
                 startActivity(i);
                 finish();
             }

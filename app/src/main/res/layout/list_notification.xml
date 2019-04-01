@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -22,7 +22,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight=".15"
-                android:paddingTop="10dp"
+                android:paddingTop="15dp"
                 android:gravity="center_horizontal"
                 android:layout_height="match_parent"
                 tools:ignore="Suspicious0dp">
@@ -30,22 +30,18 @@
                 <LinearLayout
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:id="@+id/lay_image"
                     android:gravity="center_horizontal"
                     android:background="@drawable/bg_circular_imageview"
                     android:layout_gravity="center_horizontal">
 
-                    <com.mikhaellopez.circularimageview.CircularImageView
+                    <ImageView
                         android:layout_width="20dp"
-                        android:id="@+id/iv_image"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_marginTop="5dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/election_image"
-                        app:civ_border_color="@color/Gray"
-                        app:civ_border_width="0dp"
-                        app:civ_shadow="true"
-                        app:civ_shadow_radius="0"
-                        app:civ_shadow_color="@color/colorPrimary"/>
+                        android:layout_marginTop="5dp"
+                        android:padding="3dp"
+                        android:src="@drawable/notifications_icon_color"
+                        />
 
                 </LinearLayout>
 
@@ -65,7 +61,7 @@
                     android:id="@+id/tv_title"
                     android:text="Title"
                     android:textStyle="bold"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/Blacklight"
                     android:textSize="17dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -75,11 +71,20 @@
                     android:textSize="15dp"
                     android:textColor="@color/textcolor2"
                     android:text="Content"
+                    android:justificationMode="inter_word"
                     android:inputType="textMultiLine|textNoSuggestions"
                     android:layout_marginRight="10dp"
                     android:layout_height="wrap_content"
                     android:singleLine="false"
                     android:id="@+id/tv_content"/>
+
+                <!--<me.biubiubiu.justifytext.library.JustifyTextView-->
+                    <!--android:id="@+id/tv_content1"-->
+                    <!--android:text="Implement justified textview base on the native TextView. Let text displays fill the screen width without extra blanks in the end of line"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content" />-->
+
+
 
                 <TextView
                     android:id="@+id/tv_time"

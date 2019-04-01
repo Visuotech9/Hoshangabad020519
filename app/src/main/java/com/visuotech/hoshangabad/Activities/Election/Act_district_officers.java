@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,12 +24,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.visuotech.hoshangabad.Adapter.Ad_Vidhansabha;
 import com.visuotech.hoshangabad.Adapter.Ad_district_officers;
 import com.visuotech.hoshangabad.MarshMallowPermission;
 import com.visuotech.hoshangabad.Model.District_officers;
 import com.visuotech.hoshangabad.Model.Vidhanasabha_list;
+import com.visuotech.hoshangabad.NetworkConnection;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
@@ -50,7 +54,8 @@ public class Act_district_officers extends AppCompatActivity {
     ArrayList<String>district_officers_list=new ArrayList<>();
     Ad_district_officers adapter;
     String AC;
-    String booth_name;
+
+    String Resp_name;
     EditText inputSearch;
     String designation,samitee_name;
     public boolean datafinish = false;
@@ -60,14 +65,20 @@ public class Act_district_officers extends AppCompatActivity {
     SessionParam sessionParam;
     MarshMallowPermission marshMallowPermission;
     private BaseRequest baseRequest;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    LinearLayout lin_spl_layout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act_election);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Intent intent=getIntent();
+        Resp_name=intent.getStringExtra("NAME");
+
         toolbar.setTitleTextColor((Color.parseColor("#FFFFFF")));
-        getSupportActionBar().setTitle("District officers");
+        getSupportActionBar().setTitle(Resp_name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         context=this;
@@ -77,7 +88,7 @@ public class Act_district_officers extends AppCompatActivity {
         final View rowView = inflater.inflate(R.layout.activity_act_district_officers, null);
 
         permission();
-
+        mSwipeRefreshLayout=rowView.findViewById(R.id.activity_main_swipe_refresh_layout);
         rv = (RecyclerView) rowView.findViewById(R.id.rv_list);
         inputSearch = (EditText) rowView.findViewById(R.id.inputSearch);
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
@@ -87,9 +98,7 @@ public class Act_district_officers extends AppCompatActivity {
         container.addView(rowView, container.getChildCount());
 
 
-        Intent intent=getIntent();
-        designation=intent.getStringExtra("designation");
-        AC=intent.getStringExtra("CITY");
+
 
 
 
@@ -112,7 +121,27 @@ public class Act_district_officers extends AppCompatActivity {
                 filter(editable.toString());
             }
         });
-        ApigetVidhan_detail_list();
+
+
+        lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
+        if (NetworkConnection.checkNetworkStatus(context) == true) {
+            ApigetVidhan_detail_list();
+        } else {
+            Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+        }
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkConnection.checkNetworkStatus(context)==true){
+                    ApigetVidhan_detail_list();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }else{
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
+
+
+            }
+        });
 
     }
 
@@ -287,7 +316,7 @@ public class Act_district_officers extends AppCompatActivity {
 
             }
         });
-        String remainingUrl2="/Election/Api2.php?apicall=district_officer_list";
+        String remainingUrl2="/Election/Api2.php?apicall=district_officer_list&nodal_responsibility="+Resp_name;
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
 
@@ -298,7 +327,7 @@ public class Act_district_officers extends AppCompatActivity {
 
         //looping through existing elements
         for (int i=0;i<district_officers_list1.size();i++) {
-            if (district_officers_list1.get(i).getOfficer_post().toLowerCase().contains(text.toLowerCase())) {
+            if (district_officers_list1.get(i).getOfficer_post().toLowerCase().contains(text.toLowerCase())||district_officers_list1.get(i).getOfficer_name().toLowerCase().contains(text.toLowerCase())) {
                 District_officers vd = new District_officers();
                 vd.setOfficer_name(district_officers_list1.get(i).getOfficer_name());
                 vd.setOfficer_email(district_officers_list1.get(i).getOfficer_email());
@@ -314,7 +343,7 @@ public class Act_district_officers extends AppCompatActivity {
         adapter.filterList(district_officers_list);
     }
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i = new Intent(Act_district_officers.this, Act_election.class);
+        Intent i = new Intent(Act_district_officers.this, Act_responsibility.class);
         startActivity(i);
         finish();
         return true;
@@ -323,7 +352,7 @@ public class Act_district_officers extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(Act_district_officers.this, Act_election.class);
+        Intent i = new Intent(Act_district_officers.this, Act_responsibility.class);
         startActivity(i);
         finish();
     }

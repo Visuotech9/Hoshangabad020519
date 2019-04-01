@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,10 +24,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.visuotech.hoshangabad.Adapter.Ad_samitee_member;
 import com.visuotech.hoshangabad.MarshMallowPermission;
 import com.visuotech.hoshangabad.Model.Samitee_members;
+import com.visuotech.hoshangabad.NetworkConnection;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
@@ -58,6 +62,8 @@ public class Act_sam_mem_list extends AppCompatActivity {
     private BaseRequest baseRequest;
     public boolean datafinish = false;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
+    LinearLayout lin_spl_layout;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +72,14 @@ public class Act_sam_mem_list extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Intent intent=getIntent();
+        id=intent.getStringExtra("Id");
+        samitee_name=intent.getStringExtra("Name");
+
+
         toolbar.setTitleTextColor((Color.parseColor("#FFFFFF")));
-        getSupportActionBar().setTitle("Member list");
+        getSupportActionBar().setTitle(samitee_name+" "+"Members");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         context=this;
@@ -77,7 +89,7 @@ public class Act_sam_mem_list extends AppCompatActivity {
         final View rowView = inflater.inflate(R.layout.activity_act_sam_mem_list, null);
 
         permission();
-
+        mSwipeRefreshLayout=rowView.findViewById(R.id.activity_main_swipe_refresh_layout);
         rv = (RecyclerView) rowView.findViewById(R.id.rv_list);
         inputSearch = (EditText) rowView.findViewById(R.id.inputSearch);
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
@@ -87,9 +99,7 @@ public class Act_sam_mem_list extends AppCompatActivity {
         container.addView(rowView, container.getChildCount());
 
 
-        Intent intent=getIntent();
-        id=intent.getStringExtra("Id");
-        samitee_name=intent.getStringExtra("Name");
+
 
 
 //        Apigetboothlist();
@@ -112,6 +122,26 @@ public class Act_sam_mem_list extends AppCompatActivity {
             }
         });
         Apigetsam_mem_list();
+
+        lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
+        if (NetworkConnection.checkNetworkStatus(context) == true) {
+            Apigetsam_mem_list();
+        } else {
+            Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+        }
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkConnection.checkNetworkStatus(context)==true){
+                    Apigetsam_mem_list();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }else{
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
+
+
+            }
+        });
     }
 
     private void permission() {
@@ -295,10 +325,14 @@ public class Act_sam_mem_list extends AppCompatActivity {
 
         //looping through existing elements
         for (int i=0;i<sam_mem_list1.size();i++) {
-            if (sam_mem_list1.get(i).getMember_name().toLowerCase().contains(text.toLowerCase())) {
+            if (sam_mem_list1.get(i).getMember_name().toLowerCase().contains(text.toLowerCase())||sam_mem_list1.get(i).getMember_designation().toLowerCase().contains(text.toLowerCase())) {
                 Samitee_members samitee_members = new Samitee_members();
-                samitee_members.setMember_name(sam_mem_list1.get(i).getMember_name());
                 samitee_members.setMember_mobile(sam_mem_list1.get(i).getMember_mobile());
+                samitee_members.setMember_name(sam_mem_list1.get(i).getMember_name());
+                samitee_members.setEle_sam_dutyfrom(sam_mem_list1.get(i).getEle_sam_dutyfrom());
+                samitee_members.setEle_sam_dutyto(sam_mem_list1.get(i).getEle_sam_dutyto());
+                samitee_members.setMember_designation(sam_mem_list1.get(i).getMember_designation());
+                samitee_members.setMember_responsibility(sam_mem_list1.get(i).getMember_responsibility());
                 members_list2.add(samitee_members);
             }
         }

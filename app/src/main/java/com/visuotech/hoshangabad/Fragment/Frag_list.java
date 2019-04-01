@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.visuotech.hoshangabad.Adapter.Ad_designation_details;
 import com.visuotech.hoshangabad.MarshMallowPermission;
 import com.visuotech.hoshangabad.Model.PollingBooth;
+import com.visuotech.hoshangabad.NetworkConnection;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
@@ -41,11 +46,12 @@ public class Frag_list extends Fragment {
     String booth_name;
     EditText inputSearch;
     Activity activity;
-
+    SwipeRefreshLayout mSwipeRefreshLayout;
     Context context;
     SessionParam sessionParam;
     MarshMallowPermission marshMallowPermission;
     private BaseRequest baseRequest;
+    LinearLayout lin_spl_layout;
     String[] designation_list = { "P0","P1","BLO","GRS","SACHIV","THANA","Sector Officer","Local Contact Person-1","Local Contact Person-2"};
 
     public Frag_list() {
@@ -73,12 +79,35 @@ public class Frag_list extends Fragment {
        View view = inflater.inflate(R.layout.fragment_frag_list, container, false);
 //        activity=this;
         rv = (RecyclerView) view.findViewById(R.id.rv_list);
+        lin_spl_layout=view.findViewById(R.id.lin_spl_layout);
+        mSwipeRefreshLayout=view.findViewById(R.id.activity_main_swipe_refresh_layout);
         inputSearch = (EditText) view.findViewById(R.id.inputSearch);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(linearLayoutManager);
         rv.setItemAnimator(new DefaultItemAnimator());
 //        Utility.hideKeyBoard(activity);
-        Apigetboothlist();
+
+
+
+        if (NetworkConnection.checkNetworkStatus(getContext()) == true) {
+            Apigetboothlist();
+        } else {
+            Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+        }
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkConnection.checkNetworkStatus(getContext())==true){
+                    Apigetboothlist();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }else{
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
+
+
+            }
+        });
+
 
 
         inputSearch.addTextChangedListener(new TextWatcher() {

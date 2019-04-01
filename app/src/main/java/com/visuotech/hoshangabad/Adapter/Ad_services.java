@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.visuotech.hoshangabad.Activities.MapActivity;
@@ -60,7 +62,7 @@ public class Ad_services extends RecyclerView.Adapter<Ad_services.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
 
-        holder.tv_type.setText(list.get(i).getOther_services_type());
+
         holder.tv_name.setText(list.get(i).getOther_services_name());
         holder.tv_mobile.setText(list.get(i).getOther_services_mobile());
         String htmlString="<u> View on map </u>";
@@ -68,13 +70,23 @@ public class Ad_services extends RecyclerView.Adapter<Ad_services.MyViewHolder> 
         holder.tv_lat.setText(list.get(i).getOther_services_lat());
         holder.tv_long.setText(list.get(i).getOther_services_long());
 
+        if (i%2!=0){
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }
         holder.tv_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(context, MapActivity.class);
-                intent.putExtra("LAT",holder.tv_lat.getText().toString());
-                intent.putExtra("LOG",holder.tv_long.getText().toString());
-                context.startActivity(intent);
+
+                if (holder.tv_lat.getText().toString().equals("") && holder.tv_long.getText().toString().equals("")){
+                    Toast.makeText(context,"Location is not available for this service",Toast.LENGTH_SHORT).show();
+                }else{
+                    Intent intent=new Intent(context, MapActivity.class);
+                    intent.putExtra("LAT",holder.tv_lat.getText().toString());
+                    intent.putExtra("LOG",holder.tv_long.getText().toString());
+                    intent.putExtra("NAME",holder.tv_name.getText().toString());
+                    context.startActivity(intent);
+                }
+
             }
         });
         holder.lay_call.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +140,6 @@ public class Ad_services extends RecyclerView.Adapter<Ad_services.MyViewHolder> 
             tv_name=itemView.findViewById(R.id.tv_name);
             tv_address =  itemView.findViewById(R.id.tv_address);
             tv_mobile =  itemView.findViewById(R.id.tv_mobile);
-            tv_type =  itemView.findViewById(R.id.tv_type);
             lay_message =  itemView.findViewById(R.id.lay_message);
             lay_call =  itemView.findViewById(R.id.lay_call);
             tv_lat =  itemView.findViewById(R.id.tv_lat);

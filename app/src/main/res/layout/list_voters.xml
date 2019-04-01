@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/lin_layout"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight=".15"
+                android:paddingTop="15dp"
+                android:gravity="center_horizontal"
+                android:layout_height="match_parent"
+                tools:ignore="Suspicious0dp">
+
+                <LinearLayout
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/lay_image"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/bg_circular_imageview"
+                    android:layout_gravity="center_horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="5dp"
+                        android:padding="3dp"
+                        android:src="@drawable/notifications_icon_color"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_weight=".85"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                tools:ignore="Suspicious0dp">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:text="Title"
+                    android:textStyle="bold"
+                    android:textColor="@color/Blacklight"
+                    android:textSize="17dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:textSize="15dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:text="Content"
+                    android:justificationMode="inter_word"
+                    android:inputType="textMultiLine|textNoSuggestions"
+                    android:layout_marginRight="10dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="false"
+                    android:id="@+id/tv_link"/>
+
+                <TextView
+                    android:id="@+id/tv_link2"
+                    android:text="Title"
+                    android:visibility="gone"
+                    android:textStyle="bold"
+                    android:textColor="@color/Blacklight"
+                    android:textSize="17dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <!--<me.biubiubiu.justifytext.library.JustifyTextView-->
+                <!--android:id="@+id/tv_content1"-->
+                <!--android:text="Implement justified textview base on the native TextView. Let text displays fill the screen width without extra blanks in the end of line"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content" />-->
+
+
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:text=""
+                    android:layout_marginTop="3dp"
+                    android:textSize="13dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <View android:id="@+id/separator"
+        android:background="@color/lightgrey"
+        android:layout_width = "fill_parent"
+        android:layout_marginLeft="30dp"
+        android:layout_height="1dip"
+        android:layout_centerVertical ="true"
+        android:layout_alignParentTop="true"/>
+</LinearLayout>
+

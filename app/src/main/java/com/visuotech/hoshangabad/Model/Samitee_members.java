@@ -1,7 +1,23 @@
 package com.visuotech.hoshangabad.Model;
 
 public class Samitee_members {
-    String member_name,member_designation,member_mobile,sam_samiti_id,user_id,member_responsibility;
+    String member_name,member_designation,member_mobile,sam_samiti_id,user_id,member_responsibility,ele_sam_dutyfrom,ele_sam_dutyto;
+
+    public String getEle_sam_dutyfrom() {
+        return ele_sam_dutyfrom;
+    }
+
+    public void setEle_sam_dutyfrom(String ele_sam_dutyfrom) {
+        this.ele_sam_dutyfrom = ele_sam_dutyfrom;
+    }
+
+    public String getEle_sam_dutyto() {
+        return ele_sam_dutyto;
+    }
+
+    public void setEle_sam_dutyto(String ele_sam_dutyto) {
+        this.ele_sam_dutyto = ele_sam_dutyto;
+    }
 
     public String getMember_responsibility() {
         return member_responsibility;

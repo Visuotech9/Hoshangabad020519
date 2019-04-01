@@ -22,6 +22,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,8 +43,9 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Act_home extends AppCompatActivity {
-    LinearLayout lay1,lay2,lay3,lay4,lay5,lay6;
+    LinearLayout lay1,lay2,lay3,lay4,lay5,lay6,lay13,lay12,lay11;
     public boolean datafinish = false;
+    Button btn_follow;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
     Context context;
     Activity activity;
@@ -75,11 +77,12 @@ public class Act_home extends AppCompatActivity {
         lay4=findViewById(R.id.lay4);
         lay5=findViewById(R.id.lay5);
         lay6=findViewById(R.id.lay6);
+        lay11=findViewById(R.id.lay11);
+        lay12=findViewById(R.id.lay12);
+        lay13=findViewById(R.id.lay13);
+
         scrollingText = (TextView)findViewById(R.id.scrollingtext);
-        scrollingText.setText(
-                Html.fromHtml(
-                        "निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए संपर्क करें" +
-                                " <a href='tel:1950'>1950</a> "));
+        scrollingText.setText(Html.fromHtml("निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए संपर्क करें 1950" ));
 //        scrollingText.setMovementMethod(LinkMovementMethod.getInstance());
 
         scrollingText.setSelected(true);
@@ -120,7 +123,7 @@ public class Act_home extends AppCompatActivity {
 //                finish();
             }
         });
-        lay5.setOnClickListener(new View.OnClickListener() {
+        lay11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Act_home.this, Act_election.class);
@@ -128,7 +131,7 @@ public class Act_home extends AppCompatActivity {
                 finish();
             }
         });
-        lay6.setOnClickListener(new View.OnClickListener() {
+        lay12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Act_home.this, Notification.class);
@@ -136,6 +139,15 @@ public class Act_home extends AppCompatActivity {
                 finish();
             }
         });
+        lay13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Act_home.this, FollowUsActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
 
 
 //        SpannableString ss = new SpannableString("निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए संपर्क करें 1950");
@@ -322,7 +334,31 @@ public class Act_home extends AppCompatActivity {
 
 
     }
+    public void onBackPressed() {
+        new android.app.AlertDialog.Builder(Act_home.this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Exit")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        finish();
+
+                        Intent a = new Intent(Intent.ACTION_MAIN);
+                        a.addCategory(Intent.CATEGORY_HOME);
+                        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(a);
 
 
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+
+
+    }
 
 }

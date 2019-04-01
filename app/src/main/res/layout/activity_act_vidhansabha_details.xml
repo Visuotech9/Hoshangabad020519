@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:id="@+id/lin_spl_layout"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -51,24 +52,33 @@
         android:layout_alignParentTop="true"/>
 
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.suleiman.pagination.MainActivity">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false" />
-
+        android:layout_height="wrap_content"
+        android:layout_weight=".9"
+        android:orientation="vertical">
         <ProgressBar
             android:id="@+id/progressbar"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:visibility="gone"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content" />
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/activity_main_swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+
+
+
 
 
     </FrameLayout>

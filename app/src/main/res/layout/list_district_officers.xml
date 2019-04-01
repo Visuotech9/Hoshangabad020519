@@ -21,74 +21,154 @@
 
             <LinearLayout
                 android:layout_width="0dp"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight=".20"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:ignore="Suspicious0dp">
+
+                <LinearLayout
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:id="@+id/lay_image"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/bg_circular_imageview"
+                    android:layout_gravity="center_horizontal">
+
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:layout_width="35dp"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_marginTop="5dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/person_icon"
+                        app:civ_border_width="0dp"
+                        app:civ_shadow="true"
+                        app:civ_shadow_radius="0"
+                        app:civ_shadow_color="@color/colorPrimary"/>
+
+                </LinearLayout>
+
+
+
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight=".7"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
+                android:layout_weight=".5"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="vertical"
-                android:paddingLeft="15dp"
                 tools:ignore="Suspicious0dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="5dp"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:layout_marginTop="1dp"
-                        android:layout_width="16dp"
-                        android:src="@drawable/person_icon"
-                        android:layout_height="16dp" />
+                    <!--<ImageView-->
+                        <!--android:layout_marginTop="1dp"-->
+                        <!--android:layout_width="16dp"-->
+                        <!--android:src="@drawable/person_icon"-->
+                        <!--android:layout_height="match_parent" />-->
 
                     <TextView
                         android:id="@+id/tv_name"
                         android:layout_width="wrap_content"
-                        android:layout_height="16dp"
+                        android:layout_height="match_parent"
                         android:hint="Name"
-                        android:layout_marginLeft="3dp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
                         android:text="Mr khanna kumr"
-                        android:textColor="@color/Black"
+                        android:textColor="@color/Blacklight"
                         android:textSize="14dp" />
 
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="5dp"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:layout_marginTop="3dp"
-                        android:layout_width="16dp"
-                        android:src="@drawable/person_icon"
-                        android:layout_height="16dp" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="16dp"-->
+                        <!--android:src="@drawable/person_icon"-->
+                        <!--android:layout_height="match_parent" />-->
                     <TextView
                         android:id="@+id/tv_designation"
-                        android:layout_marginTop="2dp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:hint="Designation"
-                        android:layout_marginLeft="3dp"
-                        android:text="Tehsildar"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:text="Designation"
+                        android:textColor="@color/textcolor2"
+                        android:textSize="14dp" />
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+
+                    <!--<ImageView-->
+                    <!--android:layout_width="16dp"-->
+                    <!--android:src="@drawable/mobile_icon"-->
+                    <!--android:layout_height="match_parent" />-->
+                    <TextView
+                        android:id="@+id/tv_mobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:hint="Email"
+                        android:layout_marginRight="2dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:text="1234567890"
                         android:textColor="@color/textcolor2"
                         android:textSize="12dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:hint=""
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:text=" , "
+                        android:textColor="@color/textcolor2"
+                        android:textSize="12dp" />
+
+
+                    <TextView
+                        android:id="@+id/tv_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:hint="phone"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:text="1234567890"
+                        android:textColor="@color/textcolor2"
+                        android:textSize="12dp" />
+
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="5dp"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:src="@drawable/email_icon"
-                        android:paddingTop="2dp"
-                        android:layout_height="16dp" />
+                    <!--<ImageView-->
+                    <!--android:layout_width="16dp"-->
+                    <!--android:src="@drawable/email_icon"-->
+                    <!--android:layout_height="match_parent" />-->
                     <TextView
                         android:id="@+id/tv_email"
-                        android:layout_marginLeft="3dp"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:hint="Email"
@@ -99,75 +179,6 @@
                         android:textSize="12dp" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="5dp"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:paddingTop="2dp"
-                        android:layout_width="16dp"
-                        android:src="@drawable/mobile_icon"
-                        android:layout_height="16dp" />
-                    <TextView
-                        android:id="@+id/tv_mobile"
-                        android:layout_marginLeft="3dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="Contact no."
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:text="4567876543"
-                        android:textColor="@color/textcolor2"
-                        android:textSize="12dp" />
-                    <TextView
-                        android:layout_marginLeft="2dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:text=" , "
-                        android:textColor="@color/textcolor2"
-                        android:textSize="12dp" />
-
-
-                    <TextView
-                        android:id="@+id/tv_phone"
-                        android:layout_marginLeft="1dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="Contact no."
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:text="4567876543"
-                        android:textColor="@color/textcolor2"
-                        android:textSize="12dp" />
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="5dp"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:paddingTop="2dp"
-                        android:layout_width="16dp"
-                        android:src="@drawable/responsibility_icon"
-                        android:layout_height="16dp" />
-                    <TextView
-                        android:id="@+id/tv_resp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="Mobile"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:text="hsdushadisdh sdsjdjsd sdasid"
-                        android:textColor="@color/textcolor2"
-                        android:textSize="12dp" />
-                </LinearLayout>
 
 
             </LinearLayout>
@@ -190,10 +201,10 @@
                     android:layout_gravity="center_horizontal">
 
                     <com.mikhaellopez.circularimageview.CircularImageView
-                        android:layout_width="25dp"
+                        android:layout_width="20dp"
                         xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_marginTop="7.5dp"
-                        android:layout_height="25dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/message_icon"
                         app:civ_border_width="0dp"
                         app:civ_shadow="true"
@@ -222,10 +233,10 @@
                     android:layout_gravity="center_horizontal">
 
                     <com.mikhaellopez.circularimageview.CircularImageView
-                        android:layout_width="25dp"
+                        android:layout_width="20dp"
                         xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_marginTop="7.5dp"
-                        android:layout_height="25dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/call_icon"
                         app:civ_border_width="0dp"
                         app:civ_shadow="true"
@@ -236,16 +247,16 @@
 
             </LinearLayout>
 
+
         </LinearLayout>
 
 
     </LinearLayout>
-    <View android:id="@+id/separator"
-        android:background="@color/lightgrey"
-        android:layout_width = "fill_parent"
-        android:layout_marginLeft="30dp"
-        android:layout_height="1dip"
-        android:layout_centerVertical ="true"
-        android:layout_alignParentTop="true"/>
+    <!--<View android:id="@+id/separator"-->
+        <!--android:background="@color/lightgrey"-->
+        <!--android:layout_width = "fill_parent"-->
+        <!--android:layout_height="1dip"-->
+        <!--android:layout_centerVertical ="true"-->
+        <!--android:layout_alignParentTop="true"/>-->
 </LinearLayout>
 

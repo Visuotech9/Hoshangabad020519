@@ -15,25 +15,35 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:text="Loksabha Election-2019"
-            android:textSize="22dp"
-            android:layout_marginTop="25dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:layout_height="wrap_content" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:text="Hoshangabad"
-            android:textSize="20dp"
-            android:textColor="@color/Black"
-            android:layout_marginBottom="25dp"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:layout_height="wrap_content" />
+            android:orientation="vertical"
+            android:background="@color/White"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Loksabha Election - 2019"
+                android:textSize="22dp"
+                android:layout_marginTop="25dp"
+                android:textColor="@color/DarkRed"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Hoshangabad"
+                android:textSize="20dp"
+                android:textColor="@color/Black"
+                android:layout_marginBottom="25dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
 
 
         <android.support.v7.widget.CardView
@@ -49,6 +59,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
+            android:background="@color/colorPrimaryDark"
             android:weightSum="1"
             android:layout_height="wrap_content">
 
@@ -90,7 +101,7 @@
                     android:layout_width="match_parent"
                     android:text="Seoni malwa"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
                     android:textSize="13dp"
                     android:gravity="center_horizontal"
                     android:layout_height="wrap_content" />
@@ -138,7 +149,7 @@
                     android:layout_width="match_parent"
                     android:text="Hoshangabad"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
                     android:textSize="13dp"
                     android:gravity="center_horizontal"
                     android:layout_height="wrap_content" />
@@ -186,7 +197,7 @@
                     android:layout_width="match_parent"
                     android:text="Sohagpur"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
                     android:textSize="13dp"
                     android:gravity="center_horizontal"
                     android:layout_height="wrap_content" />
@@ -234,7 +245,7 @@
                     android:layout_width="match_parent"
                     android:text="Pipariya"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
                     android:textSize="13dp"
                     android:gravity="center_horizontal"
                     android:layout_height="wrap_content" />
@@ -252,28 +263,37 @@
         </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:text="Heading :"
-            android:textSize="18dp"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/Black"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Contacts "
+                android:textSize="18dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_height="wrap_content" />
 
-        <View
-            android:background="@color/lightgrey"
-            android:layout_width = "fill_parent"
-            android:layout_height="1dip"
-            android:layout_centerVertical ="true"
-            android:layout_alignParentTop="true"/>
+
+        </LinearLayout>
+
+
+
+        <!--<View-->
+            <!--android:background="@color/lightgrey"-->
+            <!--android:layout_width = "fill_parent"-->
+            <!--android:layout_height="1dip"-->
+            <!--android:layout_centerVertical ="true"-->
+            <!--android:layout_alignParentTop="true"/>-->
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:weightSum="1"
+            android:background="@color/colorPrimaryDark"
             android:layout_height="wrap_content">
 
             <LinearLayout
@@ -291,30 +311,36 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:gravity="center_horizontal"
-                    android:background="@drawable/bg_circular_imageview"
+                    android:background="@drawable/bg_circular_imageview2"
                     android:layout_gravity="center_horizontal">
 
-                    <com.mikhaellopez.circularimageview.CircularImageView
-                        android:layout_width="55dp"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_marginTop="2.5dp"
-                        android:layout_height="55dp"
-                        android:src="@drawable/election_image"
-                        app:civ_border_color="@color/Gray"
-                        app:civ_border_width="0dp"
-                        app:civ_shadow="true"
-                        app:civ_shadow_radius="0"
-                        app:civ_shadow_color="@color/colorPrimary"/>
-
+                    <!--<com.mikhaellopez.circularimageview.CircularImageView-->
+                        <!--android:layout_width="50dp"-->
+                        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                        <!--android:layout_marginTop="5dp"-->
+                        <!--android:layout_height="50dp"-->
+                        <!--android:src="@drawable/officers_icon"-->
+                        <!--app:civ_border_color="@color/Gray"-->
+                        <!--app:civ_border_width="0dp"-->
+                        <!--app:civ_shadow="true"-->
+                        <!--app:civ_shadow_radius="0"-->
+                        <!--app:civ_shadow_color="@color/colorPrimary"/>-->
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:padding="10dp"
+                        android:src="@drawable/officers_icon2"
+                        />
                 </LinearLayout>
 
 
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:text="District officers"
+                    android:text="Election Nodal Officers List"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
                     android:textSize="13dp"
                     android:gravity="center_horizontal"
                     android:layout_height="wrap_content" />
@@ -325,7 +351,7 @@
             </LinearLayout>
 
             <View
-                android:background="@color/lightgrey"
+                android:background="@color/colorPrimary"
                 android:layout_width = "0dp"
                 android:layout_weight=".003"
                 android:layout_height="match_parent"
@@ -348,20 +374,27 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:gravity="center_horizontal"
-                    android:background="@drawable/bg_circular_imageview"
+                    android:background="@drawable/bg_circular_imageview2"
                     android:layout_gravity="center_horizontal">
 
-                    <com.mikhaellopez.circularimageview.CircularImageView
-                        android:layout_width="55dp"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_marginTop="2.5dp"
-                        android:layout_height="55dp"
-                        android:src="@drawable/election_image"
-                        app:civ_border_color="@color/Gray"
-                        app:civ_border_width="0dp"
-                        app:civ_shadow="true"
-                        app:civ_shadow_radius="0"
-                        app:civ_shadow_color="@color/colorPrimary"/>
+                    <!--<com.mikhaellopez.circularimageview.CircularImageView-->
+                        <!--android:layout_width="55dp"-->
+                        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                        <!--android:layout_marginTop="2.5dp"-->
+                        <!--android:layout_height="55dp"-->
+                        <!--android:src="@drawable/election_image"-->
+                        <!--app:civ_border_color="@color/Gray"-->
+                        <!--app:civ_border_width="0dp"-->
+                        <!--app:civ_shadow="true"-->
+                        <!--app:civ_shadow_radius="0"-->
+                        <!--app:civ_shadow_color="@color/colorPrimary"/>-->
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:padding="10dp"
+                        android:src="@drawable/dept_icon"
+                        />
 
                 </LinearLayout>
 
@@ -369,7 +402,7 @@
                     android:layout_width="match_parent"
                     android:text="Departments"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
                     android:textSize="13dp"
                     android:gravity="center_horizontal"
                     android:layout_height="wrap_content" />
@@ -381,7 +414,7 @@
             </LinearLayout>
 
             <View
-                android:background="@color/lightgrey"
+                android:background="@color/colorPrimary"
                 android:layout_width = "0dp"
                 android:layout_weight=".003"
                 android:layout_height="match_parent"
@@ -404,19 +437,26 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:gravity="center_horizontal"
-                    android:background="@drawable/bg_circular_imageview"
+                    android:background="@drawable/bg_circular_imageview2"
                     android:layout_gravity="center_horizontal">
 
-                    <com.mikhaellopez.circularimageview.CircularImageView
-                        android:layout_width="55dp"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_marginTop="2.5dp"
-                        android:layout_height="55dp"
-                        android:src="@drawable/election_image"
-                        app:civ_border_width="0dp"
-                        app:civ_shadow="true"
-                        app:civ_shadow_radius="0"
-                        app:civ_shadow_color="@color/colorPrimary"/>
+                    <!--<com.mikhaellopez.circularimageview.CircularImageView-->
+                        <!--android:layout_width="55dp"-->
+                        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                        <!--android:layout_marginTop="2.5dp"-->
+                        <!--android:layout_height="55dp"-->
+                        <!--android:src="@drawable/election_image"-->
+                        <!--app:civ_border_width="0dp"-->
+                        <!--app:civ_shadow="true"-->
+                        <!--app:civ_shadow_radius="0"-->
+                        <!--app:civ_shadow_color="@color/colorPrimary"/>-->
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:padding="10dp"
+                        android:src="@drawable/services_icon"
+                        />
 
                 </LinearLayout>
 
@@ -424,7 +464,7 @@
                     android:layout_width="match_parent"
                     android:text="Other services"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
                     android:textSize="13dp"
                     android:gravity="center_horizontal"
                     android:layout_height="wrap_content" />
@@ -441,35 +481,43 @@
 
         </LinearLayout>
 
-        <View
-            android:background="@color/lightgrey"
-            android:layout_width = "fill_parent"
-            android:layout_height="1dip"
-            android:layout_centerVertical ="true"
-            android:layout_alignParentTop="true"/>
+        <!--<View-->
+            <!--android:background="@color/lightgrey"-->
+            <!--android:layout_width = "fill_parent"-->
+            <!--android:layout_height="1dip"-->
+            <!--android:layout_centerVertical ="true"-->
+            <!--android:layout_alignParentTop="true"/>-->
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:text="Heading :"
-            android:textSize="18dp"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/Black"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Services "
+                android:textSize="18dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_height="wrap_content" />
 
-        <View
-            android:background="@color/lightgrey"
-            android:layout_width = "fill_parent"
-            android:layout_height="1dip"
-            android:layout_centerVertical ="true"
-            android:layout_alignParentTop="true"/>
+
+        </LinearLayout>
+
+
+        <!--<View-->
+            <!--android:background="@color/lightgrey"-->
+            <!--android:layout_width = "fill_parent"-->
+            <!--android:layout_height="1dip"-->
+            <!--android:layout_centerVertical ="true"-->
+            <!--android:layout_alignParentTop="true"/>-->
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:weightSum="1"
+            android:background="@color/colorPrimaryDark"
             android:layout_height="wrap_content">
 
             <LinearLayout
@@ -487,20 +535,27 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:gravity="center_horizontal"
-                    android:background="@drawable/bg_circular_imageview"
+                    android:background="@drawable/bg_circular_imageview2"
                     android:layout_gravity="center_horizontal">
 
-                    <com.mikhaellopez.circularimageview.CircularImageView
-                        android:layout_width="55dp"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_marginTop="2.5dp"
-                        android:layout_height="55dp"
-                        android:src="@drawable/election_image"
-                        app:civ_border_color="@color/Gray"
-                        app:civ_border_width="0dp"
-                        app:civ_shadow="true"
-                        app:civ_shadow_radius="0"
-                        app:civ_shadow_color="@color/colorPrimary"/>
+                    <!--<com.mikhaellopez.circularimageview.CircularImageView-->
+                        <!--android:layout_width="55dp"-->
+                        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                        <!--android:layout_marginTop="2.5dp"-->
+                        <!--android:layout_height="55dp"-->
+                        <!--android:src="@drawable/election_image"-->
+                        <!--app:civ_border_color="@color/Gray"-->
+                        <!--app:civ_border_width="0dp"-->
+                        <!--app:civ_shadow="true"-->
+                        <!--app:civ_shadow_radius="0"-->
+                        <!--app:civ_shadow_color="@color/colorPrimary"/>-->
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:padding="10dp"
+                        android:src="@drawable/committee_icon2"
+                        />
 
                 </LinearLayout>
 
@@ -510,7 +565,7 @@
                     android:layout_width="match_parent"
                     android:text="Committees"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
                     android:textSize="13dp"
                     android:gravity="center_horizontal"
                     android:layout_height="wrap_content" />
@@ -521,7 +576,7 @@
             </LinearLayout>
 
             <View
-                android:background="@color/lightgrey"
+                android:background="@color/colorPrimary"
                 android:layout_width = "0dp"
                 android:layout_weight=".003"
                 android:layout_height="match_parent"
@@ -544,20 +599,27 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:gravity="center_horizontal"
-                    android:background="@drawable/bg_circular_imageview"
+                    android:background="@drawable/bg_circular_imageview2"
                     android:layout_gravity="center_horizontal">
 
-                    <com.mikhaellopez.circularimageview.CircularImageView
-                        android:layout_width="55dp"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_marginTop="2.5dp"
-                        android:layout_height="55dp"
-                        android:src="@drawable/election_image"
-                        app:civ_border_color="@color/Gray"
-                        app:civ_border_width="0dp"
-                        app:civ_shadow="true"
-                        app:civ_shadow_radius="0"
-                        app:civ_shadow_color="@color/colorPrimary"/>
+                    <!--<com.mikhaellopez.circularimageview.CircularImageView-->
+                        <!--android:layout_width="55dp"-->
+                        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                        <!--android:layout_marginTop="2.5dp"-->
+                        <!--android:layout_height="55dp"-->
+                        <!--android:src="@drawable/election_image"-->
+                        <!--app:civ_border_color="@color/Gray"-->
+                        <!--app:civ_border_width="0dp"-->
+                        <!--app:civ_shadow="true"-->
+                        <!--app:civ_shadow_radius="0"-->
+                        <!--app:civ_shadow_color="@color/colorPrimary"/>-->
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:padding="10dp"
+                        android:src="@drawable/information_icon"
+                        />
 
                 </LinearLayout>
 
@@ -565,7 +627,7 @@
                     android:layout_width="match_parent"
                     android:text="Voters information"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/White"
                     android:textSize="13dp"
                     android:gravity="center_horizontal"
                     android:layout_height="wrap_content" />
@@ -583,13 +645,13 @@
 
         </LinearLayout>
 
-        <View
-            android:background="@color/lightgrey"
-            android:layout_width = "fill_parent"
-            android:layout_height="1dip"
-            android:layout_marginBottom="10dp"
-            android:layout_centerVertical ="true"
-            android:layout_alignParentTop="true"/>
+        <!--<View-->
+            <!--android:background="@color/lightgrey"-->
+            <!--android:layout_width = "fill_parent"-->
+            <!--android:layout_height="1dip"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_centerVertical ="true"-->
+            <!--android:layout_alignParentTop="true"/>-->
 
 
         <!--<LinearLayout-->

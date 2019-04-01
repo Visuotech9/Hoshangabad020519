@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/lin_spl_layout"
     android:orientation="vertical"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--<View android:id="@+id/separator2"-->
+        <!--android:background="@color/colorPrimaryDark"-->
+        <!--android:layout_width = "fill_parent"-->
+        <!--android:layout_height="1dip"-->
+        <!--android:layout_centerVertical ="true"-->
+        <!--android:layout_alignParentTop="true"/>-->
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:background="@color/colorPrimary"
         android:weightSum="1">
 
         <ImageView
@@ -18,7 +28,7 @@
             android:paddingTop="15dp"
             android:paddingLeft="10dp"
             android:paddingBottom="13dp"
-            android:src="@drawable/search_icon" />
+            android:src="@drawable/search_icon_white" />
 
 
 
@@ -29,8 +39,10 @@
             android:layout_weight=".65"
             android:background="@null"
             android:singleLine="true"
+            android:textCursorDrawable="@drawable/custum_cursor"
             android:gravity="center_vertical"
             android:hint="Search"
+            android:textColorHint="@color/White"
             android:textColor="@color/Black"
             android:textSize="15dp" />
 
@@ -51,24 +63,33 @@
         android:layout_alignParentTop="true"/>
 
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.suleiman.pagination.MainActivity">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false" />
-
+        android:layout_height="wrap_content"
+        android:layout_weight=".9"
+        android:orientation="vertical">
         <ProgressBar
             android:id="@+id/progressbar"
-            android:layout_width="wrap_content"
             android:visibility="gone"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_width="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content" />
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/activity_main_swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+
+
+
 
 
     </FrameLayout>

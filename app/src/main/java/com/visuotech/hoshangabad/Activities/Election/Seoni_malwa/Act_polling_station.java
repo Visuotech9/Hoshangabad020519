@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,12 +25,16 @@ import android.widget.Spinner;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import com.visuotech.hoshangabad.Activities.Election.Act_election;
 import com.visuotech.hoshangabad.MarshMallowPermission;
+import com.visuotech.hoshangabad.Model.Block;
 import com.visuotech.hoshangabad.Model.Designation_Details;
 import com.visuotech.hoshangabad.Model.PollingBooth;
+import com.visuotech.hoshangabad.Model.Tehsil;
+import com.visuotech.hoshangabad.NetworkConnection;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
 import com.visuotech.hoshangabad.retrofit.RequestReciever;
+import com.visuotech.hoshangabad.retrofit.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,14 +47,25 @@ import java.util.Map;
 
 public class Act_polling_station extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     LinearLayout container;
-//    Spinner spinner_station, spinner_designation;
+    Spinner spinner_tehsil,spinner_block,spinner_station2;
     SearchableSpinner spinner_station;
-    String station, designation, booth_name, mobile, name, desig, lat, log;
-    Button btn_submit;
+    String station, station2, tehsil, block, name, desig, lat, log,lat2, log2;
+    Button btn_submit,btn_submit2;
     int designation_no;
+
     ArrayList<PollingBooth> booth_list1;
-    ArrayList<Designation_Details> desi_details_list1;
     ArrayList<String> booth_list = new ArrayList<String>();
+
+    ArrayList<Block> blocks_list1;
+    ArrayList<String> blocks_list = new ArrayList<String>();
+
+    ArrayList<PollingBooth> booth_list2;
+    ArrayList<String> booth_list22 = new ArrayList<String>();
+
+    ArrayList<Tehsil> tehsils_list1;
+    ArrayList<String> tehsils_list = new ArrayList<String>();
+
+
     Context context;
     String AC;
     Activity activity;
@@ -68,7 +84,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor((Color.parseColor("#FFFFFF")));
-        getSupportActionBar().setTitle("Polling Stations");
+        getSupportActionBar().setTitle("Polling Station");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         context = this;
@@ -86,15 +102,30 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
         permission();
 
         spinner_station = rowView.findViewById(R.id.spinner_station);
-
+        spinner_station2 = rowView.findViewById(R.id.spinner_station2);
+        spinner_tehsil = rowView.findViewById(R.id.spinner_tehsil);
+        spinner_block = rowView.findViewById(R.id.spinner_block);
+        btn_submit2 = rowView.findViewById(R.id.btn_submit2);
         btn_submit = rowView.findViewById(R.id.btn_submit);
 
         container.addView(rowView, container.getChildCount());
         spinner_station.setOnItemSelectedListener(this);
+        spinner_station2.setOnItemSelectedListener(this);
+        spinner_tehsil.setOnItemSelectedListener(this);
+        spinner_block.setOnItemSelectedListener(this);
 
 
 //        spinner_designation.setSelection(listsize);
-        Apigetboothlist();
+
+
+         LinearLayout lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
+        if (NetworkConnection.checkNetworkStatus(context) == true) {
+            Apigetboothlist();
+            ApigettehsilList();
+        } else {
+            Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+        }
+
 
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,14 +134,31 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
                     Intent i = new Intent(Act_polling_station.this, Act_Polling_list.class);
                     i.putExtra("NAME", station);
                     i.putExtra("CITY", AC);
-//                    i.putExtra("LATITUDE",lat);
-//                    i.putExtra("LONGITUDE",log);
+                    i.putExtra("LATITUDE",lat);
+                    i.putExtra("LONGITUDE",log);
                     startActivity(i);
 
 
                 }
             }
         });
+
+        btn_submit2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (booth_list2 != null) {
+                    Intent i = new Intent(Act_polling_station.this, Act_Polling_list.class);
+                    i.putExtra("NAME", station2);
+                    i.putExtra("CITY", AC);
+                    i.putExtra("LATITUDE",lat);
+                    i.putExtra("LONGITUDE",log);
+                    startActivity(i);
+
+
+                }
+            }
+        });
+
 
 
     }
@@ -251,6 +299,29 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
             case R.id.spinner_station :
                 //Your Action Here.
                 station=booth_list1.get(i).getEleBoothName();
+                lat=booth_list1.get(i).getEleLatitude();
+                log=booth_list1.get(i).getEleLongitude();
+                break;
+
+            case R.id.spinner_tehsil :
+                //Your Action Here.
+                tehsil=tehsils_list1.get(i).getTehsil_name();
+                blocks_list.clear();
+                ApigetBlockList();
+                break;
+
+            case R.id.spinner_block :
+                //Your Action Here.
+                block=blocks_list1.get(i).getBlock_name();
+                booth_list22.clear();
+                Apigetboothlist2();
+                break;
+
+            case R.id.spinner_station2 :
+                //Your Action Here.
+                station2=booth_list2.get(i).getEleBoothName();
+                lat2=booth_list2.get(i).getEleLatitude();
+                log2=booth_list2.get(i).getEleLongitude();
                 break;
         }
 
@@ -310,6 +381,151 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
         String remainingUrl2="/Election/Api2.php?apicall=polling_booth"+"&ac="+AC;
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
+
+    private void Apigetboothlist2(){
+        baseRequest = new BaseRequest(context);
+        baseRequest.setBaseRequestListner(new RequestReciever() {
+            @Override
+            public void onSuccess(int requestCode, String Json, Object object) {
+                try {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    JSONArray jsonArray=jsonObject.optJSONArray("user");
+
+                    booth_list2=baseRequest.getDataList(jsonArray,PollingBooth.class);
+                    for (int i=0;i<booth_list2.size();i++){
+                        int j=i+1;
+                        booth_list22.add(j+"- "+booth_list2.get(i).getEleBoothName());
+//                       department_id.add(department_list1.get(i).getDepartment_id());
+                    }
+                    ArrayAdapter adapter_booth2 = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list22);
+                    adapter_booth2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_station2.setAdapter(adapter_booth2);
+
+//                    ArrayAdapter<CharSequence> adapter_booth2 = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_spinner_item,booth_list22);
+//                    adapter_booth2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    spinner_station2.setAdapter(adapter_booth2);
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int requestCode, String errorCode, String message) {
+
+            }
+            @Override
+            public void onNetworkFailure(int requestCode, String message) {
+
+            }
+        });
+        String remainingUrl2="/Election/Api2.php?apicall=get_polling"+"&tehsil_id="+tehsil+"&block_id="+block+"&ac="+AC;
+        baseRequest.callAPIGETData(1, remainingUrl2);
+    }
+
+
+    private void ApigettehsilList(){
+        baseRequest = new BaseRequest(context);
+        baseRequest.setBaseRequestListner(new RequestReciever() {
+            @Override
+            public void onSuccess(int requestCode, String Json, Object object) {
+                try {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    JSONArray jsonArray=jsonObject.optJSONArray("user");
+
+                    tehsils_list1=baseRequest.getDataList(jsonArray,Tehsil.class);
+
+                    for (int i=0;i<tehsils_list1.size();i++){
+                        int j=i+1;
+                        tehsils_list.add(j+"- "+tehsils_list1.get(i).getTehsil_name());
+//                       department_id.add(department_list1.get(i).getDepartment_id());
+                    }
+//                    ArrayAdapter adapter_booth = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list);
+//                    adapter_booth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    spinner_station.setAdapter(adapter_booth);
+
+                    ArrayAdapter adapter_tehsil = new ArrayAdapter(context,android.R.layout.simple_spinner_item,tehsils_list);
+                    adapter_tehsil.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_tehsil.setAdapter(adapter_tehsil);
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int requestCode, String errorCode, String message) {
+
+            }
+            @Override
+            public void onNetworkFailure(int requestCode, String message) {
+
+            }
+        });
+        String remainingUrl2="/Election/Api2.php?apicall=tehsil_list"+"&ac="+AC;
+        baseRequest.callAPIGETData(1, remainingUrl2);
+    }
+
+    private void ApigetBlockList(){
+        baseRequest = new BaseRequest(context);
+        baseRequest.setBaseRequestListner(new RequestReciever() {
+            @Override
+            public void onSuccess(int requestCode, String Json, Object object) {
+                try {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    JSONArray jsonArray=jsonObject.optJSONArray("user");
+
+                    blocks_list1=baseRequest.getDataList(jsonArray,Block.class);
+
+                    for (int i=0;i<blocks_list1.size();i++){
+                        int j=i+1;
+                        blocks_list.add(j+"- "+blocks_list1.get(i).getBlock_name());
+//                       department_id.add(department_list1.get(i).getDepartment_id());
+                    }
+//                    ArrayAdapter adapter_booth = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list);
+//                    adapter_booth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    spinner_station.setAdapter(adapter_booth);
+
+                    ArrayAdapter adapter_block = new ArrayAdapter(context,android.R.layout.simple_spinner_item,blocks_list);
+                    adapter_block.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_block.setAdapter(adapter_block);
+
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int requestCode, String errorCode, String message) {
+
+            }
+            @Override
+            public void onNetworkFailure(int requestCode, String message) {
+
+            }
+        });
+        String remainingUrl2="/Election/Api2.php?apicall=block_list"+"&tehsil_id="+tehsil+"&ac="+AC;
+        baseRequest.callAPIGETData(1, remainingUrl2);
+    }
+
+
+
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
 //        Intent i = new Intent(Act_polling_station.this, Act_election.class);

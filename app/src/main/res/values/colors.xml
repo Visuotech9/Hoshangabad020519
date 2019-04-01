@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="sociall">#E2E2E2</color>
+    <color name="social2">#d2d1d1</color>
+    <color name="sociald">#D1D1D1</color>
+
+    <color name="lightgrey2">#efefef</color>
     <color name="lightgrey">#e6e4e4</color>
     <color name="lighttextColor">#898888</color>
     <color name="lighttextColor2">#5c5c5c</color>
@@ -39,7 +45,8 @@
     <color name="nevy_blue">#00c0ef</color>
     <color name="lightnevy_blue">#46d8fc</color>
 
-
+    <color name="colorPrimarylightest">#bbd1de</color>
+    <color name="colorPrimarylight">#85b4cf</color>
     <color name="colorPrimary">#3c8dbc</color>
     <color name="colorPrimaryDark">#2c6494</color>
     <!--<color name="colorPrimary">#FFDA6A68</color>-->
@@ -50,7 +57,7 @@
 
 
     <color name="colorPrimary2222">#4fb8ce</color>lay_full_prof
-    <color name="colorPrimarylight">#e9fafa</color>
+    <color name="colorprimarylight">#e9fafa</color>
 
     <!--<color name="colorPrimary">#009999</color>-->
     <!--<color name="colorPrimaryDark">#076e6e</color>-->
@@ -168,6 +175,7 @@
     <color name="dot_light">#5ed2ea</color>
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
+    <color name="Blacklight">#262525</color>
     <color name="textcolor">#333333</color>
     <color name="seperator">#ffffff</color>
     <color name="seperator_color">#dcd9d9</color>

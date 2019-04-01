@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -59,11 +60,16 @@ public class Ad_samitee_member extends RecyclerView.Adapter<Ad_samitee_member.My
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
 
-        holder.tv_samitee.setText(samitee_name);
         holder.tv_resp.setText(list.get(i).getMember_responsibility());
         holder.tv_name.setText(list.get(i).getMember_name());
         holder.tv_designation.setText(list.get(i).getMember_designation());
         holder.tv_mobile.setText(list.get(i).getMember_mobile());
+        holder.tv_period.setText(list.get(i).getEle_sam_dutyfrom()+" - "+list.get(i).getEle_sam_dutyto());
+
+        if (i%2!=0){
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }
+
         holder.lay_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,7 +111,7 @@ public class Ad_samitee_member extends RecyclerView.Adapter<Ad_samitee_member.My
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
 
-        TextView tv_name,tv_designation,tv_mobile,tv_samitee,tv_resp;
+        TextView tv_name,tv_designation,tv_mobile,tv_period,tv_resp;
         LinearLayout lin_layout;
         CircleImageView iv_profile_image;
         LinearLayout lay_message,lay_call;
@@ -115,8 +121,8 @@ public class Ad_samitee_member extends RecyclerView.Adapter<Ad_samitee_member.My
             tv_name=itemView.findViewById(R.id.tv_name);
             tv_designation =  itemView.findViewById(R.id.tv_designation);
             tv_mobile =  itemView.findViewById(R.id.tv_mobile);
-            tv_samitee =  itemView.findViewById(R.id.tv_samitee);
             tv_resp =  itemView.findViewById(R.id.tv_resp);
+            tv_period =  itemView.findViewById(R.id.tv_period);
             lay_message =  itemView.findViewById(R.id.lay_message);
             lay_call =  itemView.findViewById(R.id.lay_call);
             lin_layout=itemView.findViewById(R.id.lin_layout);

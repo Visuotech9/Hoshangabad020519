@@ -35,9 +35,9 @@ public class Frag_queue extends Fragment {
     MarshMallowPermission marshMallowPermission;
     private BaseRequest baseRequest;
     ArrayList<Queue> queues;
-    String booth_name,time,count;
+    String booth_name,time,count,male_count,female_count;
 
-    TextView tv_time,tv_name,tv_count;
+    TextView tv_time,tv_name,tv_count,tv_female,tv_male;
 
     Handler handler;
     Runnable refresh;
@@ -68,6 +68,8 @@ public class Frag_queue extends Fragment {
         tv_name=view.findViewById(R.id.tv_name);
         tv_count=view.findViewById(R.id.tv_count);
         tv_time=view.findViewById(R.id.tv_time);
+        tv_male=view.findViewById(R.id.tv_male);
+        tv_female=view.findViewById(R.id.tv_female);
 
 //----------------auto refress ---------------------------
          handler = new Handler();
@@ -99,10 +101,14 @@ public class Frag_queue extends Fragment {
                         queues=baseRequest.getDataList(jsonArray,Queue.class);
                         time=queues.get(0).getCreation_date();
                         count=queues.get(0).getQueue_count();
+                        male_count=queues.get(0).getMale_count();
+                        female_count=queues.get(0).getFemale_count();
 
-                        tv_count.setText(count+" "+"person"+"(aprox)");
-                        tv_time.setText(time);
-                        tv_name.setText(booth_name);
+                        tv_count.setText(":- "+count+" "+"person"+"(approx)");
+                        tv_time.setText(":- "+time);
+                        tv_name.setText(":- "+booth_name);
+                        tv_female.setText(":- "+female_count+" "+"Female"+"(approx)");
+                        tv_male.setText(":- "+male_count+" "+"Male"+"(approx)");
                     }
 
 

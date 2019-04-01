@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -68,13 +69,19 @@ public class Ad_district_officers extends RecyclerView.Adapter<Ad_district_offic
         holder.tv_designation.setText(list.get(i).getOfficer_post());
 //        holder.tv_phone.setText(list.get(i).getOfficer_phone());
 //        holder.tv_mobile.setText(list.get(i).getOfficer_mobile());
-        holder.tv_phone.setText(Html.fromHtml("<a href='tel:"+list.get(i).getOfficer_phone()+"'>"+list.get(i).getOfficer_phone()+"</a>"));
+        holder.tv_phone.setText(Html.fromHtml("<a href='tel:"+"+91-"+list.get(i).getOfficer_phone()+"'>"+list.get(i).getOfficer_phone()+"</a>"));
         holder.tv_mobile.setText(Html.fromHtml("<a href='tel:"+list.get(i).getOfficer_mobile()+"'>"+list.get(i).getOfficer_mobile()+"</a>"));
         holder.tv_phone.setMovementMethod(LinkMovementMethod.getInstance());
         holder.tv_mobile.setMovementMethod(LinkMovementMethod.getInstance());
         String htmlString="<u>"+list.get(i).getOfficer_email()+"</u>";
         holder.tv_email.setText(Html.fromHtml(htmlString));
-        holder.tv_resp.setText(list.get(i).getOfficer_responsibility());
+
+        if (i%2!=0){
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }
+        if (list.get(i).getOfficer_email().equals("")||list.get(i).getOfficer_email().equals("-")){
+            holder.tv_email.setVisibility(View.GONE);
+        }
 
         holder.lay_call.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +149,6 @@ public class Ad_district_officers extends RecyclerView.Adapter<Ad_district_offic
             tv_designation =  itemView.findViewById(R.id.tv_designation);
             tv_mobile =  itemView.findViewById(R.id.tv_mobile);
             tv_email =  itemView.findViewById(R.id.tv_email);
-            tv_resp =  itemView.findViewById(R.id.tv_resp);
             lay_call =  itemView.findViewById(R.id.lay_call);
             tv_phone =  itemView.findViewById(R.id.tv_phone);
             lay_message =  itemView.findViewById(R.id.lay_message);

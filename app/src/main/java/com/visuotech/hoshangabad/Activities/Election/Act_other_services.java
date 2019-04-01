@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.visuotech.hoshangabad.MarshMallowPermission;
 import com.visuotech.hoshangabad.Model.Designation_Details;
 import com.visuotech.hoshangabad.Model.Samities;
 import com.visuotech.hoshangabad.Model.ServiceType;
+import com.visuotech.hoshangabad.NetworkConnection;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
@@ -41,9 +43,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Act_other_services extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    LinearLayout container;
-    TextView tv_text;
-    Spinner spinner_services;
+    LinearLayout container,lay;
+    TextView tv_text,tv_text1;
+    Spinner spinner_services,spinner_level;
     String id,designation,booth_name,mobile,name,desig,lat,log;
     Button btn_cancel,btn_submit;
     int designation_no;
@@ -66,7 +68,7 @@ public class Act_other_services extends AppCompatActivity implements AdapterView
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor((Color.parseColor("#FFFFFF")));
-        getSupportActionBar().setTitle("Committees");
+        getSupportActionBar().setTitle("Other Services");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         context = this;
@@ -84,6 +86,11 @@ public class Act_other_services extends AppCompatActivity implements AdapterView
         spinner_services = rowView.findViewById(R.id.spinner_samities);
         tv_text = rowView.findViewById(R.id.tv_text);
         btn_submit = rowView.findViewById(R.id.btn_submit);
+
+        lay = rowView.findViewById(R.id.lay);
+        tv_text1 = rowView.findViewById(R.id.tv_text1);
+        lay.setVisibility(View.GONE);
+        tv_text1.setVisibility(View.GONE);
 
         tv_text.setText("Select service type :");
 
@@ -103,7 +110,14 @@ public class Act_other_services extends AppCompatActivity implements AdapterView
                 }
             }
         });
-        ApigetSamlist();
+
+
+        LinearLayout lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
+        if (NetworkConnection.checkNetworkStatus(context) == true) {
+            ApigetSamlist();
+        } else {
+            Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+        }
 
     }
 

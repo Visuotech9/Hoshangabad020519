@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,7 +24,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.games.Notifications;
 import com.visuotech.hoshangabad.Activities.Election.Act_sam_mem_list;
@@ -31,6 +36,7 @@ import com.visuotech.hoshangabad.Adapter.Ad_samitee_member;
 import com.visuotech.hoshangabad.MarshMallowPermission;
 import com.visuotech.hoshangabad.Model.Notificationss;
 import com.visuotech.hoshangabad.Model.Samitee_members;
+import com.visuotech.hoshangabad.NetworkConnection;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
@@ -46,8 +52,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Notification extends AppCompatActivity {
-    LinearLayout container;
+    LinearLayout container,lay;
     LinearLayoutManager linearLayoutManager;
+    ImageView search_icon;
     RecyclerView rv;
     ArrayList<Notificationss> notifications_list1;
     ArrayList<String>notifications_list=new ArrayList<>();
@@ -63,7 +70,10 @@ public class Notification extends AppCompatActivity {
     private BaseRequest baseRequest;
     public boolean datafinish = false;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
-
+    Handler handler;
+    Runnable refresh;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    LinearLayout lin_spl_layout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,9 +91,14 @@ public class Notification extends AppCompatActivity {
         final View rowView = inflater.inflate(R.layout.activity_act_sam_mem_list, null);
 
         permission();
-
+        mSwipeRefreshLayout=rowView.findViewById(R.id.activity_main_swipe_refresh_layout);
         rv = (RecyclerView) rowView.findViewById(R.id.rv_list);
         inputSearch = (EditText) rowView.findViewById(R.id.inputSearch);
+        lay =  rowView.findViewById(R.id.lay);
+        search_icon =  rowView.findViewById(R.id.search_icon);
+        lay.setVisibility(View.GONE);
+
+
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(linearLayoutManager);
         rv.setItemAnimator(new DefaultItemAnimator());
@@ -98,6 +113,7 @@ public class Notification extends AppCompatActivity {
 
 //        Apigetboothlist();
 
+/*
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -115,7 +131,42 @@ public class Notification extends AppCompatActivity {
                 filter(editable.toString());
             }
         });
-        Apigetsam_mem_list();
+*/
+        lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
+
+        handler = new Handler();
+        refresh = new Runnable() {
+            public void run() {
+
+                if (NetworkConnection.checkNetworkStatus(context) == true) {
+                    Apigetsam_mem_list();
+                } else {
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                }
+                handler.postDelayed(refresh, 60000);
+
+            }
+        };
+        handler.post(refresh);
+
+
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkConnection.checkNetworkStatus(context)==true){
+                    Apigetsam_mem_list();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }else{
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
+
+
+            }
+        });
+
+
+
+
     }
 
     private void permission() {
@@ -248,7 +299,7 @@ public class Notification extends AppCompatActivity {
     }
 
     private void Apigetsam_mem_list(){
-        baseRequest = new BaseRequest(context);
+        baseRequest = new BaseRequest();
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {

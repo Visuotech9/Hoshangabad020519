@@ -7,7 +7,8 @@ import android.Manifest;
         import android.content.Context;
         import android.content.Intent;
         import android.content.pm.PackageManager;
-        import android.graphics.drawable.Drawable;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
         import android.net.Uri;
         import android.support.annotation.NonNull;
         import android.support.annotation.Nullable;
@@ -70,6 +71,9 @@ public class Ad_Vidhansabha extends RecyclerView.Adapter<Ad_Vidhansabha.MyViewHo
 //        holder.tv_email.setText(list.get(i).getCom_email());
         holder.tv_resp.setText(list.get(i).getCom_responsibility());
 
+        if (i%2!=0){
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }
         holder.lay_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

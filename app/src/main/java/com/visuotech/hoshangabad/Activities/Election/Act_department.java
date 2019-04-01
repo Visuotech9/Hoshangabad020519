@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.visuotech.hoshangabad.Model.Departments;
 import com.visuotech.hoshangabad.Model.Designation_Details;
 import com.visuotech.hoshangabad.Model.PollingBooth;
 import com.visuotech.hoshangabad.Model.Samities;
+import com.visuotech.hoshangabad.NetworkConnection;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
@@ -45,9 +47,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Act_department extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    LinearLayout container;
-    TextView tv_text;
-    Spinner spinner_dept;
+    LinearLayout container,lay;
+    TextView tv_text,tv_text1;
+    Spinner spinner_dept,spinner_level;
     String id,designation,booth_name,mobile,name,desig,lat,log;
     Button btn_cancel,btn_submit;
     int designation_no;
@@ -89,7 +91,13 @@ public class Act_department extends AppCompatActivity implements AdapterView.OnI
 
         spinner_dept = rowView.findViewById(R.id.spinner_samities);
         tv_text = rowView.findViewById(R.id.tv_text);
+
         btn_submit = rowView.findViewById(R.id.btn_submit);
+
+        lay = rowView.findViewById(R.id.lay);
+        tv_text1 = rowView.findViewById(R.id.tv_text1);
+        lay.setVisibility(View.GONE);
+        tv_text1.setVisibility(View.GONE);
 
         tv_text.setText("Select Department :");
 
@@ -110,7 +118,14 @@ public class Act_department extends AppCompatActivity implements AdapterView.OnI
                 }
             }
         });
-        ApigetDepartment();
+
+
+        LinearLayout lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
+        if (NetworkConnection.checkNetworkStatus(context) == true) {
+            ApigetDepartment();
+        } else {
+            Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+        }
 
 
     }

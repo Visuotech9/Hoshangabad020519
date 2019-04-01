@@ -4,6 +4,7 @@ package com.visuotech.hoshangabad.Adapter;
         import android.content.Context;
         import android.content.Intent;
         import android.content.pm.PackageManager;
+        import android.graphics.Color;
         import android.graphics.drawable.Drawable;
         import android.net.Uri;
         import android.support.annotation.NonNull;
@@ -93,6 +94,10 @@ public class Ad_dept_members extends RecyclerView.Adapter<Ad_dept_members.MyView
             }
 
         });
+
+        if (i%2!=0){
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }
 
     }
 

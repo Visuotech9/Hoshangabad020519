@@ -8,6 +8,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -71,6 +72,9 @@ public class Ad_designation_details extends RecyclerView.Adapter<Ad_designation_
         holder.tv_designation.setText(designation_list[i]);
         holder.tv_name.setHint(designation_list[i]+" "+"Name");
 
+        if (i%2!=0){
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }
 
         if (i == 0) {
             holder.tv_name.setText(list.get(0).getElePZero());
