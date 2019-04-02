@@ -36,7 +36,7 @@
             android:textCursorDrawable="@drawable/custum_cursor"
             android:hint="Search"
             android:textColorHint="@color/White"
-            android:textColor="@color/Black"
+            android:textColor="@color/White"
             android:textSize="15dp" />
 
         <ImageView

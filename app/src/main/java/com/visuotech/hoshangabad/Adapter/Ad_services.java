@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -78,7 +79,8 @@ public class Ad_services extends RecyclerView.Adapter<Ad_services.MyViewHolder> 
             public void onClick(View view) {
 
                 if (holder.tv_lat.getText().toString().equals("") && holder.tv_long.getText().toString().equals("")){
-                    Toast.makeText(context,"Location is not available for this service",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context,"Location is not available for this service",Toast.LENGTH_SHORT).show();
+                    Snackbar.make(holder.lin_layout, "Location is not available for this service", Snackbar.LENGTH_LONG).show();
                 }else{
                     Intent intent=new Intent(context, MapActivity.class);
                     intent.putExtra("LAT",holder.tv_lat.getText().toString());

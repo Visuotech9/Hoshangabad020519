@@ -196,14 +196,14 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
                 String message = "You need to grant access to " + permissionsNeeded.get(0);
                 for (int i = 1; i < permissionsNeeded.size(); i++)
                     message = message + ", " + permissionsNeeded.get(i);
-                showMessageOKCancel(message, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            requestPermissions(permissionsList.toArray(new String[permissionsList.size()]), REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
-                        }
-                    }
-                });
+//                showMessageOKCancel(message, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(permissionsList.toArray(new String[permissionsList.size()]), REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+                }
+//                    }
+//                });
                 return;
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -336,7 +336,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
 
 
     private void Apigetboothlist(){
-        baseRequest = new BaseRequest(context);
+        baseRequest = new BaseRequest();
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
@@ -397,7 +397,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
                         booth_list22.add(j+"- "+booth_list2.get(i).getEleBoothName());
 //                       department_id.add(department_list1.get(i).getDepartment_id());
                     }
-                    ArrayAdapter adapter_booth2 = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list22);
+                    ArrayAdapter adapter_booth2 = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_spinner_item,booth_list22);
                     adapter_booth2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_station2.setAdapter(adapter_booth2);
 
@@ -430,7 +430,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
 
 
     private void ApigettehsilList(){
-        baseRequest = new BaseRequest(context);
+        baseRequest = new BaseRequest();
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
@@ -449,7 +449,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
 //                    adapter_booth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //                    spinner_station.setAdapter(adapter_booth);
 
-                    ArrayAdapter adapter_tehsil = new ArrayAdapter(context,android.R.layout.simple_spinner_item,tehsils_list);
+                    ArrayAdapter adapter_tehsil = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_spinner_item,tehsils_list);
                     adapter_tehsil.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_tehsil.setAdapter(adapter_tehsil);
 
@@ -477,7 +477,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
     }
 
     private void ApigetBlockList(){
-        baseRequest = new BaseRequest(context);
+        baseRequest = new BaseRequest();
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
@@ -496,7 +496,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
 //                    adapter_booth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //                    spinner_station.setAdapter(adapter_booth);
 
-                    ArrayAdapter adapter_block = new ArrayAdapter(context,android.R.layout.simple_spinner_item,blocks_list);
+                    ArrayAdapter adapter_block = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_spinner_item,blocks_list);
                     adapter_block.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_block.setAdapter(adapter_block);
 

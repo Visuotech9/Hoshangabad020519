@@ -9,10 +9,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Geocoder;
 import android.os.Build;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -21,6 +25,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,11 +34,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.visuotech.hoshangabad.Activities.Election.Act_election;
+import com.visuotech.hoshangabad.HomeWatcher;
 import com.visuotech.hoshangabad.Location.GPSTracker;
 import com.visuotech.hoshangabad.MarshMallowPermission;
+import com.visuotech.hoshangabad.NetworkConnection;
+import com.visuotech.hoshangabad.OnHomePressedListener;
 import com.visuotech.hoshangabad.R;
 import com.visuotech.hoshangabad.SessionParam;
 import com.visuotech.hoshangabad.retrofit.BaseRequest;
+import com.visuotech.hoshangabad.retrofit.RequestReciever;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,8 +51,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
+import static com.visuotech.hoshangabad.MarshMallowPermission.READ_PHONE_STATE;
+
 public class Act_home extends AppCompatActivity {
-    LinearLayout lay1,lay2,lay3,lay4,lay5,lay6,lay13,lay12,lay11;
+    LinearLayout lay1,lay2,lay3,lay4,lay5,lay6,lay13,lay12,lay11,lin_spl_layout;
     public boolean datafinish = false;
     Button btn_follow;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
@@ -53,6 +67,9 @@ public class Act_home extends AppCompatActivity {
     MarshMallowPermission marshMallowPermission;
     private BaseRequest baseRequest;
     TextView scrollingText;
+    HomeWatcher mhome = new HomeWatcher(Act_home.this);
+    public String id, device_id;
+
 
 
     @Override
@@ -68,8 +85,8 @@ public class Act_home extends AppCompatActivity {
         activity = this;
         sessionParam = new SessionParam(getApplicationContext());
         marshMallowPermission = new MarshMallowPermission(activity);
+        permissionPhone();
 
-        permission();
 
         lay1=findViewById(R.id.lay1);
         lay2=findViewById(R.id.lay2);
@@ -80,6 +97,7 @@ public class Act_home extends AppCompatActivity {
         lay11=findViewById(R.id.lay11);
         lay12=findViewById(R.id.lay12);
         lay13=findViewById(R.id.lay13);
+        lin_spl_layout=findViewById(R.id.lin_spl_layout);
 
         scrollingText = (TextView)findViewById(R.id.scrollingtext);
         scrollingText.setText(Html.fromHtml("निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए संपर्क करें 1950" ));
@@ -147,6 +165,8 @@ public class Act_home extends AppCompatActivity {
                 finish();
             }
         });
+
+
 
 
 
@@ -231,14 +251,14 @@ public class Act_home extends AppCompatActivity {
                 String message = "You need to grant access to " + permissionsNeeded.get(0);
                 for (int i = 1; i < permissionsNeeded.size(); i++)
                     message = message + ", " + permissionsNeeded.get(i);
-                showMessageOKCancel(message, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+//                showMessageOKCancel(message, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            requestPermissions(permissionsList.toArray(new String[permissionsList.size()]), REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
-                        }
-                    }
-                });
+                    requestPermissions(permissionsList.toArray(new String[permissionsList.size()]), REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+                }
+//                    }
+//                });
                 return;
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -303,8 +323,17 @@ public class Act_home extends AppCompatActivity {
 //                    // Permission Denied
 //                    //  Toast.makeText(HomeActivity.this, "Some Permission is Denied,You could not able to access some functionalities of app.", Toast.LENGTH_LONG).show();
 //                }
+                break;
             }
-            break;
+            case READ_PHONE_STATE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    permissionPhone();
+                } else {
+                    alertDialog();
+                }
+
+                break;
+            }
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
@@ -334,6 +363,32 @@ public class Act_home extends AppCompatActivity {
 
 
     }
+
+    private void permissionPhone(){
+        if (!marshMallowPermission.checkPermissionForPhoneState()) {
+            marshMallowPermission.requestPermissionForPhoneState();
+        } else {
+            TelephonyManager TelephonyMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            }
+            device_id = TelephonyMgr.getDeviceId();
+
+            Log.d("API LEVEL>>>>>", String.valueOf(Build.VERSION.SDK_INT));
+            Log.d("API LEVEL LOLISPOP>>>>>", String.valueOf(Build.VERSION_CODES.N));
+
+//            if (NetworkConnection.checkNetworkStatus(context) == true) {
+//                api_loginStatus();
+//            } else {
+////                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+//            }
+            if (NetworkConnection.checkNetworkStatus(context) == true) {
+                api_loginStatus();
+            } else {
+                Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();            }
+        }
+
+    }
+
     public void onBackPressed() {
         new android.app.AlertDialog.Builder(Act_home.this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -345,7 +400,6 @@ public class Act_home extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
 
                         finish();
-
                         Intent a = new Intent(Intent.ACTION_MAIN);
                         a.addCategory(Intent.CATEGORY_HOME);
                         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -359,6 +413,47 @@ public class Act_home extends AppCompatActivity {
                 .show();
 
 
+    }
+
+    public void api_loginStatus() {
+        baseRequest = new BaseRequest();
+        baseRequest.setBaseRequestListner(new RequestReciever() {
+            @Override
+            public void onSuccess(int requestCode, String Json, Object object) {
+                permission();
+            }
+
+            @Override
+            public void onFailure(int requestCode, String errorCode, String message) {
+//                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNetworkFailure(int requestCode, String message) {
+//                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        RequestBody device_id_ = RequestBody.create(MediaType.parse("text/plain"), device_id);
+
+
+        baseRequest.callAPILoginStatus(1,"http://collectorexpress.in/",device_id_);
+
+    }
+    private void alertDialog() {
+        new android.app.AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_warning)
+                .setTitle("Attention")
+                .setCancelable(false)
+                .setMessage("You need grant READ_PHONE_STATE permission for device id.")
+                .setPositiveButton("Continue", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        permissionPhone();
+                    }
+                })
+                .show();
     }
 
 }

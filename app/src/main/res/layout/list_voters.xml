@@ -40,7 +40,7 @@
                         android:layout_height="20dp"
                         android:layout_marginTop="5dp"
                         android:padding="3dp"
-                        android:src="@drawable/notifications_icon_color"
+                        android:src="@drawable/links_icon"
                         />
 
                 </LinearLayout>
@@ -114,12 +114,12 @@
 
 
     </LinearLayout>
-    <View android:id="@+id/separator"
-        android:background="@color/lightgrey"
-        android:layout_width = "fill_parent"
-        android:layout_marginLeft="30dp"
-        android:layout_height="1dip"
-        android:layout_centerVertical ="true"
-        android:layout_alignParentTop="true"/>
+    <!--<View android:id="@+id/separator"-->
+        <!--android:background="@color/lightgrey"-->
+        <!--android:layout_width = "fill_parent"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_height="1dip"-->
+        <!--android:layout_centerVertical ="true"-->
+        <!--android:layout_alignParentTop="true"/>-->
 </LinearLayout>
 

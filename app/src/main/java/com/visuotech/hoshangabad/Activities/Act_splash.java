@@ -60,123 +60,105 @@ public class Act_splash extends AppCompatActivity {
         user_typee= sessionParam.user_type;
         user_id= sessionParam.userId;
         organization_id=sessionParam.org_id;
-
+        startTimer();
 //        lin_spl_layout=findViewById(R.id.lin_spl_layout);
-        permissionPhone();
+//        permissionPhone();
 
 
     }
-    private void permissionPhone(){
-        if (!marshMallowPermission.checkPermissionForPhoneState()) {
-            marshMallowPermission.requestPermissionForPhoneState();
-        } else {
-            TelephonyManager TelephonyMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            }
-            device_id = TelephonyMgr.getDeviceId();
-
-            Log.d("API LEVEL>>>>>", String.valueOf(Build.VERSION.SDK_INT));
-            Log.d("API LEVEL LOLISPOP>>>>>", String.valueOf(Build.VERSION_CODES.N));
-
-//            if (NetworkConnection.checkNetworkStatus(context) == true) {
-//                api_loginStatus();
-//            } else {
-////                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+//    private void permissionPhone(){
+//        if (!marshMallowPermission.checkPermissionForPhoneState()) {
+//            marshMallowPermission.requestPermissionForPhoneState();
+//        } else {
+//            TelephonyManager TelephonyMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+//            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 //            }
-            startTimer();
-        }
-
-    }
+//            device_id = TelephonyMgr.getDeviceId();
+//
+//            Log.d("API LEVEL>>>>>", String.valueOf(Build.VERSION.SDK_INT));
+//            Log.d("API LEVEL LOLISPOP>>>>>", String.valueOf(Build.VERSION_CODES.N));
+//
+////            if (NetworkConnection.checkNetworkStatus(context) == true) {
+////                api_loginStatus();
+////            } else {
+//////                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+////            }
+//            startTimer();
+//        }
+//
+//    }
 
 
     private void startTimer() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
-                if (NetworkConnection.checkNetworkStatus(context) == true) {
-                    api_loginStatus();
-                } else {
-//                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
-                }
-
-//                handler = new Handler();
-//                refresh = new Runnable() {
-//                    public void run() {
-//
-//
-//                        handler.postDelayed(refresh, 20000);
-//
-//                    }
-//                };
-//                handler.post(refresh);
-
-
-
+                Intent intent=new Intent(Act_splash.this,Act_home.class);
+                startActivity(intent);
             }
 
         }, SPLASH_TIME_OUT);
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode) {
-            case READ_PHONE_STATE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    permissionPhone();
-                }else{
-                    alertDialog();
-                }
-                break;
-        }
-    }
-
-    public void api_loginStatus() {
-        baseRequest = new BaseRequest();
-        baseRequest.setBaseRequestListner(new RequestReciever() {
-            @Override
-            public void onSuccess(int requestCode, String Json, Object object) {
-
-              Intent intent=new Intent(Act_splash.this, Act_home.class);
-              startActivity(intent);
-
-            }
-
-            @Override
-            public void onFailure(int requestCode, String errorCode, String message) {
-//                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNetworkFailure(int requestCode, String message) {
-//                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-        RequestBody device_id_ = RequestBody.create(MediaType.parse("text/plain"), device_id);
-
-
-        baseRequest.callAPILoginStatus(1,"http://collectorexpress.in/",device_id_);
-
-    }
-    private void alertDialog() {
-        new AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_warning)
-                .setTitle("Attention")
-                .setCancelable(false)
-                .setMessage("You need grant READ_PHONE_STATE permission for device id.")
-                .setPositiveButton("Continue", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        permissionPhone();
-                    }
-                })
-                .show();
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.M)
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//
+//        switch (requestCode) {
+//            case READ_PHONE_STATE:
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    permissionPhone();
+//                }else{
+//                    alertDialog();
+//                }
+//                break;
+//        }
+//    }
+//
+//    public void api_loginStatus() {
+//        baseRequest = new BaseRequest();
+//        baseRequest.setBaseRequestListner(new RequestReciever() {
+//            @Override
+//            public void onSuccess(int requestCode, String Json, Object object) {
+//
+//              Intent intent=new Intent(Act_splash.this, Act_home.class);
+//              startActivity(intent);
+//
+//            }
+//
+//            @Override
+//            public void onFailure(int requestCode, String errorCode, String message) {
+////                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onNetworkFailure(int requestCode, String message) {
+////                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
+//        RequestBody device_id_ = RequestBody.create(MediaType.parse("text/plain"), device_id);
+//
+//
+//        baseRequest.callAPILoginStatus(1,"http://collectorexpress.in/",device_id_);
+//
+//    }
+//    private void alertDialog() {
+//        new AlertDialog.Builder(this)
+//                .setIcon(R.drawable.ic_warning)
+//                .setTitle("Attention")
+//                .setCancelable(false)
+//                .setMessage("You need grant READ_PHONE_STATE permission for device id.")
+//                .setPositiveButton("Continue", new DialogInterface.OnClickListener()
+//                {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        permissionPhone();
+//                    }
+//                })
+//                .show();
+//    }
     @Override
     protected void onStart() {
         super.onStart();

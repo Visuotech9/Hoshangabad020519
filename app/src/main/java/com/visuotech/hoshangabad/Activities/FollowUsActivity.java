@@ -38,6 +38,7 @@ public class FollowUsActivity extends AppCompatActivity {
     RelativeLayout rl_fb, rl_twit, rt_insta;
     ProgressBar progressbar;
     AdView adView;
+    View view1,view2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,8 @@ public class FollowUsActivity extends AppCompatActivity {
         progressbar = findViewById(R.id.progressbar);
         tv_facebook = findViewById(R.id.tv_facebook);
         tv_twitter = findViewById(R.id.tv_twit);
+        view1 = findViewById(R.id.view1);
+        view2 = findViewById(R.id.view2);
 
 
         rl_twit = findViewById(R.id.rl_twit);
@@ -64,8 +67,10 @@ public class FollowUsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                rl_fb.setBackgroundColor(getResources().getColor(R.color.sociall));
-                rl_twit.setBackgroundColor(getResources().getColor(R.color.sociald));
+                rl_fb.setBackgroundColor(getResources().getColor(R.color.sociald));
+                rl_twit.setBackgroundColor(getResources().getColor(R.color.sociall));
+                view1.setVisibility(View.VISIBLE);
+                view2.setVisibility(View.GONE);
                 webView.setWebChromeClient(new WebChromeClient());
                 webView.setWebViewClient(new CustomWebViewClient());
                 webView.getSettings().setAppCacheEnabled(true);
@@ -78,8 +83,10 @@ public class FollowUsActivity extends AppCompatActivity {
         rl_twit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rl_twit.setBackgroundColor(getResources().getColor(R.color.sociall));
-                rl_fb.setBackgroundColor(getResources().getColor(R.color.sociald));
+                rl_twit.setBackgroundColor(getResources().getColor(R.color.sociald));
+                rl_fb.setBackgroundColor(getResources().getColor(R.color.sociall));
+                view2.setVisibility(View.VISIBLE);
+                view1.setVisibility(View.GONE);
                 webView.setWebChromeClient(new WebChromeClient());
                 webView.setWebViewClient(new CustomWebViewClient());
                 webView.getSettings().setAppCacheEnabled(true);
@@ -96,8 +103,8 @@ public class FollowUsActivity extends AppCompatActivity {
 
 
     public void init() {
-        rl_fb.setBackgroundColor(getResources().getColor(R.color.sociall));
-        rl_twit.setBackgroundColor(getResources().getColor(R.color.sociald));
+        rl_fb.setBackgroundColor(getResources().getColor(R.color.sociald));
+        rl_twit.setBackgroundColor(getResources().getColor(R.color.sociall));
         webView.setWebChromeClient(new WebChromeClient());
         webView.setWebViewClient(new CustomWebViewClient());
         webView.getSettings().setAppCacheEnabled(true);
