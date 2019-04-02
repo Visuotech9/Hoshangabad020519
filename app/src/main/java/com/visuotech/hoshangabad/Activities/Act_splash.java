@@ -49,7 +49,7 @@ public class Act_splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_act_splash);
+//        setContentView(R.layout.activity_act_splash);
 
 
 
@@ -87,6 +87,8 @@ public class Act_splash extends AppCompatActivity {
         }
 
     }
+
+
     private void startTimer() {
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -174,6 +176,11 @@ public class Act_splash extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startTimer();
     }
 
 

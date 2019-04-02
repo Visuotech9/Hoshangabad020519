@@ -13,7 +13,7 @@
         >
         <bitmap
             android:gravity="fill_horizontal|fill_vertical"
-            android:src="@mipmap/splash_image2" />
+            android:src="@mipmap/ic_launcher" />
     </item>
 
 </layer-list>
