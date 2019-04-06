@@ -1,52 +1,32 @@
 {
   "project_info": {
-    "project_number": "934759234116",
-    "firebase_url": "https://hoshangabad-55b1a.firebaseio.com",
-    "project_id": "hoshangabad-55b1a",
-    "storage_bucket": "hoshangabad-55b1a.appspot.com"
+    "project_number": "177052030375",
+    "firebase_url": "https://hoshangabad-election.firebaseio.com",
+    "project_id": "hoshangabad-election",
+    "storage_bucket": "hoshangabad-election.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:934759234116:android:35fac8cedec3be38",
+        "mobilesdk_app_id": "1:177052030375:android:30a36c807c4d10c7",
         "android_client_info": {
-          "package_name": "com.visuotech.hoshangabad"
+          "package_name": "com.visuotech.hoshangabad_election"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "934759234116-8glu4issf7a38la3084egs074rkaqef2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.visuotech.hoshangabad",
-            "certificate_hash": "239d3dedd7c221da7f809e57bcdee8183c35cc69"
-          }
-        },
-        {
-          "client_id": "934759234116-7us465s9nbjlkdmb7bbbms9ft85124lg.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCCMCfIMXbFBf8DZKMXASKd_-uP1F1fqXw"
+          "current_key": "AIzaSyBuJROGKYZjcT6Z-Lql10mQuBtPOl1gfJM"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "934759234116-7us465s9nbjlkdmb7bbbms9ft85124lg.apps.googleusercontent.com",
+              "client_id": "177052030375-db27qpt98m7s8g90vsnnr06jaha5sq7e.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

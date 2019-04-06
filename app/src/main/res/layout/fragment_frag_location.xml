@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/lin_spl_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center_horizontal"
     android:orientation="vertical"
@@ -66,9 +67,10 @@
             android:layout_width="0dp"
             android:layout_gravity="center_vertical"
             android:layout_weight=".9"
+            android:paddingRight="30dp"
             android:paddingLeft="20dp"
             android:textColor="@color/DarkRed"
-            android:text=":- Station name"
+            android:text=":- Station name Station name Station name Station name"
             android:layout_height="wrap_content" />
 
 
@@ -317,8 +319,10 @@
 
             <ImageView
                 android:layout_width="40dp"
-                android:src="@drawable/male"
+                android:src="@drawable/add"
                 android:layout_height="40dp" />
+
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -369,11 +373,12 @@
             android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content">
-
             <ImageView
                 android:layout_width="40dp"
                 android:src="@drawable/male"
                 android:layout_height="40dp" />
+
+
 
             <TextView
                 android:layout_width="match_parent"

@@ -111,7 +111,7 @@
                         android:hint="Designation"
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
-                        android:text="Designation"
+                        android:text="Address"
                         android:textColor="@color/lighttextColor2"
                         android:textSize="14dp" />
 

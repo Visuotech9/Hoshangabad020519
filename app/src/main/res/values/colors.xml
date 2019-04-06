@@ -46,9 +46,10 @@
     <color name="lightnevy_blue">#46d8fc</color>
 
     <color name="colorPrimarylightest">#bbd1de</color>
-    <color name="colorPrimarylight">#85b4cf</color>
+    <color name="colorPrimarylight">#6fa8c9</color>
     <color name="colorPrimary">#3c8dbc</color>
     <color name="colorPrimaryDark">#2c6494</color>
+    <color name="colorPrimaryDark2">#1d598c</color>
     <!--<color name="colorPrimary">#FFDA6A68</color>-->
     <!--<color name="colorPrimaryDark">#944240</color>-->
 

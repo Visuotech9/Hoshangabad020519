@@ -442,12 +442,13 @@
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
             android:id="@+id/lay11"
-            android:background="@drawable/bg_home"
+            android:background="@drawable/gradient"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_height="wrap_content">
+            <!--bg_home-->
 
             <LinearLayout
                 android:layout_width="40dp"
@@ -467,17 +468,33 @@
 
             </LinearLayout>
 
-
-
-            <TextView
-                android:id="@+id/tv_resp"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:text="Election Details"
-                android:textColor="@color/White"
-                android:layout_gravity="center_vertical"
-                android:textSize="18dp"
-                android:paddingLeft="10dp"
-                android:layout_height="wrap_content" />
+                android:weightSum="1"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_resp"
+                    android:layout_weight=".8"
+                    android:layout_width="0dp"
+                    android:text="Election Details"
+                    android:textColor="@color/White"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="18dp"
+                    android:paddingLeft="10dp"
+                    android:layout_height="wrap_content"
+                    tools:ignore="Suspicious0dp" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight=".2"
+                    android:src="@drawable/right_icon"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="30dp"
+                    tools:ignore="Suspicious0dp" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -487,7 +504,7 @@
             android:orientation="horizontal"
             android:weightSum="1"
             android:id="@+id/lay12"
-            android:background="@drawable/bg_home"
+            android:background="@drawable/gradient"
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="10dp"
@@ -514,16 +531,41 @@
 
             </LinearLayout>
 
-
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:text="Notification"
-                android:textColor="@color/White"
-                android:layout_gravity="center_vertical"
-                android:textSize="18dp"
-                android:paddingLeft="10dp"
-                android:layout_height="wrap_content" />
+                android:weightSum="1"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_weight=".8"
+                    android:layout_width="0dp"
+                    android:text="Notifications"
+                    android:textColor="@color/White"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="18dp"
+                    android:paddingLeft="10dp"
+                    android:layout_height="wrap_content"
+                    tools:ignore="Suspicious0dp" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight=".2"
+                    android:src="@drawable/right_icon"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="30dp"
+                    tools:ignore="Suspicious0dp" />
+
+            </LinearLayout>
+
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:text="Notifications"-->
+                <!--android:textColor="@color/White"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:textSize="18dp"-->
+                <!--android:paddingLeft="10dp"-->
+                <!--android:layout_height="wrap_content" />-->
 
         </LinearLayout>
         <LinearLayout
@@ -532,7 +574,7 @@
             android:weightSum="1"
             android:layout_marginTop="10dp"
             android:id="@+id/lay13"
-            android:background="@drawable/bg_home"
+            android:background="@drawable/gradient"
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
             android:paddingTop="10dp"
@@ -558,16 +600,41 @@
 
             </LinearLayout>
 
-
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:text="Follow us"
-                android:textColor="@color/White"
-                android:layout_gravity="center_vertical"
-                android:textSize="18dp"
-                android:paddingLeft="10dp"
-                android:layout_height="wrap_content" />
+                android:weightSum="1"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_weight=".8"
+                    android:layout_width="0dp"
+                    android:text="Follow us"
+                    android:textColor="@color/White"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="18dp"
+                    android:paddingLeft="10dp"
+                    android:layout_height="wrap_content"
+                    tools:ignore="Suspicious0dp" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight=".2"
+                    android:src="@drawable/right_icon"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="30dp"
+                    tools:ignore="Suspicious0dp" />
+
+            </LinearLayout>
+
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:text="Follow us"-->
+                <!--android:textColor="@color/White"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:textSize="18dp"-->
+                <!--android:paddingLeft="10dp"-->
+                <!--android:layout_height="wrap_content" />-->
 
         </LinearLayout>
 

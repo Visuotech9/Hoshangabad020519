@@ -1,8 +1,13 @@
 <resources>
-    <string name="app_name">Hoshangabad</string>
+    <string name="app_name">Hoshangabad Election</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="google_maps_api_key">AIzaSyARh7mWnFM-LDcmXylbmpr47LjEHX_5RO0</string>
+    <string name="google_maps_api_key">AIzaSyBvFsW7pd8bLIq4EMt0Szj14ljiFgj8F1k</string>
     <string name="title_activity_maps">Map</string>
+    <!--&lt;!&ndash;FCm&ndash;&gt;23:9D:3D:ED:D7:C2:21:DA:7F:80:9E:57:BC:DE:E8:18:3C:35:CC:69-->
+                              <!--23:9D:3D:ED:D7:C2:21:DA:7F:80:9E:57:BC:DE:E8:18:3C:35:CC:69-->
+    <string name="FCM_PREF">com.visuotect.hoshangabad_election.fcm_pref</string>
+    <string name="FCM_TOKEN">com.visuotect.hoshangabad_election.fcm_token</string>
+
 </resources>

@@ -44,6 +44,122 @@
         </LinearLayout>
 
 
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:weightSum="1"-->
+            <!--android:paddingRight="5dp"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<LinearLayout-->
+                <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:id="@+id/lay31"-->
+                <!--android:background="@color/lightGreen"-->
+                <!--android:layout_weight=".25"-->
+                <!--android:layout_marginLeft="7dp"-->
+                <!--android:layout_height="140dp"-->
+                <!--android:layout_marginTop="5dp">-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="70dp"-->
+                    <!--android:layout_height="70dp"-->
+                    <!--android:layout_marginTop="15dp"-->
+                    <!--android:layout_marginBottom="15dp"-->
+                    <!--android:gravity="center_horizontal"-->
+                    <!--android:background="@drawable/bg_circular_imageview"-->
+                    <!--android:layout_gravity="center_horizontal">-->
+
+                    <!--<com.mikhaellopez.circularimageview.CircularImageView-->
+                        <!--android:layout_width="65dp"-->
+                        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                        <!--android:layout_marginTop="2.5dp"-->
+                        <!--android:layout_height="65dp"-->
+                        <!--android:src="@drawable/election_image"-->
+                        <!--app:civ_border_color="@color/Gray"-->
+                        <!--app:civ_border_width="0dp"-->
+                        <!--app:civ_shadow="true"-->
+                        <!--app:civ_shadow_radius="0"-->
+                        <!--app:civ_shadow_color="@color/colorPrimary"/>-->
+
+                <!--</LinearLayout>-->
+                <!--&lt;!&ndash;<View&ndash;&gt;-->
+                <!--&lt;!&ndash;android:background="@color/Gray_light"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width = "fill_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="1dip"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_centerVertical ="true"></View>&ndash;&gt;-->
+
+                <!--<TextView-->
+                    <!--android:textColor="@color/White"-->
+                    <!--android:textSize="16sp"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:text="Jansunwai"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:background="@color/Green"-->
+                    <!--android:hint="Electronics"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent" />-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight=".5"-->
+                <!--android:id="@+id/lay41"-->
+                <!--android:layout_marginLeft="7dp"-->
+                <!--android:background="@color/lightDarkRed"-->
+                <!--android:layout_height="140dp"-->
+                <!--android:layout_marginTop="5dp">-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="70dp"-->
+                    <!--android:layout_height="70dp"-->
+                    <!--android:layout_marginTop="15dp"-->
+                    <!--android:layout_marginBottom="15dp"-->
+                    <!--android:gravity="center_horizontal"-->
+                    <!--android:background="@drawable/bg_circular_imageview"-->
+                    <!--android:layout_gravity="center_horizontal">-->
+
+                    <!--<com.mikhaellopez.circularimageview.CircularImageView-->
+                        <!--android:layout_width="65dp"-->
+                        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                        <!--android:layout_marginTop="2.5dp"-->
+                        <!--android:layout_height="65dp"-->
+                        <!--android:src="@drawable/election_image"-->
+                        <!--app:civ_border_color="@color/Gray"-->
+                        <!--app:civ_border_width="0dp"-->
+                        <!--app:civ_shadow="true"-->
+                        <!--app:civ_shadow_radius="0"-->
+                        <!--app:civ_shadow_color="@color/colorPrimary"/>-->
+
+                <!--</LinearLayout>-->
+                <!--&lt;!&ndash;<View&ndash;&gt;-->
+                <!--&lt;!&ndash;android:background="@color/Gray_light"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width = "fill_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="1dip"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_centerVertical ="true"></View>&ndash;&gt;-->
+
+                <!--<TextView-->
+                    <!--android:textColor="@color/White"-->
+                    <!--android:textSize="16sp"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:text="Directory"-->
+                    <!--android:background="@color/DarkRed"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:hint="Electronics"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent" />-->
+            <!--</LinearLayout>-->
+
+
+
+
+
+        <!--</LinearLayout>-->
+
+
 
 
         <android.support.v7.widget.CardView
@@ -67,6 +183,7 @@
                 android:layout_width="0dp"
                 android:id="@+id/lay1"
                 android:paddingBottom="15dp"
+                android:background="@color/DarkRed"
                 android:paddingTop="15dp"
                 android:layout_weight=".25"
                 android:layout_height="match_parent"
@@ -104,7 +221,7 @@
                     android:textColor="@color/White"
                     android:textSize="13dp"
                     android:gravity="center_horizontal"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
 
 
 
@@ -119,6 +236,7 @@
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
                 android:layout_weight=".25"
+                android:background="@color/nevy_blue"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:orientation="vertical"
@@ -128,7 +246,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:gravity="center_horizontal"
-                    android:background="@drawable/bg_circular_img3"
+                    android:background="@drawable/bg_circular_img5"
                     android:layout_gravity="center_horizontal">
 
                     <TextView
@@ -167,6 +285,7 @@
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
                 android:layout_weight=".25"
+                android:background="@color/yellow"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:orientation="vertical"
@@ -214,6 +333,7 @@
                 android:id="@+id/lay4"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
+                android:background="@color/Green"
                 android:layout_weight=".25"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -224,7 +344,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:gravity="center_horizontal"
-                    android:background="@drawable/bg_circular_img5"
+                    android:background="@drawable/bg_circular_img3"
                     android:layout_gravity="center_horizontal">
 
                     <TextView
@@ -270,9 +390,9 @@
                 android:layout_width="match_parent"
                 android:text="Contacts "
                 android:textSize="18dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="12dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="7dp"
                 android:layout_marginLeft="15dp"
                 android:layout_height="wrap_content" />
 
@@ -495,9 +615,9 @@
                 android:layout_width="match_parent"
                 android:text="Services "
                 android:textSize="18dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="12dp"
                 android:textColor="@color/colorPrimaryDark"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="7dp"
                 android:layout_marginLeft="15dp"
                 android:layout_height="wrap_content" />
 
