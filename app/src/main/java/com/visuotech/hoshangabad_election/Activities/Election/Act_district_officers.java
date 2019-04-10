@@ -28,8 +28,10 @@ import android.widget.Toast;
 
 import com.visuotech.hoshangabad_election.Adapter.Ad_Vidhansabha;
 import com.visuotech.hoshangabad_election.Adapter.Ad_district_officers;
+import com.visuotech.hoshangabad_election.Adapter.Ad_responsibility;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
 import com.visuotech.hoshangabad_election.Model.District_officers;
+import com.visuotech.hoshangabad_election.Model.Responsibility;
 import com.visuotech.hoshangabad_election.Model.Vidhanasabha_list;
 import com.visuotech.hoshangabad_election.NetworkConnection;
 import com.visuotech.hoshangabad_election.R;
@@ -50,12 +52,12 @@ public class Act_district_officers extends AppCompatActivity {
     LinearLayout container;
     LinearLayoutManager linearLayoutManager;
     RecyclerView rv;
-    ArrayList<District_officers> district_officers_list1;
+    ArrayList<District_officers> district_officers_list1=new ArrayList<>();
     ArrayList<String>district_officers_list=new ArrayList<>();
     Ad_district_officers adapter;
     String AC;
 
-    String Resp_name;
+    String Resp_name,key;
     EditText inputSearch;
     String designation,samitee_name;
     public boolean datafinish = false;
@@ -76,12 +78,17 @@ public class Act_district_officers extends AppCompatActivity {
 
         Intent intent=getIntent();
         Resp_name=intent.getStringExtra("NAME");
+        key=intent.getStringExtra("key");
 
         toolbar.setTitleTextColor((Color.parseColor("#FFFFFF")));
         getSupportActionBar().setTitle(Resp_name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        context=this;
+        context = this;
+        activity = this;
+        sessionParam = new SessionParam(getApplicationContext());
+        marshMallowPermission = new MarshMallowPermission(activity);
+
 
         container = (LinearLayout)findViewById(R.id.container);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -125,16 +132,59 @@ public class Act_district_officers extends AppCompatActivity {
 
         lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
         if (NetworkConnection.checkNetworkStatus(context) == true) {
-            ApigetVidhan_detail_list();
+            ApigetVidhan_detail_list(key);
         } else {
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+            String Json;
+            Json = sessionParam.getJson(Resp_name,context);
+            try {
+                if (Json!=null) {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    String message=jsonObject.getString("message");
+                    if (message.equals("No Records Found")){
+                        Snackbar.make(lin_spl_layout, "No Records Found", Snackbar.LENGTH_LONG).show();
+                    }else {
+                        JSONArray jsonArray = jsonObject.optJSONArray("user");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            District_officers vd = new District_officers();
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            String officer_name = jsonObject1.optString("officer_name");
+                            String officer_responsibility = jsonObject1.optString("officer_responsibility");
+                            String officer_mobile = jsonObject1.optString("officer_mobile");
+                            String officer_phone = jsonObject1.optString("officer_phone");
+                            String officer_email = jsonObject1.optString("officer_email");
+                            String officer_post = jsonObject1.optString("officer_post");
+
+
+                            vd.setOfficer_name(officer_name);
+                            vd.setOfficer_email(officer_responsibility);
+                            vd.setOfficer_mobile(officer_mobile);
+                            vd.setOfficer_phone(officer_phone);
+                            vd.setOfficer_post(officer_email);
+                            vd.setOfficer_responsibility(officer_post);
+
+                            district_officers_list1.add(vd);
+
+                        }
+
+                    }
+
+                    adapter=new Ad_district_officers(context,district_officers_list1);
+                    rv.setAdapter(adapter);
+                }else {
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (NetworkConnection.checkNetworkStatus(context)==true){
-                    ApigetVidhan_detail_list();
+                    ApigetVidhan_detail_list(key);
                     mSwipeRefreshLayout.setRefreshing(false);
                 }else{
                     Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
@@ -269,13 +319,14 @@ public class Act_district_officers extends AppCompatActivity {
 
     }
 
-    private void ApigetVidhan_detail_list(){
+    private void ApigetVidhan_detail_list(final String key){
         baseRequest = new BaseRequest(context);
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),key,context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     district_officers_list1=baseRequest.getDataList(jsonArray,District_officers.class);

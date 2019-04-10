@@ -2,6 +2,7 @@ package com.visuotech.hoshangabad_election.Activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Notification;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,8 +50,9 @@ public class Act_notification extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     ImageView search_icon;
     RecyclerView rv;
-    ArrayList<Notificationss> notifications_list1;
+    ArrayList<Notificationss> notifications_list1=new ArrayList<Notificationss>();
     ArrayList<String>notifications_list=new ArrayList<>();
+    ArrayList<Notificationss> notifications_list2 = new ArrayList<Notificationss>();
     Ad_notifications adapter;
     String booth_name;
     EditText inputSearch;
@@ -76,21 +79,24 @@ public class Act_notification extends AppCompatActivity {
         getSupportActionBar().setTitle("Notifications");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        context=this;
+
+        context = this;
+        activity = this;
+        sessionParam = new SessionParam(getApplicationContext());
+        marshMallowPermission = new MarshMallowPermission(activity);
 
         container = (LinearLayout)findViewById(R.id.container);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.activity_act_sam_mem_list, null);
 
         permission();
+
         mSwipeRefreshLayout=rowView.findViewById(R.id.activity_main_swipe_refresh_layout);
         rv = (RecyclerView) rowView.findViewById(R.id.rv_list);
         inputSearch = (EditText) rowView.findViewById(R.id.inputSearch);
         lay =  rowView.findViewById(R.id.lay);
         search_icon =  rowView.findViewById(R.id.search_icon);
         lay.setVisibility(View.GONE);
-
-
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(linearLayoutManager);
         rv.setItemAnimator(new DefaultItemAnimator());
@@ -126,6 +132,44 @@ public class Act_notification extends AppCompatActivity {
 */
         lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
 
+
+
+
+
+
+        if (NetworkConnection.checkNetworkStatus(context)==true){
+            Apigetsam_mem_list();
+        }else{
+            String Json;
+            Json = sessionParam.getJson("Notification",context);
+            try {
+                JSONObject jsonObject = new JSONObject(Json);
+                JSONArray jsonArray=jsonObject.optJSONArray("user");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    Notificationss notificationss = new Notificationss();
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                    String push_title = jsonObject1.optString("push_title");
+                    String push_desc = jsonObject1.optString("push_desc");
+                    String creation_date = jsonObject1.optString("creation_date");
+
+                    notificationss.setPush_title(push_title);
+                    notificationss.setPush_desc(push_desc);
+                    notificationss.setCreation_date(creation_date);
+
+                    notifications_list1.add(notificationss);
+
+                }
+
+                adapter=new Ad_notifications(context,notifications_list1);
+                rv.setAdapter(adapter);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
         handler = new Handler();
         refresh = new Runnable() {
             public void run() {
@@ -133,6 +177,7 @@ public class Act_notification extends AppCompatActivity {
                 if (NetworkConnection.checkNetworkStatus(context) == true) {
                     Apigetsam_mem_list();
                 } else {
+
                     Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
                 }
                 handler.postDelayed(refresh, 60000);
@@ -142,7 +187,6 @@ public class Act_notification extends AppCompatActivity {
         handler.post(refresh);
 
 
-
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -150,7 +194,8 @@ public class Act_notification extends AppCompatActivity {
                     Apigetsam_mem_list();
                     mSwipeRefreshLayout.setRefreshing(false);
                 }else{
-                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                }
 
 
             }
@@ -158,6 +203,10 @@ public class Act_notification extends AppCompatActivity {
 
 
 
+
+    }
+
+    public void start(){
 
     }
 
@@ -288,12 +337,13 @@ public class Act_notification extends AppCompatActivity {
     }
 
     private void Apigetsam_mem_list(){
-        baseRequest = new BaseRequest();
+        baseRequest = new BaseRequest(context);
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),"Notification",context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     notifications_list1=baseRequest.getDataList(jsonArray,Notificationss.class);
@@ -366,6 +416,12 @@ public class Act_notification extends AppCompatActivity {
         Intent i = new Intent(Act_notification.this, Act_home.class);
         startActivity(i);
         finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        start();
     }
 
 }

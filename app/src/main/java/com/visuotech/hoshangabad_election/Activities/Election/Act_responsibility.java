@@ -28,9 +28,11 @@ import android.widget.Toast;
 
 import com.visuotech.hoshangabad_election.Adapter.Ad_dept_members;
 import com.visuotech.hoshangabad_election.Adapter.Ad_responsibility;
+import com.visuotech.hoshangabad_election.Adapter.Ad_voters_urls;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
 import com.visuotech.hoshangabad_election.Model.Deaprtments_members;
 import com.visuotech.hoshangabad_election.Model.Responsibility;
+import com.visuotech.hoshangabad_election.Model.Voter;
 import com.visuotech.hoshangabad_election.NetworkConnection;
 import com.visuotech.hoshangabad_election.R;
 import com.visuotech.hoshangabad_election.SessionParam;
@@ -52,7 +54,7 @@ public class Act_responsibility extends AppCompatActivity {
 
     LinearLayoutManager linearLayoutManager;
     RecyclerView rv;
-    ArrayList<Responsibility> responsibilities_list;
+    ArrayList<Responsibility> responsibilities_list=new ArrayList<Responsibility>();
     ArrayList<String>dept_memb_list=new ArrayList<>();
     Ad_responsibility adapter;
     String booth_name;
@@ -130,6 +132,32 @@ public class Act_responsibility extends AppCompatActivity {
             Apigetsam_mem_list();
         } else {
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+            String Json;
+            Json = sessionParam.getJson("responsibility",context);
+            try {
+                if (Json!=null) {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    JSONArray jsonArray = jsonObject.optJSONArray("user");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        Responsibility notificationss = new Responsibility();
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        String nodal_responsibility = jsonObject1.optString("nodal_responsibility");
+
+                        notificationss.setNodal_responsibility(nodal_responsibility);
+
+                        responsibilities_list.add(notificationss);
+
+                    }
+
+                    adapter = new Ad_responsibility(context, responsibilities_list);
+                    rv.setAdapter(adapter);
+                }else {
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -279,6 +307,7 @@ public class Act_responsibility extends AppCompatActivity {
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),"responsibility",context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     responsibilities_list=baseRequest.getDataList(jsonArray,Responsibility.class);

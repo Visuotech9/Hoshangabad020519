@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lin_spl_layout"
     android:orientation="vertical"
     android:layout_height="match_parent"
@@ -86,6 +87,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight=".9"
+        android:id="@+id/lay_recy"
+        android:visibility="gone"
         android:orientation="vertical">
         <ProgressBar
             android:id="@+id/progressbar"
@@ -112,6 +115,195 @@
 
 
     </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/lay_design"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/lin_layout"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="1"
+                android:orientation="horizontal"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight=".20"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    tools:ignore="Suspicious0dp">
+
+                    <LinearLayout
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:id="@+id/lay_image"
+                        android:gravity="center_horizontal"
+                        android:background="@drawable/bg_circular_imageview"
+                        android:layout_gravity="center_horizontal">
+
+                        <com.mikhaellopez.circularimageview.CircularImageView
+                            android:layout_width="35dp"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:layout_marginTop="5dp"
+                            android:layout_height="35dp"
+                            android:src="@drawable/person_icon"
+                            app:civ_border_width="0dp"
+                            app:civ_shadow="true"
+                            app:civ_shadow_radius="0"
+                            app:civ_shadow_color="@color/colorPrimary"/>
+
+                    </LinearLayout>
+
+
+
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:orientation="vertical"
+                    android:layout_marginTop="12dp"
+                    android:layout_weight=".5"
+                    android:layout_marginBottom="10dp"
+                    android:layout_height="wrap_content"
+                    tools:ignore="Suspicious0dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:hint="Name"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="3dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/Blacklight"
+                            android:textSize="14dp"
+                            android:text="" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_designation"
+                            android:hint="Designation"
+                            android:layout_marginLeft="3dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/textcolor2"
+                            android:textSize="12dp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_mobile"
+                            android:hint="Contact no."
+                            android:layout_marginLeft="3dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/textcolor2"
+                            android:textSize="12dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:gravity="center_vertical"
+                    android:layout_weight=".15"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    tools:ignore="Suspicious0dp">
+
+                    <LinearLayout
+                        android:id="@+id/lay_message"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:gravity="center_horizontal"
+                        android:background="@drawable/bg_circular_imageview"
+                        android:layout_gravity="center_horizontal">
+
+                        <com.mikhaellopez.circularimageview.CircularImageView
+                            android:layout_width="20dp"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:layout_marginTop="10dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/message_icon"
+                            app:civ_border_width="0dp"
+                            app:civ_shadow="true"
+                            app:civ_shadow_radius="0"
+                            app:civ_shadow_color="@color/colorPrimary"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:gravity="center_vertical"
+                    android:layout_weight=".15"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    tools:ignore="Suspicious0dp">
+
+                    <LinearLayout
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/lay_call"
+                        android:gravity="center_horizontal"
+                        android:background="@drawable/bg_circular_imageview"
+                        android:layout_gravity="center_horizontal">
+
+                        <com.mikhaellopez.circularimageview.CircularImageView
+                            android:layout_width="20dp"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:layout_marginTop="10dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/call_icon"
+                            app:civ_border_width="0dp"
+                            app:civ_shadow="true"
+                            app:civ_shadow_radius="0"
+                            app:civ_shadow_color="@color/colorPrimary"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
 
 
 

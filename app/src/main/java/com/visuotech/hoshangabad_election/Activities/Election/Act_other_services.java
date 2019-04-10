@@ -24,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
+import com.visuotech.hoshangabad_election.Model.Departments;
 import com.visuotech.hoshangabad_election.Model.Designation_Details;
 import com.visuotech.hoshangabad_election.Model.Samities;
 import com.visuotech.hoshangabad_election.Model.ServiceType;
@@ -49,8 +50,7 @@ public class Act_other_services extends AppCompatActivity implements AdapterView
     String id,designation,booth_name,mobile,name,desig,lat,log;
     Button btn_cancel,btn_submit;
     int designation_no;
-    ArrayList<ServiceType> serviceTypes_list1;
-    ArrayList<Designation_Details> desi_details_list1;
+    ArrayList<ServiceType> serviceTypes_list1=new ArrayList<ServiceType>();
     ArrayList<String>  serviceTypes_list= new ArrayList<String>();
     Context context;
     Activity activity;
@@ -103,7 +103,7 @@ public class Act_other_services extends AppCompatActivity implements AdapterView
                 if (serviceTypes_list1!=null){
                     Intent i = new Intent(Act_other_services.this, Act_services_list.class);
                     i.putExtra("Name",name);
-//                    i.putExtra("LONGITUDE",log);
+                    i.putExtra("key",name);
                     startActivity(i);
                     finish();
 
@@ -117,6 +117,39 @@ public class Act_other_services extends AppCompatActivity implements AdapterView
             ApigetSamlist();
         } else {
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+            String Json;
+            Json = sessionParam.getJson("services",context);
+            try {
+                if (Json!=null) {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    JSONArray jsonArray = jsonObject.optJSONArray("user");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        ServiceType notificationss = new ServiceType();
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        String type = jsonObject1.optString("type");
+
+                        notificationss.setType(type);
+
+                        serviceTypes_list1.add(notificationss);
+
+                    }
+
+                    for (int i = 0; i < serviceTypes_list1.size(); i++) {
+                        serviceTypes_list.add(serviceTypes_list1.get(i).getType());
+//                       department_id.add(department_list1.get(i).getDepartment_id());
+                    }
+                    ArrayAdapter adapter_service = new ArrayAdapter(context, android.R.layout.simple_spinner_item, serviceTypes_list);
+                    adapter_service.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_services.setAdapter(adapter_service);
+
+                }else {
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -273,6 +306,7 @@ public class Act_other_services extends AppCompatActivity implements AdapterView
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),"services",context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     serviceTypes_list1=baseRequest.getDataList(jsonArray,ServiceType.class);

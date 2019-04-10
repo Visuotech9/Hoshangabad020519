@@ -70,6 +70,7 @@ public class Ad_responsibility extends RecyclerView.Adapter<Ad_responsibility.My
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(context, Act_district_officers.class);
+                intent.putExtra("key",holder.tv_resp.getText().toString());
                 intent.putExtra("NAME",holder.tv_resp.getText().toString());
                 context.startActivity(intent);
             }

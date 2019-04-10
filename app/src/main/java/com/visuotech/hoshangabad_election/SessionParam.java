@@ -3,9 +3,16 @@ package com.visuotech.hoshangabad_election;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /*import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;*/
@@ -209,6 +216,7 @@ public class SessionParam {
         prefsEditor.commit();
     }
 
+
     public void loginSession(Context context, String logged_in) {
         Log.d("logged_in Session ",logged_in);
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -256,6 +264,37 @@ public class SessionParam {
         prefsEditor.commit();
     }
 
+    public void saveArrayList(ArrayList<String> list, String key,Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        prefsEditor.putString(key, json);
+        prefsEditor.apply();     // This line is IMPORTANT !!!
+    }
+
+    public ArrayList<String> getArrayList(String key,Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(key, null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        return gson.fromJson(json, type);
+    }
+
+    public void saveJson(String json, String key,Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        prefsEditor.putString(key, json.toString());
+        prefsEditor.apply();     // This line is IMPORTANT !!!
+    }
+
+    public String getJson(String key,Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        String json = sharedPreferences.getString(key, null);
+        return json;
+    }
 
 
 

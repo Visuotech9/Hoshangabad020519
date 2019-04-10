@@ -24,12 +24,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.visuotech.hoshangabad_election.Adapter.Ad_samitee_member;
 import com.visuotech.hoshangabad_election.Adapter.Ad_services;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
-import com.visuotech.hoshangabad_election.Model.Samitee_members;
 import com.visuotech.hoshangabad_election.Model.ServiceList;
 import com.visuotech.hoshangabad_election.NetworkConnection;
 import com.visuotech.hoshangabad_election.R;
@@ -50,12 +47,12 @@ public class Act_services_list extends AppCompatActivity {
     LinearLayout container;
     LinearLayoutManager linearLayoutManager;
     RecyclerView rv;
-    ArrayList<ServiceList> service_list1;
+    ArrayList<ServiceList> service_list1=new ArrayList<>();
     ArrayList<String>service_list=new ArrayList<>();
     Ad_services adapter;
     String booth_name;
     EditText inputSearch;
-    String name;
+    String name,key;
 
     Context context;
     Activity activity;
@@ -75,13 +72,17 @@ public class Act_services_list extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent=getIntent();
+        key=intent.getStringExtra("key");
         name=intent.getStringExtra("Name");
 
         toolbar.setTitleTextColor((Color.parseColor("#FFFFFF")));
         getSupportActionBar().setTitle(name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        context=this;
+        context = this;
+        activity = this;
+        sessionParam = new SessionParam(getApplicationContext());
+        marshMallowPermission = new MarshMallowPermission(activity);
 
         container = (LinearLayout)findViewById(R.id.container);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -120,20 +121,63 @@ public class Act_services_list extends AppCompatActivity {
                 filter(editable.toString());
             }
         });
-        Apigetsam_mem_list();
+
 
         lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
         if (NetworkConnection.checkNetworkStatus(context) == true) {
-            Apigetsam_mem_list();
+            Apigetsam_mem_list(key);
         } else {
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+            String Json;
+            Json = sessionParam.getJson(name,context);
+            try {
+                if (Json!=null){
+                    JSONObject jsonObject = new JSONObject(Json);
+                    String message=jsonObject.getString("message");
+                    if (message.equals("No Records Found")){
+                        Snackbar.make(lin_spl_layout, "No Records Found", Snackbar.LENGTH_LONG).show();
+                    }else {
+                        JSONArray jsonArray=jsonObject.optJSONArray("user");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            ServiceList samitee_members = new ServiceList();
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                            String other_services_lat = jsonObject1.optString("other_services_lat");
+                            String other_services_long = jsonObject1.optString("other_services_long");
+                            String other_services_mobile = jsonObject1.optString("other_services_mobile");
+                            String other_services_name = jsonObject1.optString("other_services_name");
+                            String other_services_type = jsonObject1.optString("other_services_type");
+
+                            samitee_members.setOther_services_lat(other_services_lat);
+                            samitee_members.setOther_services_long(other_services_long);
+                            samitee_members.setOther_services_mobile(other_services_mobile);
+                            samitee_members.setOther_services_name(other_services_name);
+                            samitee_members.setOther_services_type(other_services_type);
+
+                            service_list1.add(samitee_members);
+
+                        }
+                    }
+
+                }else{
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                }
+
+
+                adapter=new Ad_services(context,service_list1);
+                rv.setAdapter(adapter);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (NetworkConnection.checkNetworkStatus(context)==true){
-                    Apigetsam_mem_list();
+                    Apigetsam_mem_list(key);
                     mSwipeRefreshLayout.setRefreshing(false);
                 }else{
                     Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
@@ -267,13 +311,14 @@ public class Act_services_list extends AppCompatActivity {
 
     }
 
-    private void Apigetsam_mem_list(){
+    private void Apigetsam_mem_list(final String key){
         baseRequest = new BaseRequest(context);
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),key,context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     service_list1=baseRequest.getDataList(jsonArray,ServiceList.class);

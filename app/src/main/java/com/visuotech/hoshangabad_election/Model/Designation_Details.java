@@ -3,7 +3,23 @@ package com.visuotech.hoshangabad_election.Model;
 public class Designation_Details {
 
     String election_id,ele_boothno,ele_ac,ele_block,ele_tehsil,ele_gpanchayat,ele_gram,ele_latitude,ele_longitude,ele_booth_name
-    ,ele_local1_name,ele_local1_mobile,designation,user_id;
+    ,designation_name,designation_mobile,designation,user_id;
+
+    public String getDesignation_name() {
+        return designation_name;
+    }
+
+    public void setDesignation_name(String designation_name) {
+        this.designation_name = designation_name;
+    }
+
+    public String getDesignation_mobile() {
+        return designation_mobile;
+    }
+
+    public void setDesignation_mobile(String designation_mobile) {
+        this.designation_mobile = designation_mobile;
+    }
 
     public Designation_Details() {
     }
@@ -88,21 +104,7 @@ public class Designation_Details {
         this.ele_booth_name = ele_booth_name;
     }
 
-    public String getEle_local1_name() {
-        return ele_local1_name;
-    }
 
-    public void setEle_local1_name(String ele_local1_name) {
-        this.ele_local1_name = ele_local1_name;
-    }
-
-    public String getEle_local1_mobile() {
-        return ele_local1_mobile;
-    }
-
-    public void setEle_local1_mobile(String ele_local1_mobile) {
-        this.ele_local1_mobile = ele_local1_mobile;
-    }
 
     public String getDesignation() {
         return designation;

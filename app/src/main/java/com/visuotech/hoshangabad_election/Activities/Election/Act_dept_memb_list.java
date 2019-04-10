@@ -50,12 +50,12 @@ public class Act_dept_memb_list extends AppCompatActivity {
     LinearLayout container;
     LinearLayoutManager linearLayoutManager;
     RecyclerView rv;
-    ArrayList<Deaprtments_members> dept_memb_list1;
+    ArrayList<Deaprtments_members> dept_memb_list1=new ArrayList<>();
     ArrayList<String>dept_memb_list=new ArrayList<>();
     Ad_dept_members adapter;
     String booth_name;
     EditText inputSearch;
-    String id,samitee_name;
+    String id,samitee_name,key;
 
     Context context;
     Activity activity;
@@ -77,13 +77,17 @@ public class Act_dept_memb_list extends AppCompatActivity {
         getSupportActionBar().setTitle("Member list");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        context=this;
+        context = this;
+        activity = this;
+        sessionParam = new SessionParam(getApplicationContext());
+        marshMallowPermission = new MarshMallowPermission(activity);
 
         container = (LinearLayout)findViewById(R.id.container);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.activity_act_sam_mem_list, null);
 
         permission();
+
         mSwipeRefreshLayout=rowView.findViewById(R.id.activity_main_swipe_refresh_layout);
         rv = (RecyclerView) rowView.findViewById(R.id.rv_list);
         inputSearch = (EditText) rowView.findViewById(R.id.inputSearch);
@@ -97,6 +101,7 @@ public class Act_dept_memb_list extends AppCompatActivity {
         Intent intent=getIntent();
         id=intent.getStringExtra("Id");
         samitee_name=intent.getStringExtra("Name");
+        key=intent.getStringExtra("key");
 
 
 //        Apigetboothlist();
@@ -122,16 +127,63 @@ public class Act_dept_memb_list extends AppCompatActivity {
 
         lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
         if (NetworkConnection.checkNetworkStatus(context) == true) {
-            Apigetsam_mem_list();
+            Apigetsam_mem_list(key);
         } else {
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+            String Json;
+            Json = sessionParam.getJson(samitee_name,context);
+            try {
+                if (Json!=null){
+                    JSONObject jsonObject = new JSONObject(Json);
+                    String message=jsonObject.getString("message");
+                    if (message.equals("No Records Found")){
+                        Snackbar.make(lin_spl_layout, "No Records Found", Snackbar.LENGTH_LONG).show();
+                    }else {
+                        JSONArray jsonArray=jsonObject.optJSONArray("user");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Deaprtments_members samitee_members = new Deaprtments_members();
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                            dept_officer_name,dept_officer_designation,dept_officer_email,dept_officer_mobile,dept_officer_posting,
+//            dept_officer_duty,dept_officer_dept_id,user_id;
+                            String dept_officer_designation = jsonObject1.optString("dept_officer_designation");
+                            String dept_officer_duty = jsonObject1.optString("dept_officer_duty");
+                            String dept_officer_email = jsonObject1.optString("dept_officer_email");
+                            String dept_officer_mobile = jsonObject1.optString("dept_officer_mobile");
+                            String dept_officer_name = jsonObject1.optString("dept_officer_name");
+                            String dept_officer_posting = jsonObject1.optString("dept_officer_posting");
+
+                            samitee_members.setDept_officer_designation(dept_officer_designation);
+                            samitee_members.setDept_officer_duty(dept_officer_duty);
+                            samitee_members.setDept_officer_email(dept_officer_email);
+                            samitee_members.setDept_officer_mobile(dept_officer_mobile);
+                            samitee_members.setDept_officer_name(dept_officer_name);
+                            samitee_members.setDept_officer_posting(dept_officer_posting);
+
+                            dept_memb_list1.add(samitee_members);
+
+                        }
+                    }
+
+                }else{
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                }
+
+
+                adapter=new Ad_dept_members(context,dept_memb_list1,samitee_name);
+                rv.setAdapter(adapter);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (NetworkConnection.checkNetworkStatus(context)==true){
-                    Apigetsam_mem_list();
+                    Apigetsam_mem_list(key);
                     mSwipeRefreshLayout.setRefreshing(false);
                 }else{
                     Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
@@ -266,13 +318,14 @@ public class Act_dept_memb_list extends AppCompatActivity {
 
     }
 
-    private void Apigetsam_mem_list(){
+    private void Apigetsam_mem_list(final String key){
         baseRequest = new BaseRequest(context);
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),key,context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     dept_memb_list1=baseRequest.getDataList(jsonArray,Deaprtments_members.class);

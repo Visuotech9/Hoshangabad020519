@@ -1,10 +1,14 @@
 package com.visuotech.hoshangabad_election.Fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,18 +16,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.visuotech.hoshangabad_election.Adapter.Ad_designation_details;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
+import com.visuotech.hoshangabad_election.Model.Designation_Details;
 import com.visuotech.hoshangabad_election.Model.PollingBooth;
 import com.visuotech.hoshangabad_election.NetworkConnection;
 import com.visuotech.hoshangabad_election.R;
@@ -45,10 +53,11 @@ public class Frag_list extends Fragment implements AdapterView.OnItemSelectedLis
     RecyclerView rv;
     Spinner spinner_designation;
     ArrayList<PollingBooth>booth_list1;
+    ArrayList<Designation_Details>designation_details_list;
     ArrayList<String>booth_list=new ArrayList<>();
     Ad_designation_details adapter;
-    String AC;
-    String booth_name;
+    String AC,name,mobile;
+    String booth_name,designation,designation_count;
     EditText inputSearch;
     Activity activity;
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -56,8 +65,13 @@ public class Frag_list extends Fragment implements AdapterView.OnItemSelectedLis
     SessionParam sessionParam;
     MarshMallowPermission marshMallowPermission;
     private BaseRequest baseRequest;
-    LinearLayout lin_spl_layout;
-    String[] designation_list = { "P0","P1","BLO","GRS","SACHIV","THANA","Sector Officer","Local Contact Person-1","Local Contact Person-2"};
+    LinearLayout lin_spl_layout,lay_design;
+    TextView tv_name,tv_designation,tv_mobile;
+    LinearLayout lay_message,lay_call;
+    FrameLayout lay_recy;
+    String[] designation_lists = { "All","P0","P1","BLO","GRS","SACHIV","THANA","Sector Officer","Local Contact Person-1","Local Contact Person-2"};
+    String[] designation_list = {"P0","P1","BLO","GRS","SACHIV","THANA","Sector Officer","Local Contact Person-1","Local Contact Person-2"};
+
     ArrayAdapter adapter_desig;
     public Frag_list() {
         // Required empty public constructor
@@ -85,8 +99,15 @@ public class Frag_list extends Fragment implements AdapterView.OnItemSelectedLis
 //        activity=this;
         rv = (RecyclerView) view.findViewById(R.id.rv_list);
         lin_spl_layout=view.findViewById(R.id.lin_spl_layout);
+        lay_recy=view.findViewById(R.id.lay_recy);
+        lay_design=view.findViewById(R.id.lay_design);
         spinner_designation=view.findViewById(R.id.spinner_designation);
         mSwipeRefreshLayout=view.findViewById(R.id.activity_main_swipe_refresh_layout);
+        tv_name=view.findViewById(R.id.tv_name);
+        tv_designation =  view.findViewById(R.id.tv_designation);
+        tv_mobile =  view.findViewById(R.id.tv_mobile);
+        lay_message =  view.findViewById(R.id.lay_message);
+        lay_call =  view.findViewById(R.id.lay_call);
         spinner_designation.setOnItemSelectedListener(this);
 //        inputSearch = (EditText) view.findViewById(R.id.inputSearch);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -95,7 +116,7 @@ public class Frag_list extends Fragment implements AdapterView.OnItemSelectedLis
 //        Utility.hideKeyBoard(activity);
 
 
-        adapter_desig = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,designation_list);
+        adapter_desig = new ArrayAdapter(getContext(),android.R.layout.simple_spinner_item,designation_lists);
         adapter_desig.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_designation.setAdapter(adapter_desig);
 
@@ -117,6 +138,37 @@ public class Frag_list extends Fragment implements AdapterView.OnItemSelectedLis
 
 
             }
+        });
+
+        lay_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("POSITION>>>>", tv_mobile.getText().toString());
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" +tv_mobile.getText().toString()));
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                getContext().startActivity(intent);
+            }
+
+        });
+        lay_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("POSITION>>>>", tv_mobile.getText().toString());
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("smsto:" + Uri.encode(tv_mobile.getText().toString())));
+                getContext().startActivity(intent);
+            }
+
         });
 
 
@@ -144,6 +196,24 @@ public class Frag_list extends Fragment implements AdapterView.OnItemSelectedLis
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        switch(adapterView.getId()){
+            case R.id.spinner_designation :
+                //Your Another Action Here.
+                designation=designation_lists[i];
+
+                if (designation.equals("All")){
+                    lay_recy.setVisibility(View.VISIBLE);
+                    lay_design.setVisibility(View.GONE);
+                    Apigetboothlist();
+                }else{
+                    designation_count= String.valueOf(i);
+                    Apigetdesignation(designation_count);
+                }
+
+
+//                Toast.makeText(getApplicationContext(),gender_list[i] , Toast.LENGTH_LONG).show();
+                break;
+        }
 
     }
 
@@ -172,11 +242,6 @@ public class Frag_list extends Fragment implements AdapterView.OnItemSelectedLis
                     adapter=new Ad_designation_details(getContext(),booth_list1,design_list);
                     rv.setAdapter(adapter);
 
-//                    ArrayAdapter adapter_booth = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list);
-//                    adapter_booth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                    spinner_station.setAdapter(adapter_booth);
-//
-
 
 
                 } catch (JSONException e) {
@@ -198,6 +263,51 @@ public class Frag_list extends Fragment implements AdapterView.OnItemSelectedLis
         String remainingUrl2="/Election/Api2.php?apicall=polling_booth"+"&ac="+AC+"&booth_name="+booth_name;
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
+
+    private void Apigetdesignation(final String designation_count){
+        baseRequest = new BaseRequest(getContext());
+        baseRequest.setBaseRequestListner(new RequestReciever() {
+            @Override
+            public void onSuccess(int requestCode, String Json, Object object) {
+                try {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    JSONArray jsonArray=jsonObject.optJSONArray("user");
+
+                    designation_details_list=baseRequest.getDataList(jsonArray,Designation_Details.class);
+                    lay_recy.setVisibility(View.GONE);
+                    lay_design.setVisibility(View.VISIBLE);
+
+                    name=designation_details_list.get(0).getDesignation_name();
+                    mobile=designation_details_list.get(0).getDesignation_mobile();
+
+                    tv_name.setText(name);
+                    tv_mobile.setText(mobile);
+                    tv_designation.setText(designation);
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int requestCode, String errorCode, String message) {
+
+            }
+            @Override
+            public void onNetworkFailure(int requestCode, String message) {
+
+            }
+        });
+        String remainingUrl2="/Election/Api2.php?apicall=polling_booth"+"&ac="+AC+"&booth_name="+booth_name+"&designation="+designation_count;
+        baseRequest.callAPIGETData(1, remainingUrl2);
+    }
+
+
 
     private void filter(String text) {
         //new array list that will hold the filtered data

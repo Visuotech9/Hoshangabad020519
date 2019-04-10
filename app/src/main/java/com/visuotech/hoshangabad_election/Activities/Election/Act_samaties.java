@@ -48,7 +48,7 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
     String id,designation,booth_name,mobile,name,level,lat,log,assembly;
     Button btn_cancel,btn_submit;
     int designation_no;
-    ArrayList<Samities> samiti_list1;
+    ArrayList<Samities> samiti_list1=new ArrayList<>();
     ArrayList<Designation_Details> desi_details_list1;
     ArrayList<String>  samiti_list= new ArrayList<String>();
     Context context;
@@ -123,7 +123,7 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
                     Intent i = new Intent(Act_samaties.this, Act_sam_mem_list.class);
                     i.putExtra("Id",id);
                     i.putExtra("Name",name);
-//                    i.putExtra("LONGITUDE",log);
+                    i.putExtra("key",name);
                     startActivity(i);
                     finish();
 
@@ -272,9 +272,40 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
                     samiti_list.clear();
 
                     if (NetworkConnection.checkNetworkStatus(context) == true) {
-                        ApigetSamlist2(level);
+                        ApigetSamlist2(level, assembly, "samiti_1");
                     } else {
                         Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                        String Json;
+                        Json = sessionParam.getJson("samiti_1",context);
+                        try {
+                            if (Json!=null) {
+                                JSONObject jsonObject = new JSONObject(Json);
+                                JSONArray jsonArray = jsonObject.optJSONArray("user");
+                                for (int j = 0; j < jsonArray.length(); j++) {
+                                    Samities notificationss = new Samities();
+                                    JSONObject jsonObject1 = jsonArray.getJSONObject(j);
+                                    String samiti_name = jsonObject1.optString("samiti_name");
+
+                                    notificationss.setSamitiName(samiti_name);
+
+                                    samiti_list1.add(notificationss);
+
+                                }
+
+                                for (int j = 0; j < samiti_list1.size(); j++) {
+                                    samiti_list.add(samiti_list1.get(j).getSamitiName());
+//                       department_id.add(department_list1.get(i).getDepartment_id());
+                                }
+                                ArrayAdapter adapter_samitie = new ArrayAdapter(context, android.R.layout.simple_spinner_item, samiti_list);
+                                adapter_samitie.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spinner_samities.setAdapter(adapter_samitie);
+                            }else {
+                                Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
 
@@ -287,6 +318,36 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
                         ApigetSamlist(level);
                     } else {
                         Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                        String Json;
+                        Json = sessionParam.getJson("district_samities",context);
+                        try {
+                            if (Json!=null) {
+                                JSONObject jsonObject = new JSONObject(Json);
+                                JSONArray jsonArray = jsonObject.optJSONArray("user");
+                                for (int j = 0; j < jsonArray.length(); j++) {
+                                    Samities notificationss = new Samities();
+                                    JSONObject jsonObject1 = jsonArray.getJSONObject(j);
+                                    String samiti_name = jsonObject1.optString("samiti_name");
+
+                                    notificationss.setSamitiName(samiti_name);
+
+                                    samiti_list1.add(notificationss);
+
+                                }
+
+                                for (int j = 0; j < samiti_list1.size(); j++) {
+                                    samiti_list.add(samiti_list1.get(j).getSamitiName());
+//                       department_id.add(department_list1.get(i).getDepartment_id());
+                                }
+                                ArrayAdapter adapter_samitie = new ArrayAdapter(context, android.R.layout.simple_spinner_item, samiti_list);
+                                adapter_samitie.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spinner_samities.setAdapter(adapter_samitie);
+                            }else {
+                                Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                 }
@@ -296,13 +357,23 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
             case R.id.spinner_assembly :
                 //Your Action Here.
                 assembly=assembly_list[i];
+                samiti_list1.clear();
                 samiti_list.clear();
 
-                if (NetworkConnection.checkNetworkStatus(context) == true) {
-                    ApigetSamlist2(level);
-                } else {
-                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
-                }
+
+               if (assembly.equals("136- Seoni malwa")){
+                   callApi(level,assembly,"samiti_1");
+               }else  if(assembly.equals("137- Hoshangabad")){
+                   callApi(level,assembly,"samiti_2");
+
+               }else if (assembly.equals("138- Sohagpur")){
+                   callApi(level,assembly,"samiti_3");
+
+               }else {
+                   callApi(level,assembly,"samiti_4");
+
+               }
+
                 break;
 
             case R.id.spinner_samities :
@@ -317,18 +388,60 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    private void callApi(String level, String assembly, String key) {
+
+        if (NetworkConnection.checkNetworkStatus(context) == true) {
+            ApigetSamlist2(level, assembly,key);
+        } else {
+            Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+            String Json;
+            Json = sessionParam.getJson(key,context);
+            try {
+                if (Json!=null) {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    JSONArray jsonArray = jsonObject.optJSONArray("user");
+                    for (int j = 0; j < jsonArray.length(); j++) {
+                        Samities notificationss = new Samities();
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(j);
+                        String samiti_name = jsonObject1.optString("samiti_name");
+
+                        notificationss.setSamitiName(samiti_name);
+
+                        samiti_list1.add(notificationss);
+
+                    }
+
+                    for (int j = 0; j < samiti_list1.size(); j++) {
+                        samiti_list.add(samiti_list1.get(j).getSamitiName());
+//                       department_id.add(department_list1.get(i).getDepartment_id());
+                    }
+                    ArrayAdapter adapter_samitie = new ArrayAdapter(context, android.R.layout.simple_spinner_item, samiti_list);
+                    adapter_samitie.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_samities.setAdapter(adapter_samitie);
+                }else{
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
 
-    private void ApigetSamlist2(String level){
+    private void ApigetSamlist2(String level, String assembly, final String key){
         baseRequest = new BaseRequest(context);
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),key,context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     samiti_list1=baseRequest.getDataList(jsonArray,Samities.class);
@@ -360,7 +473,7 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
 
             }
         });
-        String remainingUrl2="/Election/Api2.php?apicall=samiti_list&samiti_level="+level +"&samiti_assembly="+assembly;
+        String remainingUrl2="/Election/Api2.php?apicall=samiti_list&samiti_level="+level +"&samiti_assembly="+ assembly;
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
 
@@ -372,6 +485,7 @@ public class Act_samaties extends AppCompatActivity implements AdapterView.OnIte
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),"district_samities",context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     samiti_list1=baseRequest.getDataList(jsonArray,Samities.class);

@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -25,6 +27,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.visuotech.hoshangabad_election.Activities.Election.Act_election;
 import com.visuotech.hoshangabad_election.HomeWatcher;
@@ -32,6 +35,7 @@ import com.visuotech.hoshangabad_election.MarshMallowPermission;
 import com.visuotech.hoshangabad_election.NetworkConnection;
 import com.visuotech.hoshangabad_election.R;
 import com.visuotech.hoshangabad_election.SessionParam;
+import com.visuotech.hoshangabad_election.VersionChecker;
 import com.visuotech.hoshangabad_election.retrofit.BaseRequest;
 import com.visuotech.hoshangabad_election.retrofit.RequestReciever;
 
@@ -39,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -56,9 +61,10 @@ public class Act_home extends AppCompatActivity {
     MarshMallowPermission marshMallowPermission;
     private BaseRequest baseRequest;
     TextView scrollingText;
+    String currentVersion,latestVersion;
     HomeWatcher mhome = new HomeWatcher(Act_home.this);
     public String id, device_id,fcm_token;
-
+//    View lin_spl_layout;
 
 
     @Override
@@ -79,7 +85,7 @@ public class Act_home extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         fcm_token=sharedPreferences.getString(getString(R.string.FCM_TOKEN),"");
 
-        permissionPhone();
+
 
 
         lay1=findViewById(R.id.lay1);
@@ -161,6 +167,36 @@ public class Act_home extends AppCompatActivity {
                 finish();
             }
         });
+
+        try {
+            VersionChecker versionChecker = new VersionChecker();
+            latestVersion = versionChecker.execute().get();
+//            Log.d("UPDATE VERSION>>>>>",latestVersion);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        PackageManager packageManager = this.getPackageManager();
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo =packageManager.getPackageInfo(getPackageName(),0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        currentVersion = packageInfo.versionName;
+
+        if (NetworkConnection.checkNetworkStatus(context)==true){
+            if ((compareVersionNames(currentVersion,latestVersion))==-1){
+                showUpdateDialog();
+            }else{
+                permissionPhone();
+            }
+        }else{
+            Toast.makeText(getApplicationContext(),"Check internet connection",Toast.LENGTH_SHORT).show();
+        }
+
 
 
 
@@ -369,7 +405,7 @@ public class Act_home extends AppCompatActivity {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             }
             device_id = TelephonyMgr.getDeviceId();
-
+            sessionParam.deviceId(context,device_id);
             Log.d("API LEVEL>>>>>", String.valueOf(Build.VERSION.SDK_INT));
             Log.d("API LEVEL LOLISPOP>>>>>", String.valueOf(Build.VERSION_CODES.N));
 
@@ -381,7 +417,9 @@ public class Act_home extends AppCompatActivity {
             if (NetworkConnection.checkNetworkStatus(context) == true) {
                 api_loginStatus();
             } else {
-                Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();            }
+                Toast.makeText(getApplicationContext(),"Check internet connection",Toast.LENGTH_SHORT).show();
+
+               }
         }
 
     }
@@ -411,6 +449,64 @@ public class Act_home extends AppCompatActivity {
 
 
     }
+
+    public void showUpdateDialog () {
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(Act_home.this);
+
+        alertDialogBuilder.setTitle(Act_home.this.getString(R.string.app_name));
+        alertDialogBuilder.setMessage(Act_home.this.getString(R.string.update_message));
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton(R.string.update_now, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+//                    Act_Splash.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+                Intent i = new Intent(android.content.Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.visuotech.hoshangabad_election"));
+                startActivity(i);
+                dialog.cancel();
+                permissionPhone();
+            }
+        });
+        alertDialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                permissionPhone();
+
+            }
+        });
+        alertDialogBuilder.show();
+    }
+
+    public int compareVersionNames(String oldVersionName, String newVersionName) {
+        int res = 0;
+
+        String[] oldNumbers = oldVersionName.split("\\.");
+        String[] newNumbers = newVersionName.split("\\.");
+
+        // To avoid IndexOutOfBounds
+        int maxIndex = Math.min(oldNumbers.length, newNumbers.length);
+
+        for (int i = 0; i < maxIndex; i ++) {
+            int oldVersionPart = Integer.valueOf(oldNumbers[i]);
+            int newVersionPart = Integer.valueOf(newNumbers[i]);
+
+            if (oldVersionPart < newVersionPart) {
+                res = -1;
+                break;
+            } else if (oldVersionPart > newVersionPart) {
+                res = 1;
+                break;
+            }
+        }
+
+        // If versions are the same so far, but they have different length...
+        if (res == 0 && oldNumbers.length != newNumbers.length) {
+            res = (oldNumbers.length > newNumbers.length)?1:-1;
+        }
+
+        return res;
+    }
+
 
     public void api_loginStatus() {
         baseRequest = new BaseRequest();
@@ -443,7 +539,7 @@ public class Act_home extends AppCompatActivity {
                 .setIcon(R.drawable.ic_warning)
                 .setTitle("Attention")
                 .setCancelable(false)
-                .setMessage("You need grant READ_PHONE_STATE permission for device id.")
+                .setMessage("Compulsory!")
                 .setPositiveButton("Continue", new DialogInterface.OnClickListener()
                 {
                     @Override

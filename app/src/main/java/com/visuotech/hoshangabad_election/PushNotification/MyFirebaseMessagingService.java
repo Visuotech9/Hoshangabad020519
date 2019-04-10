@@ -1,6 +1,7 @@
 package com.visuotech.hoshangabad_election.PushNotification;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,10 +9,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -49,56 +52,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //    @Override
 //    public void onMessageReceived(RemoteMessage remoteMessage) {
 //
-//        Map<String, String> params = remoteMessage.getData();
-//        JSONObject object = new JSONObject(params);
-//        Log.e("JSON_OBJECT", object.toString());
-//
-//        String NOTIFICATION_CHANNEL_ID = "Nilesh_channel";
-//
-//        long pattern[] = {0, 1000, 500, 1000};
 //
 //        NotificationManager mNotificationManager =
 //                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 //
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Your Notifications",
-//                    NotificationManager.IMPORTANCE_HIGH);
+//            intent = new Intent(this, Act_notification.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //
-//            Log.e("Service 1=>",remoteMessage.getNotification().toString());
-//            if(remoteMessage.getData().containsKey("changeit_id"))
-//            {
-//                intent = new Intent(this, ChatActivity.class);
-//                intent.putExtra("item_id", remoteMessage.getData().get("changeit_id"));
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            }
-//            else {
-//                intent = new Intent(this, HomeActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            }
-//            notificationChannel.setDescription(remoteMessage.getData().get("body"));
-//            notificationChannel.enableLights(true);
-//            notificationChannel.setLightColor(ContextCompat.getColor(this, R.color.colorPrimary));
-//            notificationChannel.setVibrationPattern(pattern);
-//            notificationChannel.enableVibration(true);
-//            mNotificationManager.createNotificationChannel(notificationChannel);
 //        }
 //
-//        // to diaplay notification in DND Mode
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            NotificationChannel channel = mNotificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID);
-////            channel.canBypassDnd();
-//        }
+//
 //        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-//        if(remoteMessage.getData().containsKey("changeit_id"))
-//        {
-//            intent = new Intent(this, ChatActivity.class);
-//            intent.putExtra("item_id", remoteMessage.getData().get("changeit_id"));
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        }
-//        else {
-//            intent = new Intent(this, HomeActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        }
+//
 //
 //        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* request code */, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 //
@@ -152,14 +118,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody FCM message body received.
      */
     private void sendNotification(String messageBody) {
-//        Intent intent = new Intent(this, Act_notification.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
-        Intent notificationIntent = new Intent(context, Act_notification.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
-        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_stat_call_white);
-        Bitmap largeIcon1 = BitmapFactory.decodeResource(getResources(), R.drawable.app_icon1);
+        Intent intent = new Intent(this, Act_notification.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* request code */, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
+
+//        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_stat_call_white);
+//        Bitmap largeIcon1 = BitmapFactory.decodeResource(getResources(), R.drawable.app_icon1);
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
 //                .setSmallIcon(R.drawable.elections)
@@ -169,17 +137,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
-                .setContentIntent(contentIntent);
+                .setContentIntent(pendingIntent);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            notificationBuilder.setSmallIcon(R.mipmap.ic_stat_call_white);
-//            notificationBuilder.setLargeIcon(largeIcon);
-            notificationBuilder.setColor(getResources().getColor(R.color.colorPrimary));
-        } else {
-            notificationBuilder.setSmallIcon(R.drawable.app_icon1);
-//            notificationBuilder.setLargeIcon(largeIcon1);
-            notificationBuilder.setColor(getResources().getColor(R.color.colorPrimary));
-        }
+//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            notificationBuilder.setSmallIcon(R.mipmap.ic_stat_call_white);
+////            notificationBuilder.setLargeIcon(largeIcon);
+//            notificationBuilder.setColor(getResources().getColor(R.color.colorPrimary));
+//        } else {
+//            notificationBuilder.setSmallIcon(R.drawable.app_icon1);
+////            notificationBuilder.setLargeIcon(largeIcon1);
+//            notificationBuilder.setColor(getResources().getColor(R.color.colorPrimary));
+//        }
 
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

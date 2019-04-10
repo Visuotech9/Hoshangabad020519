@@ -71,12 +71,9 @@ public interface ApiInterface {
 //    name_,action_,mobile_no_,title_,body,story_desc_,user_id_
 
     @Multipart
-    @POST("signup/")
-    Call<JsonElement> formData(@Part("email_id_to") RequestBody email,
-                               @Part("app_name") RequestBody app_name,
-                               @Part("device_id") RequestBody deviceid,
-                               @Part("fcm_token") RequestBody fcm_token,
-                               @Part("ssecrete") RequestBody ssecrete);
+    @POST("Election/Api2.php?apicall=blo_login")
+    Call<JsonElement> formData(@Part("booth_name") RequestBody booth_name_,
+                               @Part("code") RequestBody boothcode_);
 
 
 
@@ -160,8 +157,12 @@ public interface ApiInterface {
 
 
     @Multipart
-    @POST("SOH/PHP/Api2.php?apicall=booked_items")
-    Call<JsonElement> bookedItems(@Part("user_id") RequestBody user_id_);
+    @POST("Election/Api2.php?apicall=add_queue")
+    Call<JsonElement> bookedItems(@Part("male_count") RequestBody male_,
+                                  @Part("female_count") RequestBody female_,
+                                  @Part("queue_count") RequestBody total_,
+                                  @Part("device_id") RequestBody deviceId_,
+                                  @Part("polling_station") RequestBody booth_name_);
 
     //body,name_,action_,mobile_no_,title_,story_desc_,user_id_
 

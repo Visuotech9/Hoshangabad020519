@@ -19,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -123,7 +124,7 @@ public class Act_vidhansabha_details_list extends AppCompatActivity {
             }
         });
 
-
+//        Log.e("LENGTH>>>",sessionParam.getJson("Vidhansabha",context));
          lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
         if (NetworkConnection.checkNetworkStatus(context) == true) {
             ApigetVidhan_detail_list();
@@ -277,6 +278,7 @@ public class Act_vidhansabha_details_list extends AppCompatActivity {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
+//                    sessionParam.saveJson(Json,"Vidhansabha",context);
                     JSONObject jsonObject = new JSONObject(Json);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 

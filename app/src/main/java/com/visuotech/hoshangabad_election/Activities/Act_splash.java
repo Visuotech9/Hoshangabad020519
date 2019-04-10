@@ -43,7 +43,6 @@ public class Act_splash extends AppCompatActivity {
 
          bundle = getIntent().getExtras();
          context = this;
-         startTimer();
 
 
     }
@@ -52,15 +51,16 @@ public class Act_splash extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
+//
                 if (bundle != null) {
-                    //here can get notification message
-                    Intent intent=new Intent(Act_splash.this,Act_notification.class);
-                    startActivity(intent);
-                }else{
-                    Intent intent=new Intent(Act_splash.this,Act_home.class);
-                    startActivity(intent);
-                }
+                        //here can get notification message
+                        Intent intent = new Intent(Act_splash.this, Act_notification.class);
+                        startActivity(intent);
+                        bundle.clear();
+                } else {
+                        Intent intent = new Intent(Act_splash.this, Act_home.class);
+                        startActivity(intent);
+                    }
             }
 
         }, SPLASH_TIME_OUT);

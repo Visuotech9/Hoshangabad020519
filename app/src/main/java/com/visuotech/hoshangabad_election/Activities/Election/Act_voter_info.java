@@ -34,9 +34,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.visuotech.hoshangabad_election.Adapter.Ad_notifications;
 import com.visuotech.hoshangabad_election.Adapter.Ad_samitee_member;
 import com.visuotech.hoshangabad_election.Adapter.Ad_voters_urls;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
+import com.visuotech.hoshangabad_election.Model.Notificationss;
 import com.visuotech.hoshangabad_election.Model.Samitee_members;
 import com.visuotech.hoshangabad_election.Model.Voter;
 import com.visuotech.hoshangabad_election.NetworkConnection;
@@ -65,7 +67,7 @@ public class Act_voter_info extends AppCompatActivity {
 
     LinearLayoutManager linearLayoutManager;
     RecyclerView rv;
-    ArrayList<Voter> voters_urls_info1;
+    ArrayList<Voter> voters_urls_info1=new ArrayList<Voter>();
     ArrayList<String>voters_urls_info=new ArrayList<>();
     Ad_voters_urls adapter;
     String booth_name;
@@ -94,7 +96,10 @@ public class Act_voter_info extends AppCompatActivity {
         getSupportActionBar().setTitle("Voter information");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        context=this;
+        context = this;
+        activity = this;
+        sessionParam = new SessionParam(getApplicationContext());
+        marshMallowPermission = new MarshMallowPermission(activity);
 
         container = (LinearLayout)findViewById(R.id.container);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -127,13 +132,36 @@ public class Act_voter_info extends AppCompatActivity {
                 filter(editable.toString());
             }
         });
-        ApigetvoterInfo();
 
         lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
         if (NetworkConnection.checkNetworkStatus(context) == true) {
             ApigetvoterInfo();
         } else {
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+            String Json;
+            Json = sessionParam.getJson("Voter_info",context);
+            try {
+                JSONObject jsonObject = new JSONObject(Json);
+                JSONArray jsonArray=jsonObject.optJSONArray("user");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    Voter notificationss = new Voter();
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                    String voter_name = jsonObject1.optString("voter_name");
+                    String voter_url = jsonObject1.optString("voter_url");
+
+                    notificationss.setVoterName(voter_name);
+                    notificationss.setVoterUrl(voter_url);
+
+                    voters_urls_info1.add(notificationss);
+
+                }
+
+                adapter=new Ad_voters_urls(context,voters_urls_info1);
+                rv.setAdapter(adapter);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -305,6 +333,7 @@ public class Act_voter_info extends AppCompatActivity {
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),"Voter_info",context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     voters_urls_info1=baseRequest.getDataList(jsonArray,Voter.class);

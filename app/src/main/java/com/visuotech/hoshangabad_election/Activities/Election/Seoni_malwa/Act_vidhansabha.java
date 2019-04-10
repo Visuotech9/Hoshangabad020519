@@ -55,7 +55,8 @@ public class Act_vidhansabha extends AppCompatActivity implements AdapterView.On
     Activity activity;
     SessionParam sessionParam;
     MarshMallowPermission marshMallowPermission;
-    private BaseRequest baseRequest;public boolean datafinish = false;
+    private BaseRequest baseRequest;
+    public boolean datafinish = false;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

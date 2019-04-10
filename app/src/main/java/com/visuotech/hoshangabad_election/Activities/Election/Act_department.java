@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,10 +27,12 @@ import android.widget.TextView;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import com.visuotech.hoshangabad_election.Activities.Election.Seoni_malwa.Act_Polling_list;
 import com.visuotech.hoshangabad_election.Activities.Election.Seoni_malwa.Act_polling_station;
+import com.visuotech.hoshangabad_election.Adapter.Ad_responsibility;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
 import com.visuotech.hoshangabad_election.Model.Departments;
 import com.visuotech.hoshangabad_election.Model.Designation_Details;
 import com.visuotech.hoshangabad_election.Model.PollingBooth;
+import com.visuotech.hoshangabad_election.Model.Responsibility;
 import com.visuotech.hoshangabad_election.Model.Samities;
 import com.visuotech.hoshangabad_election.NetworkConnection;
 import com.visuotech.hoshangabad_election.R;
@@ -53,7 +56,7 @@ public class Act_department extends AppCompatActivity implements AdapterView.OnI
     String id,designation,booth_name,mobile,name,desig,lat,log;
     Button btn_cancel,btn_submit;
     int designation_no;
-    ArrayList<Departments> departments_list1;
+    ArrayList<Departments> departments_list1=new ArrayList<Departments>();
     ArrayList<String>  departments_list= new ArrayList<String>();
     Context context;
     Activity activity;
@@ -63,6 +66,9 @@ public class Act_department extends AppCompatActivity implements AdapterView.OnI
     String[] designation_list = { "P0","P1","BLO","GRS","SACHIV","THANA","Sector Officer","Local Contact Person-1","Local Contact Person-2"};
     public boolean datafinish = false;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    LinearLayout lin_spl_layout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +97,7 @@ public class Act_department extends AppCompatActivity implements AdapterView.OnI
 
         spinner_dept = rowView.findViewById(R.id.spinner_samities);
         tv_text = rowView.findViewById(R.id.tv_text);
+//        mSwipeRefreshLayout=rowView.findViewById(R.id.activity_main_swipe_refresh_layout);
 
         btn_submit = rowView.findViewById(R.id.btn_submit);
 
@@ -111,7 +118,7 @@ public class Act_department extends AppCompatActivity implements AdapterView.OnI
                     Intent i = new Intent(Act_department.this, Act_dept_memb_list.class);
                     i.putExtra("Id",id);
                     i.putExtra("Name",name);
-//                    i.putExtra("LONGITUDE",log);
+                    i.putExtra("key",name);
                     startActivity(i);
                     finish();
 
@@ -120,12 +127,57 @@ public class Act_department extends AppCompatActivity implements AdapterView.OnI
         });
 
 
-        LinearLayout lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
+         lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
         if (NetworkConnection.checkNetworkStatus(context) == true) {
             ApigetDepartment();
         } else {
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+            String Json;
+            Json = sessionParam.getJson("department",context);
+            try {
+                if (Json!=null) {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    JSONArray jsonArray = jsonObject.optJSONArray("user");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        Departments notificationss = new Departments();
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        String department_name = jsonObject1.optString("department_name");
+
+                        notificationss.setDepartmentName(department_name);
+
+                        departments_list1.add(notificationss);
+
+                    }
+
+                    for (int i = 0; i < departments_list1.size(); i++) {
+                        departments_list.add(departments_list1.get(i).getDepartmentName());
+//                       department_id.add(department_list1.get(i).getDepartment_id());
+                    }
+                    ArrayAdapter adapter_dept = new ArrayAdapter(context, android.R.layout.simple_spinner_item, departments_list);
+                    adapter_dept.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_dept.setAdapter(adapter_dept);
+                }else {
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+
+//        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                if (NetworkConnection.checkNetworkStatus(context)==true){
+//                    ApigetDepartment();
+//                    mSwipeRefreshLayout.setRefreshing(false);
+//                }else{
+//                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
+//
+//
+//            }
+//        });
 
 
     }
@@ -283,6 +335,7 @@ public class Act_department extends AppCompatActivity implements AdapterView.OnI
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),"department",context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     departments_list1=baseRequest.getDataList(jsonArray,Departments.class);

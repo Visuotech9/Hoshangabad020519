@@ -4,12 +4,14 @@
     <color name="sociall">#E2E2E2</color>
     <color name="social2">#d2d1d1</color>
     <color name="sociald">#D1D1D1</color>
-
+    <color name="sociald2">#fcf8f8</color>
     <color name="lightgrey2">#efefef</color>
     <color name="lightgrey">#e6e4e4</color>
     <color name="lighttextColor">#898888</color>
     <color name="lighttextColor2">#5c5c5c</color>
     <color name="textcolor2">#292929</color>
+    <color name="textcolor3">#4d4c4c</color>
+
     <color name="White">#FFFFFF</color>
     <color name="separater_color">#edeaea</color>
     <color name="Ivory">#FFFFF0</color>
@@ -50,6 +52,9 @@
     <color name="colorPrimary">#3c8dbc</color>
     <color name="colorPrimaryDark">#2c6494</color>
     <color name="colorPrimaryDark2">#1d598c</color>
+    <color name="col">#4dd0e1</color>
+    <color name="col2">#80deea</color>
+
     <!--<color name="colorPrimary">#FFDA6A68</color>-->
     <!--<color name="colorPrimaryDark">#944240</color>-->
 

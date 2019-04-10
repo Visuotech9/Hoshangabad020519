@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.visuotech.hoshangabad_election.Adapter.Ad_samitee_member;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
@@ -48,12 +47,12 @@ public class Act_sam_mem_list extends AppCompatActivity {
     LinearLayout container;
     LinearLayoutManager linearLayoutManager;
     RecyclerView rv;
-    ArrayList<Samitee_members> sam_mem_list1;
+    ArrayList<Samitee_members> sam_mem_list1=new ArrayList<>();
     ArrayList<String>booth_list=new ArrayList<>();
     Ad_samitee_member adapter;
     String booth_name;
     EditText inputSearch;
-    String id,samitee_name;
+    String id,samitee_name,key;
 
     Context context;
     Activity activity;
@@ -75,6 +74,7 @@ public class Act_sam_mem_list extends AppCompatActivity {
 
         Intent intent=getIntent();
         id=intent.getStringExtra("Id");
+        key=intent.getStringExtra("key");
         samitee_name=intent.getStringExtra("Name");
 
 
@@ -82,7 +82,10 @@ public class Act_sam_mem_list extends AppCompatActivity {
         getSupportActionBar().setTitle(samitee_name+" "+"Members");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        context=this;
+        context = this;
+        activity = this;
+        sessionParam = new SessionParam(getApplicationContext());
+        marshMallowPermission = new MarshMallowPermission(activity);
 
         container = (LinearLayout)findViewById(R.id.container);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -121,20 +124,64 @@ public class Act_sam_mem_list extends AppCompatActivity {
                 filter(editable.toString());
             }
         });
-        Apigetsam_mem_list();
+
 
         lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
         if (NetworkConnection.checkNetworkStatus(context) == true) {
-            Apigetsam_mem_list();
+            Apigetsam_mem_list(id,key);
         } else {
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+            String Json;
+            Json = sessionParam.getJson(samitee_name,context);
+            try {
+                if (Json!=null){
+                    JSONObject jsonObject = new JSONObject(Json);
+                    String message=jsonObject.getString("message");
+                    if (message.equals("No Records Found")){
+                        Snackbar.make(lin_spl_layout, "No Records Found", Snackbar.LENGTH_LONG).show();
+                    }else {
+                        JSONArray jsonArray=jsonObject.optJSONArray("user");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Samitee_members notificationss = new Samitee_members();
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            String member_mobile = jsonObject1.optString("member_mobile");
+                            String member_name = jsonObject1.optString("member_name");
+                            String ele_sam_dutyfrom = jsonObject1.optString("ele_sam_dutyfrom");
+                            String ele_sam_dutyto = jsonObject1.optString("ele_sam_dutyto");
+                            String member_designation = jsonObject1.optString("member_designation");
+                            String member_responsibility = jsonObject1.optString("member_responsibility");
+
+                            notificationss.setMember_mobile(member_mobile);
+                            notificationss.setMember_name(member_name);
+                            notificationss.setEle_sam_dutyfrom(ele_sam_dutyfrom);
+                            notificationss.setEle_sam_dutyto(ele_sam_dutyto);
+                            notificationss.setMember_designation(member_designation);
+                            notificationss.setMember_responsibility(member_responsibility);
+
+                            sam_mem_list1.add(notificationss);
+
+                        }
+                    }
+
+                }else{
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                }
+
+
+                adapter=new Ad_samitee_member(context,sam_mem_list1,samitee_name);
+                rv.setAdapter(adapter);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (NetworkConnection.checkNetworkStatus(context)==true){
-                    Apigetsam_mem_list();
+                    Apigetsam_mem_list(id, key);
                     mSwipeRefreshLayout.setRefreshing(false);
                 }else{
                     Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
@@ -267,13 +314,14 @@ public class Act_sam_mem_list extends AppCompatActivity {
 
     }
 
-    private void Apigetsam_mem_list(){
+    private void Apigetsam_mem_list(String id, final String key){
         baseRequest = new BaseRequest(context);
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),key,context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     sam_mem_list1=baseRequest.getDataList(jsonArray,Samitee_members.class);
@@ -309,7 +357,7 @@ public class Act_sam_mem_list extends AppCompatActivity {
 
             }
         });
-        String remainingUrl2="/Election/Api2.php?apicall=samiti_details_list"+"&samiti_id="+id;
+        String remainingUrl2="/Election/Api2.php?apicall=samiti_details_list"+"&samiti_id="+ id;
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
     private void filter(String text) {

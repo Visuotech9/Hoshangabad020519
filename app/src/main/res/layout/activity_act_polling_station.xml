@@ -8,6 +8,12 @@
     android:fillViewport="true"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+
 
 
         <LinearLayout
@@ -241,6 +247,37 @@
 
 
                         </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_text23"
+                            android:layout_width="match_parent"
+                            android:text="Select Sector"
+                            android:paddingLeft="5dp"
+                            android:textColor="@color/Black"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_height="wrap_content" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="8dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/background_border"
+                            android:paddingBottom="8dp"
+                            android:orientation="horizontal">
+
+
+                            <Spinner
+                                android:id="@+id/spinner_sector"
+                                android:paddingLeft="20dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                            <!--android:entries="@array/user_type"-->
+
+
+                        </LinearLayout>
 
 
 
@@ -272,11 +309,14 @@
                             <!--android:layout_width="match_parent"-->
                             <!--android:layout_height="wrap_content"/>-->
 
-                            <Spinner
+                            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                                 android:id="@+id/spinner_station2"
-                                android:paddingLeft="20dp"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>
+                                android:paddingTop="10dp"
+                                android:textColor="#000000"
+                                android:paddingBottom="10dp"
+                                android:layout_height="wrap_content"
+                                />
 
                             <!--android:entries="@array/user_type"-->
 
@@ -315,8 +355,11 @@
             </LinearLayout>
 
 
+
+
         </LinearLayout>
 
 
+</LinearLayout>
 
 </ScrollView>
