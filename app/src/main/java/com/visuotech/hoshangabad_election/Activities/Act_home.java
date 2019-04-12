@@ -30,12 +30,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.visuotech.hoshangabad_election.Activities.Election.Act_election;
+import com.visuotech.hoshangabad_election.GooglePlayStoreAppVersionNameLoader;
 import com.visuotech.hoshangabad_election.HomeWatcher;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
 import com.visuotech.hoshangabad_election.NetworkConnection;
 import com.visuotech.hoshangabad_election.R;
 import com.visuotech.hoshangabad_election.SessionParam;
 import com.visuotech.hoshangabad_election.VersionChecker;
+import com.visuotech.hoshangabad_election.WSCallerVersionListener;
 import com.visuotech.hoshangabad_election.retrofit.BaseRequest;
 import com.visuotech.hoshangabad_election.retrofit.RequestReciever;
 
@@ -50,7 +52,7 @@ import okhttp3.RequestBody;
 
 import static com.visuotech.hoshangabad_election.MarshMallowPermission.READ_PHONE_STATE;
 
-public class Act_home extends AppCompatActivity {
+public class Act_home extends AppCompatActivity  {
     LinearLayout lay1,lay2,lay3,lay4,lay5,lay6,lay13,lay12,lay11,lin_spl_layout;
     public boolean datafinish = false;
     Button btn_follow;
@@ -66,14 +68,13 @@ public class Act_home extends AppCompatActivity {
     public String id, device_id,fcm_token;
 //    View lin_spl_layout;
 
-
+    boolean isForceUpdate = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         //-------------------------toolbar------------------------------------------
-
 
 
         context = this;
@@ -83,26 +84,24 @@ public class Act_home extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        fcm_token=sharedPreferences.getString(getString(R.string.FCM_TOKEN),"");
+        fcm_token = sharedPreferences.getString(getString(R.string.FCM_TOKEN), "");
 
 
+        lay1 = findViewById(R.id.lay1);
+        lay2 = findViewById(R.id.lay2);
+        lay3 = findViewById(R.id.lay3);
+        lay4 = findViewById(R.id.lay4);
+        lay5 = findViewById(R.id.lay5);
+        lay6 = findViewById(R.id.lay6);
+        lay11 = findViewById(R.id.lay11);
+        lay12 = findViewById(R.id.lay12);
+        lay13 = findViewById(R.id.lay13);
+        lin_spl_layout = findViewById(R.id.lin_spl_layout);
 
 
-        lay1=findViewById(R.id.lay1);
-        lay2=findViewById(R.id.lay2);
-        lay3=findViewById(R.id.lay3);
-        lay4=findViewById(R.id.lay4);
-        lay5=findViewById(R.id.lay5);
-        lay6=findViewById(R.id.lay6);
-        lay11=findViewById(R.id.lay11);
-        lay12=findViewById(R.id.lay12);
-        lay13=findViewById(R.id.lay13);
-        lin_spl_layout=findViewById(R.id.lin_spl_layout);
-
-
-        Log.e("FCM<>>>>>>>",fcm_token);
-        scrollingText = (TextView)findViewById(R.id.scrollingtext);
-        scrollingText.setText(Html.fromHtml("निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए 1950 पर संपर्क करें" ));
+        Log.e("FCM<>>>>>>>", fcm_token);
+        scrollingText = (TextView) findViewById(R.id.scrollingtext);
+        scrollingText.setText(Html.fromHtml("निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए 1950 पर संपर्क करें"));
 //        scrollingText.setMovementMethod(LinkMovementMethod.getInstance());
 
         scrollingText.setSelected(true);
@@ -181,75 +180,25 @@ public class Act_home extends AppCompatActivity {
         PackageManager packageManager = this.getPackageManager();
         PackageInfo packageInfo = null;
         try {
-            packageInfo =packageManager.getPackageInfo(getPackageName(),0);
+            packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
         currentVersion = packageInfo.versionName;
 
-        if (NetworkConnection.checkNetworkStatus(context)==true){
-            if ((compareVersionNames(currentVersion,latestVersion))==-1){
+        if (NetworkConnection.checkNetworkStatus(context) == true) {
+            if ((compareVersionNames(currentVersion, latestVersion)) == -1) {
                 showUpdateDialog();
-            }else{
+            } else {
                 permissionPhone();
             }
-        }else{
-            Toast.makeText(getApplicationContext(),"Check internet connection",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Check internet connection", Toast.LENGTH_SHORT).show();
         }
+//        new GooglePlayStoreAppVersionNameLoader(getApplicationContext(), this).execute();
 
-
-
-
-
-
-//        SpannableString ss = new SpannableString("निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए संपर्क करें 1950");
-//        ClickableSpan clickableSpan = new ClickableSpan() {
-//            @Override
-//            public void onClick(View textView) {
-//                Toast.makeText(getApplicationContext(),"phone no clicked",Toast.LENGTH_SHORT).show();
-//            }
-//            @Override
-//            public void updateDrawState(TextPaint ds) {
-//                super.updateDrawState(ds);
-//                ds.setUnderlineText(false);
-//            }
-//        };
-//        ss.setSpan(clickableSpan, 50, 55, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//
-////        TextView textView = (TextView) findViewById(R.id.hello);
-//        scrollingText = (TextView)findViewById(R.id.scrollingtext);
-//        scrollingText.setSelected(true);
-//        scrollingText.setText(ss);
-//        scrollingText.setMovementMethod(LinkMovementMethod.getInstance());
-//        scrollingText.setHighlightColor(Color.TRANSPARENT);
-
-//        setClickableString("1950","निर्वाचन संबंधित जानकारी एवं मतदाता सहायता के लिए संपर्क करें 1950",scrollingText);
 
     }
-
-
-    public void setClickableString(String clickableValue, String wholeValue, TextView yourTextView){
-        String value = wholeValue;
-        SpannableString spannableString = new SpannableString(value);
-        int startIndex = value.indexOf(clickableValue);
-        int endIndex = startIndex + clickableValue.length();
-        spannableString.setSpan(new ClickableSpan() {
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(false); // <-- this will remove automatic underline in set span
-            }
-
-            @Override
-            public void onClick(View widget) {
-                // do what you want with clickable value
-            }
-        }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        yourTextView.setText(spannableString);
-        yourTextView.setMovementMethod(LinkMovementMethod.getInstance()); // <-- important, onClick in ClickableSpan won't work without this
-    }
-
-
     private void permission() {
         datafinish = true;
         List<String> permissionsNeeded = new ArrayList<String>();
@@ -450,8 +399,11 @@ public class Act_home extends AppCompatActivity {
 
     }
 
+
+
     public void showUpdateDialog () {
         android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(Act_home.this);
+        final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
 
         alertDialogBuilder.setTitle(Act_home.this.getString(R.string.app_name));
         alertDialogBuilder.setMessage(Act_home.this.getString(R.string.update_message));
@@ -463,7 +415,7 @@ public class Act_home extends AppCompatActivity {
                 i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.visuotech.hoshangabad_election"));
                 startActivity(i);
                 dialog.cancel();
-                permissionPhone();
+//                permissionPhone();
             }
         });
         alertDialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -550,4 +502,11 @@ public class Act_home extends AppCompatActivity {
                 .show();
     }
 
+   /* @Override
+    public void onGetResponse(boolean isUpdateAvailable) {
+        Log.e("ResultAPPMAIN", String.valueOf(isUpdateAvailable));
+        if (isUpdateAvailable) {
+            showUpdateDialog();
+        }
+    }*/
 }
