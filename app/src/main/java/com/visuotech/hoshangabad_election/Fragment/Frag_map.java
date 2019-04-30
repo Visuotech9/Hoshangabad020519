@@ -145,6 +145,7 @@ public class Frag_map extends Fragment implements OnMapReadyCallback {
         btn_dirn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Uri gmmIntentUri = Uri.parse("google.navigation:q="+lat_curr+","+lon_curr);
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");

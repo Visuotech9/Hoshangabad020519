@@ -162,7 +162,10 @@ public interface ApiInterface {
                                   @Part("female_count") RequestBody female_,
                                   @Part("queue_count") RequestBody total_,
                                   @Part("device_id") RequestBody deviceId_,
-                                  @Part("polling_station") RequestBody booth_name_);
+                                  @Part("polling_station") RequestBody booth_name_,
+                                  @Part("ac") RequestBody AC_,
+                                  @Part("election_id") RequestBody election_id_,
+                                  @Part("polling_station_id") RequestBody station_id_);
 
     //body,name_,action_,mobile_no_,title_,story_desc_,user_id_
 

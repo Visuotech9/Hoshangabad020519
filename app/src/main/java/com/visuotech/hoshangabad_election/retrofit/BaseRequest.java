@@ -488,7 +488,7 @@ public class BaseRequest<T> extends BaseRequestParser {
     }
 
 
-    public void callAPIBookedItems(final int APINumber, String remainingURL, RequestBody male_, RequestBody female_, RequestBody total_, RequestBody deviceId_, RequestBody booth_name_) {
+    public void callAPIBookedItems(final int APINumber, String remainingURL, RequestBody male_, RequestBody female_, RequestBody total_, RequestBody deviceId_, RequestBody booth_name_, RequestBody AC_, RequestBody election_id_, RequestBody station_id_) {
         APINumber_ = APINumber;
         requestType = RequestType.Post;
         showLoader();
@@ -496,7 +496,7 @@ public class BaseRequest<T> extends BaseRequestParser {
 //        System.out.println("BaseReq INPUT URL : " + remainingURL);
         ApiInterface apiInterface_ = ApiClient.getCustomClient(remainingURL).create(ApiInterface.class);
         //Call<JsonElement> call = apiInterface_.formData(images,latitude,fcm_token,msg_detail,app_name,email_id_to,ssecrete,device_id,longitude,location_detail);
-        Call<JsonElement> call = apiInterface_.bookedItems(male_,female_,total_,deviceId_,booth_name_);
+        Call<JsonElement> call = apiInterface_.bookedItems(male_,female_,total_,deviceId_,booth_name_,AC_,election_id_,station_id_);
         call.enqueue(responseCallback);
     }
     //

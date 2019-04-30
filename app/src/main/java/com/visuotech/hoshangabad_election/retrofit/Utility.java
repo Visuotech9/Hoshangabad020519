@@ -3,12 +3,14 @@ package com.visuotech.hoshangabad_election.retrofit;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.KeyguardManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.fingerprint.FingerprintManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -52,6 +54,8 @@ import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
+import static android.content.Context.FINGERPRINT_SERVICE;
+import static android.content.Context.KEYGUARD_SERVICE;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
@@ -66,6 +70,7 @@ public class Utility {
     public static View progressdialogview;
     public static Dialog progress_dialog;
     public static RotateAnimation rAnim;
+    FingerprintManager fingerprintManager;
 //    GoogleMap googleMap;
     public static String _clientName = "";
     public static String _clientMessageCount = "";
@@ -94,11 +99,53 @@ public class Utility {
         window.setStatusBarColor(con.getResources().getColor(R.color.Black));
     }
 
+//    private boolean checkFinger(Context context) {
+//        // Keyguard Manager
+//        KeyguardManager keyguardManager = (KeyguardManager)
+//                context.getSystemService(KEYGUARD_SERVICE);
+//        // Fingerprint Manager
+//        fingerprintManager = (FingerprintManager)
+//                context.getSystemService(FINGERPRINT_SERVICE);
+//        try {
+//            // Check if the fingerprint sensor is present
+//            if (!fingerprintManager.isHardwareDetected()) {
+//                // Update the UI with a message
+//                message.setText("Fingerprint authentication not supported");
+//                return false;
+//            }
+//            if (!fingerprintManager.hasEnrolledFingerprints()) {
+//                message.setText("No fingerprint configured.");
+//                return false;
+//            }
+//            if (!keyguardManager.isKeyguardSecure()) {
+//                message.setText("Secure lock screen not enabled");
+//                return false;
+//            }
+//        }
+//        catch(SecurityException se) {
+//            se.printStackTrace();
+//        }
+//        return true;
+//    }
+
     public static boolean getAPIVerison() {
 
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
 
     }
+
+    public boolean isValidLatLng(double lat, double lng){
+        if(lat < -90 || lat > 90)
+        {
+            return false;
+        }
+        else if(lng < -180 || lng > 180)
+        {
+            return false;
+        }
+        return true;
+    }
+
 
     public static void cancelDialog()
     {

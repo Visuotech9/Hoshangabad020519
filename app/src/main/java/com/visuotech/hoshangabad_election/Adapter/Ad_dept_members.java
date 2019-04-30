@@ -95,8 +95,10 @@ public class Ad_dept_members extends RecyclerView.Adapter<Ad_dept_members.MyView
 
         });
 
-        if (i%2!=0){
+        if((i % 2 != 0)){
             holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }else{
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
     }

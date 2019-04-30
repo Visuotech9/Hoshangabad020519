@@ -55,6 +55,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
+            android:name=".Activities.Election.Seoni_malwa.Act_polling_station2"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
             android:name=".Activities.Election.Seoni_malwa.Act_vidhansabha"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
@@ -114,15 +119,14 @@
             </intent-filter>
         </service>
 
-        <!--<activity-->
-            <!--android:name=".Activities.Act_notification"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:windowSoftInputMode="stateAlwaysHidden" />-->
-        <!--<activity-->
-        <!--android:name=".Activities.Act_notification"-->
-        <!--android:screenOrientation="portrait"-->
-        <!--android:windowSoftInputMode="stateAlwaysHidden" />-->
-
+        <!-- <activity -->
+        <!-- android:name=".Activities.Act_notification" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:windowSoftInputMode="stateAlwaysHidden" /> -->
+        <!-- <activity -->
+        <!-- android:name=".Activities.Act_notification" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:windowSoftInputMode="stateAlwaysHidden" /> -->
 
         <activity
             android:name=".Activities.Act_notification"
@@ -174,18 +178,22 @@
             android:name=".Activities.FollowUsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".Activities.Election.Act_voter_web"
+        <activity
+            android:name=".Activities.Election.Act_voter_web"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".Activities.Election.Seoni_malwa.Act_add_details"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Activities.Election.Seoni_malwa.Act_add_details"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".Activities.TestA"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Activities.TestA"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".Activities.Election.Seoni_malwa.Act_designation_details"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Activities.Election.Seoni_malwa.Act_designation_details"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
 </manifest>

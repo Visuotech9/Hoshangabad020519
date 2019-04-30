@@ -180,6 +180,7 @@ public class Act_services_list extends AppCompatActivity {
                     Apigetsam_mem_list(key);
                     mSwipeRefreshLayout.setRefreshing(false);
                 }else{
+                    mSwipeRefreshLayout.setRefreshing(false);
                     Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
 
 

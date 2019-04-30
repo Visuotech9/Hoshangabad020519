@@ -19,17 +19,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.visuotech.hoshangabad_election.Activities.Election.Act_election;
 import com.visuotech.hoshangabad_election.Adapter.Ad_Vidhansabha;
+import com.visuotech.hoshangabad_election.Adapter.Ad_dept_members;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
+import com.visuotech.hoshangabad_election.Model.Deaprtments_members;
 import com.visuotech.hoshangabad_election.Model.Vidhanasabha_list;
 import com.visuotech.hoshangabad_election.NetworkConnection;
 import com.visuotech.hoshangabad_election.R;
@@ -50,10 +49,10 @@ public class Act_vidhansabha_details_list extends AppCompatActivity {
     LinearLayout container;
     LinearLayoutManager linearLayoutManager;
     RecyclerView rv;
-    ArrayList<Vidhanasabha_list> vidhanasabha_list1;
+    ArrayList<Vidhanasabha_list> vidhanasabha_list1=new ArrayList<>();
     ArrayList<String>vidhanasabha_list=new ArrayList<>();
     Ad_Vidhansabha adapter;
-    String AC;
+    String AC,key;
     String booth_name;
     EditText inputSearch;
     String designation,samitee_name;
@@ -77,12 +76,16 @@ public class Act_vidhansabha_details_list extends AppCompatActivity {
 
         Intent intent=getIntent();
         designation=intent.getStringExtra("designation");
+        key=intent.getStringExtra("key");
         AC=intent.getStringExtra("CITY");
 
         getSupportActionBar().setTitle(designation+" Member list");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        context=this;
+        context = this;
+        activity = this;
+        sessionParam = new SessionParam(getApplicationContext());
+        marshMallowPermission = new MarshMallowPermission(activity);
 
         container = (LinearLayout)findViewById(R.id.container);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -127,18 +130,63 @@ public class Act_vidhansabha_details_list extends AppCompatActivity {
 //        Log.e("LENGTH>>>",sessionParam.getJson("Vidhansabha",context));
          lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
         if (NetworkConnection.checkNetworkStatus(context) == true) {
-            ApigetVidhan_detail_list();
+            ApigetVidhan_detail_list(key);
         } else {
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+            String Json;
+            Json = sessionParam.getJson(key,context);
+            try {
+                if (Json!=null){
+                    JSONObject jsonObject = new JSONObject(Json);
+                    String message=jsonObject.getString("message");
+                    if (message.equals("No Records Found")){
+                        Snackbar.make(lin_spl_layout, "No Records Found", Snackbar.LENGTH_LONG).show();
+                    }else {
+                        JSONArray jsonArray=jsonObject.optJSONArray("user");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Vidhanasabha_list vd = new Vidhanasabha_list();
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                            String com_ac_name,com_name,com_post,com_designation,com_responsibility,
+// com_mobile,com_email,user_id;
+
+                            String com_name = jsonObject1.optString("com_name");
+                            String com_mobile = jsonObject1.optString("com_mobile");
+                            String com_responsibility = jsonObject1.optString("com_responsibility");
+                            String com_post = jsonObject1.optString("com_post");
+                            String com_email = jsonObject1.optString("com_email");
+
+                            vd.setCom_name(com_name);
+                            vd.setCom_mobile(com_mobile);
+                            vd.setCom_responsibility(com_responsibility);
+                            vd.setCom_post(com_post);
+                            vd.setCom_email(com_email);
+
+                            vidhanasabha_list1.add(vd);
+
+                        }
+                    }
+                }else{
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                }
+
+                adapter=new Ad_Vidhansabha(context,vidhanasabha_list1);
+                rv.setAdapter(adapter);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (NetworkConnection.checkNetworkStatus(context)==true){
-                    ApigetVidhan_detail_list();
+                    ApigetVidhan_detail_list(key);
                     mSwipeRefreshLayout.setRefreshing(false);
                 }else{
+                    mSwipeRefreshLayout.setRefreshing(false);
                     Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
 
 
@@ -272,14 +320,15 @@ public class Act_vidhansabha_details_list extends AppCompatActivity {
 
     }
 
-    private void ApigetVidhan_detail_list(){
+    private void ApigetVidhan_detail_list(final String key){
         baseRequest = new BaseRequest(context);
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
-//                    sessionParam.saveJson(Json,"Vidhansabha",context);
+
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),key,context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     vidhanasabha_list1=baseRequest.getDataList(jsonArray,Vidhanasabha_list.class);

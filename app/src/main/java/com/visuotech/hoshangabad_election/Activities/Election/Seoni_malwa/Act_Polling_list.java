@@ -27,12 +27,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.visuotech.hoshangabad_election.Fragment.Frag_list;
 import com.visuotech.hoshangabad_election.Fragment.Frag_queue;
 import com.visuotech.hoshangabad_election.Fragment.Frag_map;
 import com.visuotech.hoshangabad_election.Location.GPSTracker;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
+import com.visuotech.hoshangabad_election.Model.PollingBooth;
 import com.visuotech.hoshangabad_election.R;
 import com.visuotech.hoshangabad_election.SessionParam;
 
@@ -45,6 +47,7 @@ import java.util.Map;
 
 
 public class Act_Polling_list extends AppCompatActivity {
+    ArrayList<PollingBooth> booth_list=new ArrayList<>();
     RecyclerView rv;
     LinearLayoutManager linearLayoutManager;
     SessionParam sessionParam;
@@ -53,7 +56,7 @@ public class Act_Polling_list extends AppCompatActivity {
     ProgressBar progressbar;
     ArrayList<Integer> array_image = new ArrayList<Integer>();
     ArrayList<String> array_name = new ArrayList<String>();
-    String booth_name,lat,log,AC;
+    String booth_name,lat,log,AC,key,station_id,election_id;
     private String lat_current = "";
     private String lon_current = "";
     String address;
@@ -79,11 +82,30 @@ public class Act_Polling_list extends AppCompatActivity {
 
 
         Intent intent = getIntent();
+//        Bundle bundle1= getIntent().getExtras();
+
+//        booth_list =  (ArrayList<PollingBooth>)bundle1.getSerializable("ARRAY");
+
+//
+//        booth_name = bundle1.getString("NAME");
+//        key = bundle1.getString("key");
+//        lat = bundle1.getString("LATITUDE");
+//        log = bundle1.getString("LONGITUDE");
+//        AC = bundle1.getString("CITY");
+//        station_id = bundle1.getString("STATION_ID");
+//        election_id = bundle1.getString("ELECTION_ID");
+
         booth_name = intent.getStringExtra("NAME");
+        key = intent.getStringExtra("key");
         lat = intent.getStringExtra("LATITUDE");
         log = intent.getStringExtra("LONGITUDE");
         AC = intent.getStringExtra("CITY");
-        Log.d("ID LOCATION", booth_name);
+        station_id = intent.getStringExtra("STATION_ID");
+        election_id = intent.getStringExtra("ELECTION_ID");
+        booth_list =  (ArrayList<PollingBooth>)getIntent().getSerializableExtra("ARRAY");
+        Log.e("length_array", String.valueOf(booth_list.size()));
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -112,10 +134,15 @@ public class Act_Polling_list extends AppCompatActivity {
         bundle.putString("NAME",booth_name);
         bundle.putString("LATITUDE",lat);
         bundle.putString("LONGITUDE",log);
-        bundle.putString("CURRENT_LATITUDE",lat_current);
-        bundle.putString("CURRENT_LONGITUDE",lon_current);
+//        bundle.putString("CURRENT_LATITUDE",lat_current);
+//        bundle.putString("CURRENT_LONGITUDE",lon_current);
         bundle.putString("ADDRESS",address);
+        bundle.putString("STATION_ID",station_id);
+        bundle.putString("ELECTION_ID",election_id);
         bundle.putString("CITY",AC);
+        bundle.putString("key",key);
+        bundle.putString("key",key);
+        bundle.putSerializable("ARRAY",booth_list);
         frag_list.setArguments(bundle);
         frag_map.setArguments(bundle);
         frag_queue.setArguments(bundle);
@@ -344,23 +371,30 @@ public boolean onOptionsItemSelected(MenuItem item) {
         GPSTracker gpsTracker = new GPSTracker(Act_Polling_list.this);
 
         if (gpsTracker.canGetLocation()) {
-            lat_current = String.valueOf(gpsTracker.getLatitude());
-            lon_current = String.valueOf(gpsTracker.getLongitude());
+//            lat_current = String.valueOf(gpsTracker.getLatitude());
+//            lon_current = String.valueOf(gpsTracker.getLongitude());
             if (lat.equals("0.0") && log.equals("0.0")) {
-                gpsTracker.showSettingsAlert();
+
+//                gpsTracker.showSettingsAlert();
             } else {
                 try {
                     Geocoder geocoder = new Geocoder(Act_Polling_list.this, Locale.getDefault());
                     addresses = geocoder.getFromLocation(Double.valueOf(lat), Double.valueOf(log), 1);
-                     address = addresses.get(0).getAddressLine(0);
-                    // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                    String city = addresses.get(0).getLocality();
-                    String state = addresses.get(0).getAdminArea();
-                    String country = addresses.get(0).getCountryName();
-                    String postalCode = addresses.get(0).getPostalCode();
-                    String knownName = addresses.get(0).getFeatureName();
 
-                    String add=city + " , " + state + " , " + country;
+                    if (addresses.size() > 0){
+                        address = addresses.get(0).getAddressLine(0);
+                        String city = addresses.get(0).getLocality();
+                        String state = addresses.get(0).getAdminArea();
+                        String country = addresses.get(0).getCountryName();
+                        String postalCode = addresses.get(0).getPostalCode();
+                        String knownName = addresses.get(0).getFeatureName();
+
+                        String add=city + " , " + state + " , " + country;
+                    }else {
+                        address= "Latitude and Longitude are incorect";
+                    }
+                    // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+
 
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
@@ -368,7 +402,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
                 } // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             }
         } else {
-            gpsTracker.showSettingsAlert();
+//            gpsTracker.showSettingsAlert();
         }
     }
 

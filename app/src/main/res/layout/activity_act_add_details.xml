@@ -77,6 +77,8 @@
                 app:tint_color="@color/textcolor" />
 
 
+
+
         </LinearLayout>
 
 
@@ -250,7 +252,20 @@
 
 
 
+
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="match_parent"
+        android:text="Data added successfully!"
+        android:textColor="@color/Green"
+        android:textSize="20dp"
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content" />
+
 
 
 

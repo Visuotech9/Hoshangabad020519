@@ -23,15 +23,13 @@ import com.visuotech.hoshangabad_election.Activities.Act_notification;
 import com.visuotech.hoshangabad_election.R;
 import com.visuotech.hoshangabad_election.SessionParam;
 
+import java.io.ByteArrayOutputStream;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
     SessionParam sessionParam;
     Context context;
-
-
-
-
 
     /**
      * Called when message is received.
@@ -49,116 +47,57 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
-//    @Override
-//    public void onMessageReceived(RemoteMessage remoteMessage) {
-//
-//
-//        NotificationManager mNotificationManager =
-//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            intent = new Intent(this, Act_notification.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//
-//        }
-//
-//
-//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-//
-//
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* request code */, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-//
-//        notificationBuilder.setAutoCancel(true)
-//                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-//                .setContentTitle(remoteMessage.getData().get("title"))
-//                .setContentText(remoteMessage.getData().get("body"))
-//                .setDefaults(Act_notification.DEFAULT_ALL)
-//                .setWhen(System.currentTimeMillis())
-//                .setSmallIcon(R.drawable.app_icon)
-//                .setContentIntent(pendingIntent)
-//                .setLights(Color.BLUE,1,1)
-//                .setAutoCancel(true);
-//        mNotificationManager.notify(1000, notificationBuilder.build());
-//    }
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // [START_EXCLUDE]
-        // There are two types of messages data messages and notification messages. Data messages are handled
-        // here in onMessageReceived whether the app is in the foreground or background. Data messages are the type
-        // traditionally used with GCM. Notificationss messages are only received here in onMessageReceived when the app
-        // is in the foreground. When the app is in the background an automatically generated notification is displayed.
-        // When the user taps on the notification they are returned to the app. Messages containing both notification
-        // and data payloads are treated as notification messages. The Firebase console always sends notification
-        // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
-        // [END_EXCLUDE]
 
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-//        sendNotification(remoteMessage.getData().get("message"));
-        // Check if message contains a data payload.
+//        sendNotification(remoteMessage.getData().get("message"),remoteMessage.getData().get("title"));
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         }
-
-        // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notificationss Body: " + remoteMessage.getNotification().getBody());
-//            sendNotification(remoteMessage.getNotification().getBody());
+
+            String title=remoteMessage.getNotification().getTitle();
+            String body=remoteMessage.getNotification().getBody();
+            String click_action=remoteMessage.getNotification().getClickAction();
+
+            Log.e("message>>>>>>>",body);
+            Log.e("title>>>>>>>",title);
+            Log.e("Action>>>>>>>",click_action);
+            sendNotification(body, title, click_action);
         }
 
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
+        //To get a Bitmap image from the URL received
+//        bitmap = getBitmapfromUrl(imageUri);
+        //method for functioning the notification --->
+
+
     }
-    // [END receive_message]
 
-    /**
-     * Create and show a simple notification containing the received FCM message.
-     *
-     * @param messageBody FCM message body received.
-     */
-    private void sendNotification(String messageBody) {
-
-        Intent intent = new Intent(this, Act_notification.class);
+    private void sendNotification(String messageBody, String title, String click_action) {
+        Intent intent = new Intent(click_action);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "Default");
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* request code */, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
-
-//        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_stat_call_white);
-//        Bitmap largeIcon1 = BitmapFactory.decodeResource(getResources(), R.drawable.app_icon1);
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-//                .setSmallIcon(R.drawable.elections)
-//                .setLargeIcon(largeIcon)
-//                .setColor(getResources().getColor(R.color.colorPrimary))
-                .setContentTitle("FCM Message")
+        notificationBuilder.setAutoCancel(true)
+                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .setContentTitle(title)
                 .setContentText(messageBody)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
-
-//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            notificationBuilder.setSmallIcon(R.mipmap.ic_stat_call_white);
-////            notificationBuilder.setLargeIcon(largeIcon);
-//            notificationBuilder.setColor(getResources().getColor(R.color.colorPrimary));
-//        } else {
-//            notificationBuilder.setSmallIcon(R.drawable.app_icon1);
-////            notificationBuilder.setLargeIcon(largeIcon1);
-//            notificationBuilder.setColor(getResources().getColor(R.color.colorPrimary));
-//        }
-
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-
-
-
-
-        //=================================
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+//                .setColor(getResources().getColor(R.color.colorPrimary))
+//                .setSmallIcon(R.mipmap.ic_stat_call_white)
+                .setContentIntent(pendingIntent)
+                .setLights(Color.BLUE,1,1)
+                .setAutoCancel(true);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(1000, notificationBuilder.build());
+    }
 
 
     }
-}
+

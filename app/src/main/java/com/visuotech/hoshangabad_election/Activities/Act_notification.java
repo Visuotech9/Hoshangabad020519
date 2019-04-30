@@ -170,22 +170,22 @@ public class Act_notification extends AppCompatActivity {
         }
 
 
-        handler = new Handler();
-        refresh = new Runnable() {
-            public void run() {
-
-                if (NetworkConnection.checkNetworkStatus(context) == true) {
-                    Apigetsam_mem_list();
-                } else {
-
-                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
-                }
-                handler.postDelayed(refresh, 60000);
-
-            }
-        };
-        handler.post(refresh);
-
+//        handler = new Handler();
+//        refresh = new Runnable() {
+//            public void run() {
+//
+//                if (NetworkConnection.checkNetworkStatus(context) == true) {
+//                    Apigetsam_mem_list();
+//                } else {
+//
+//                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+//                }
+//                handler.postDelayed(refresh, 60000);
+//
+//            }
+//        };
+//        handler.post(refresh);
+//
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -194,6 +194,7 @@ public class Act_notification extends AppCompatActivity {
                     Apigetsam_mem_list();
                     mSwipeRefreshLayout.setRefreshing(false);
                 }else{
+                    mSwipeRefreshLayout.setRefreshing(false);
                     Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
                 }
 

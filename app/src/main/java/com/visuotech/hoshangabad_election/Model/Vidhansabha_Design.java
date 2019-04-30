@@ -11,7 +11,7 @@ public class Vidhansabha_Design {
         this.designation = designation;
     }
 
-    public Vidhansabha_Design(String designation) {
-        this.designation = designation;
+    public Vidhansabha_Design() {
+
     }
 }

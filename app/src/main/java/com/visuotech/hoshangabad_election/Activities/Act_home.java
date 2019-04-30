@@ -292,6 +292,7 @@ public class Act_home extends AppCompatActivity  {
                 {
 
                     // All Permissions Granted
+
                     init();
                 }
 //                else {

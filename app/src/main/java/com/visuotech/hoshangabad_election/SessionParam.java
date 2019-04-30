@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.visuotech.hoshangabad_election.Model.PollingBooth;
 
 import org.json.JSONObject;
 
@@ -264,7 +265,7 @@ public class SessionParam {
         prefsEditor.commit();
     }
 
-    public void saveArrayList(ArrayList<String> list, String key,Context context){
+    public void saveArrayList(ArrayList<PollingBooth> list, String key,Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         Gson gson = new Gson();
@@ -273,7 +274,7 @@ public class SessionParam {
         prefsEditor.apply();     // This line is IMPORTANT !!!
     }
 
-    public ArrayList<String> getArrayList(String key,Context context){
+    public ArrayList<PollingBooth> getArrayList(String key, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         Gson gson = new Gson();

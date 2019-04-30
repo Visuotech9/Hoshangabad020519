@@ -39,9 +39,8 @@ public class Act_splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_act_splash);
+        setContentView(R.layout.activity_act_splash);
 
-         bundle = getIntent().getExtras();
          context = this;
 
 
@@ -52,15 +51,9 @@ public class Act_splash extends AppCompatActivity {
             @Override
             public void run() {
 //
-                if (bundle != null) {
-                        //here can get notification message
-                        Intent intent = new Intent(Act_splash.this, Act_notification.class);
-                        startActivity(intent);
-                        bundle.clear();
-                } else {
-                        Intent intent = new Intent(Act_splash.this, Act_home.class);
-                        startActivity(intent);
-                    }
+                Intent intent = new Intent(Act_splash.this, Act_home.class);
+                startActivity(intent);
+
             }
 
         }, SPLASH_TIME_OUT);

@@ -141,6 +141,7 @@ public class Act_voter_info extends AppCompatActivity {
             String Json;
             Json = sessionParam.getJson("Voter_info",context);
             try {
+                if (Json!=null){
                 JSONObject jsonObject = new JSONObject(Json);
                 JSONArray jsonArray=jsonObject.optJSONArray("user");
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -155,7 +156,9 @@ public class Act_voter_info extends AppCompatActivity {
                     voters_urls_info1.add(notificationss);
 
                 }
-
+                }else{
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                }
                 adapter=new Ad_voters_urls(context,voters_urls_info1);
                 rv.setAdapter(adapter);
 
@@ -171,6 +174,7 @@ public class Act_voter_info extends AppCompatActivity {
                     ApigetvoterInfo();
                     mSwipeRefreshLayout.setRefreshing(false);
                 }else{
+                    mSwipeRefreshLayout.setRefreshing(false);
                     Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
 
 

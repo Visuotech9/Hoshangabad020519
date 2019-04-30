@@ -152,7 +152,7 @@ public class GPSTracker extends Service implements LocationListener
 
 				if (String.valueOf(latitude).equalsIgnoreCase("0.0") && String.valueOf(longitude).equalsIgnoreCase("0.0"))
                 {
-					showSettingsAlert();
+//					showSettingsAlert();
 				}
 				System.out.println("LATITIUE AND LONGITUTE ====" + latitude + "        " + longitude);
 

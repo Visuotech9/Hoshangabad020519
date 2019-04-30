@@ -27,8 +27,10 @@ import android.widget.TextView;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import com.visuotech.hoshangabad_election.Activities.Election.Seoni_malwa.Act_Polling_list;
 import com.visuotech.hoshangabad_election.Activities.Election.Seoni_malwa.Act_polling_station;
+import com.visuotech.hoshangabad_election.Adapter.Ad_dept_members;
 import com.visuotech.hoshangabad_election.Adapter.Ad_responsibility;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
+import com.visuotech.hoshangabad_election.Model.Deaprtments_members;
 import com.visuotech.hoshangabad_election.Model.Departments;
 import com.visuotech.hoshangabad_election.Model.Designation_Details;
 import com.visuotech.hoshangabad_election.Model.PollingBooth;
@@ -342,8 +344,11 @@ public class Act_department extends AppCompatActivity implements AdapterView.OnI
 
                     for (int i=0;i<departments_list1.size();i++){
                         departments_list.add(departments_list1.get(i).getDepartmentName());
+                        Apigetsam_mem_list(departments_list1.get(i).getDepartmentName(),departments_list1.get(i).getDepartmentId());
 //                       department_id.add(department_list1.get(i).getDepartment_id());
                     }
+
+
                     ArrayAdapter adapter_dept = new ArrayAdapter(context,android.R.layout.simple_spinner_item,departments_list);
                     adapter_dept.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_dept.setAdapter(adapter_dept);
@@ -370,6 +375,38 @@ public class Act_department extends AppCompatActivity implements AdapterView.OnI
         String remainingUrl2="/Election/Api2.php?apicall=department_list";
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
+
+    private void Apigetsam_mem_list(final String key, String departmentId){
+        baseRequest = new BaseRequest();
+        baseRequest.setBaseRequestListner(new RequestReciever() {
+            @Override
+            public void onSuccess(int requestCode, String Json, Object object) {
+                try {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),key,context);
+                    JSONArray jsonArray=jsonObject.optJSONArray("user");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int requestCode, String errorCode, String message) {
+
+            }
+            @Override
+            public void onNetworkFailure(int requestCode, String message) {
+
+            }
+        });
+        String remainingUrl2="/Election/Api2.php?apicall=department_officer_list"+"&department_id="+departmentId;
+        baseRequest.callAPIGETData(1, remainingUrl2);
+    }
+
+
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i = new Intent(Act_department.this, Act_election.class);
         startActivity(i);

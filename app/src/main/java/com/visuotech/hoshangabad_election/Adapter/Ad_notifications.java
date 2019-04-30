@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -78,14 +79,22 @@ public class Ad_notifications extends RecyclerView.Adapter<Ad_notifications.MyVi
         holder.tv_time.setText("Posted :"+list.get(i).getCreation_date());
         holder.tv_title.setText(list.get(i).getPush_title());
         holder.tv_content.setText(list.get(i).getPush_desc());
-//        holder.tv_content1.setText(list.get(i).getPush_desc());
-        String str=holder.tv_content.getText().toString();
-//        String str=holder.tv_content1.getText().toString();
-        for(int j=0;j<str.length();++j)
-        {
-            if(str.charAt(i)==' ')
-                word++;
+
+
+        if (countLines(holder.tv_content.getText().toString()) >= 3){
+            makeTextViewResizable(holder.tv_content, 3, "..more", true);
+        }else {
+//            makeTextViewResizable(holder.tv_content, 3, "..more", false);
         }
+
+//        holder.tv_content1.setText(list.get(i).getPush_desc());
+//        String str=holder.tv_content.getText().toString();
+//        String str=holder.tv_content1.getText().toString();
+//        for(int j=0;j<str.length();++j)
+//        {
+//            if(str.charAt(i)==' ')
+//                word++;
+//        }
 
 //        if (word<10){
 //            makeTextViewResizable(holder.tv_content, 3, "..more", false);
@@ -94,7 +103,7 @@ public class Ad_notifications extends RecyclerView.Adapter<Ad_notifications.MyVi
 //        }
 ////        justify(holder.tv_content);
 
-        makeTextViewResizable(holder.tv_content, 3, "..more", true);
+
     }
 
     @Override
@@ -135,6 +144,12 @@ public class Ad_notifications extends RecyclerView.Adapter<Ad_notifications.MyVi
         this.samitee_name=samitee_name;
         notifyDataSetChanged();
     }
+
+    private static int countLines(String str){
+        String[] lines = str.split("\r\n|\r|\n");
+        return  lines.length;
+    }
+
 
     public static void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore) {
 

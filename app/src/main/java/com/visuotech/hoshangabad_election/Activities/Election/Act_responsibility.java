@@ -27,10 +27,12 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.visuotech.hoshangabad_election.Adapter.Ad_dept_members;
+import com.visuotech.hoshangabad_election.Adapter.Ad_district_officers;
 import com.visuotech.hoshangabad_election.Adapter.Ad_responsibility;
 import com.visuotech.hoshangabad_election.Adapter.Ad_voters_urls;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
 import com.visuotech.hoshangabad_election.Model.Deaprtments_members;
+import com.visuotech.hoshangabad_election.Model.District_officers;
 import com.visuotech.hoshangabad_election.Model.Responsibility;
 import com.visuotech.hoshangabad_election.Model.Voter;
 import com.visuotech.hoshangabad_election.NetworkConnection;
@@ -167,6 +169,7 @@ public class Act_responsibility extends AppCompatActivity {
                     Apigetsam_mem_list();
                     mSwipeRefreshLayout.setRefreshing(false);
                 }else{
+                    mSwipeRefreshLayout.setRefreshing(false);
                     Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
 
 
@@ -311,21 +314,12 @@ public class Act_responsibility extends AppCompatActivity {
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     responsibilities_list=baseRequest.getDataList(jsonArray,Responsibility.class);
-
-//                    for (int i=0;i<sam_mem_list1.size();i++){
-//                        booth_list.add(sam_mem_list1.get(i).getEleBoothName());
-////                       department_id.add(department_list1.get(i).getDepartment_id());
-//                    }
-
                     adapter=new Ad_responsibility(context,responsibilities_list);
                     rv.setAdapter(adapter);
-
-//                    ArrayAdapter adapter_booth = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list);
-//                    adapter_booth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                    spinner_station.setAdapter(adapter_booth);
-//
-
-
+                    for (int i=0;i<responsibilities_list.size();i++){
+                        ApigetVidhan_detail_list(responsibilities_list.get(i).getNodal_responsibility()+i,responsibilities_list.get(i).getNodal_responsibility());
+//                       department_id.add(department_list1.get(i).getDepartment_id());
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -346,6 +340,39 @@ public class Act_responsibility extends AppCompatActivity {
         String remainingUrl2="/Election/Api2.php?apicall=nodal_officer_responsibility";
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
+
+    private void ApigetVidhan_detail_list(final String key, String nodal_responsibility){
+        baseRequest = new BaseRequest();
+        baseRequest.setBaseRequestListner(new RequestReciever() {
+            @Override
+            public void onSuccess(int requestCode, String Json, Object object) {
+                try {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),key,context);
+                    JSONArray jsonArray=jsonObject.optJSONArray("user");
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int requestCode, String errorCode, String message) {
+
+            }
+            @Override
+            public void onNetworkFailure(int requestCode, String message) {
+
+            }
+        });
+        String remainingUrl2="/Election/Api2.php?apicall=district_officer_list&nodal_responsibility="+nodal_responsibility;
+        baseRequest.callAPIGETData(1, remainingUrl2);
+    }
+
+
 
 
     private void filter(String text) {

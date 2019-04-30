@@ -15,7 +15,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,17 +71,37 @@ public class Ad_district_officers extends RecyclerView.Adapter<Ad_district_offic
 
         holder.tv_name.setText(list.get(i).getOfficer_name());
         holder.tv_designation.setText(list.get(i).getOfficer_post());
-//        holder.tv_phone.setText(list.get(i).getOfficer_phone());
-//        holder.tv_mobile.setText(list.get(i).getOfficer_mobile());
-        holder.tv_phone.setText(Html.fromHtml("<a href='tel:"+"+91-"+list.get(i).getOfficer_phone()+"'>"+list.get(i).getOfficer_phone()+"</a>"));
-        holder.tv_mobile.setText(Html.fromHtml("<a href='tel:"+list.get(i).getOfficer_mobile()+"'>"+list.get(i).getOfficer_mobile()+"</a>"));
+
+        Spannable s = (Spannable) Html.fromHtml("<a href='tel:"+list.get(i).getOfficer_mobile()+"'>"+list.get(i).getOfficer_mobile()+"</a>");
+        for (URLSpan u: s.getSpans(0, s.length(), URLSpan.class)) {
+            s.setSpan(new UnderlineSpan() {
+                public void updateDrawState(TextPaint tp) {
+                    tp.setUnderlineText(false);
+                }
+            }, s.getSpanStart(u), s.getSpanEnd(u), 0);
+        }
+        holder.tv_mobile.setText(s);
+
+
+        Spannable s2 = (Spannable) Html.fromHtml("<a href='tel:"+list.get(i).getOfficer_phone()+"'>"+list.get(i).getOfficer_phone()+"</a>");
+        for (URLSpan u: s2.getSpans(0, s2.length(), URLSpan.class)) {
+            s2.setSpan(new UnderlineSpan() {
+                public void updateDrawState(TextPaint tp) {
+                    tp.setUnderlineText(false);
+                }
+            }, s2.getSpanStart(u), s2.getSpanEnd(u), 0);
+        }
+        holder.tv_phone.setText(s2);
+
         holder.tv_phone.setMovementMethod(LinkMovementMethod.getInstance());
         holder.tv_mobile.setMovementMethod(LinkMovementMethod.getInstance());
         String htmlString="<u>"+list.get(i).getOfficer_email()+"</u>";
         holder.tv_email.setText(Html.fromHtml(htmlString));
 
-        if (i%2!=0){
+        if((i % 2 != 0)){
             holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }else{
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
         if (list.get(i).getOfficer_email().equals("")||list.get(i).getOfficer_email().equals("-")){
             holder.tv_email.setVisibility(View.GONE);
@@ -130,6 +154,7 @@ public class Ad_district_officers extends RecyclerView.Adapter<Ad_district_offic
 
     }
 
+
     @Override
     public int getItemCount() {
         return list.size();
@@ -154,14 +179,10 @@ public class Ad_district_officers extends RecyclerView.Adapter<Ad_district_offic
             lay_message =  itemView.findViewById(R.id.lay_message);
             lin_layout=itemView.findViewById(R.id.lin_layout);
 
-
-
-
-
-
         }
     }
     public void filterList(ArrayList<District_officers> list) {
         this.list = list;
         notifyDataSetChanged();
-    }}
+    }
+}

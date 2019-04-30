@@ -71,54 +71,68 @@ public class Ad_designation_details extends RecyclerView.Adapter<Ad_designation_
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int i) {
 
 
-        holder.tv_designation.setText(designation_list.get(i));
         holder.tv_name.setHint(designation_list.get(i)+" "+"Name");
 
-        if (i%2!=0){
+        if((i % 2 != 0)){
             holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }else{
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
         if (i == 0) {
+            holder.tv_designation.setText(designation_list.get(0));
             holder.tv_name.setText(list.get(0).getElePZero());
             holder.tv_mobile.setText(list.get(0).getElePZeroMobile());
 //            holder.tv_mobile.setText(Html.fromHtml("<a href='tel:"+list.get(0).getElePZeroMobile())+"'>"+list.get(0).getElePZeroMobile()+"</a>"));
 //            holder.tv_mobile.setMovementMethod(LinkMovementMethod.getInstance());
-
         }
         if (i == 1) {
+            holder.tv_designation.setText(designation_list.get(1));
             holder.tv_name.setText(list.get(0).getElePOne());
             holder.tv_mobile.setText(list.get(0).getElePOneMobile());
 
         }
         if (i == 2) {
+            holder.tv_designation.setText(designation_list.get(2));
             holder.tv_name.setText(list.get(0).getEleBloName());
             holder.tv_mobile.setText(list.get(0).getEleBloMobile());
 
         }
         if (i == 3) {
+            holder.tv_designation.setText(designation_list.get(3));
             holder.tv_name.setText(list.get(0).getEleGrs());
             holder.tv_mobile.setText(list.get(0).getEleGrsMobile());
 
         }
         if (i == 4) {
+            holder.tv_designation.setText(designation_list.get(4));
             holder.tv_name.setText(list.get(0).getEleSachiv());
             holder.tv_mobile.setText(list.get(0).getEleSachivMobile());
         }
         if (i == 5) {
+            holder.tv_designation.setText(designation_list.get(5));
             holder.tv_name.setText(list.get(0).getEleNearestThana());
             holder.tv_mobile.setText(list.get(0).getEleThanaMobile());
         }
         if (i == 6) {
+            holder.tv_designation.setText(designation_list.get(6));
             holder.tv_name.setText(list.get(0).getEleSectorOfficer());
             holder.tv_mobile.setText(list.get(0).getEleSectorMobile());
         }
         if (i == 7) {
+            holder.tv_designation.setText(designation_list.get(7));
             holder.tv_name.setText(list.get(0).getEleLocal1Name());
             holder.tv_mobile.setText(list.get(0).getEleLocal1Mobile());
         }
         if (i == 8) {
+            holder.tv_designation.setText(designation_list.get(8));
             holder.tv_name.setText(list.get(0).getEleLocal2Name());
             holder.tv_mobile.setText(list.get(0).getEleLocal2Mobile());
+        }
+        if (i == 9) {
+            holder.tv_designation.setText(list.get(0).getEle_wc_cctv());
+            holder.tv_name.setText(list.get(0).getEle_wc_cctv_name());
+            holder.tv_mobile.setText(list.get(0).getEle_wc_cctv_mobile());
         }
 
         holder.lay_call.setOnClickListener(new View.OnClickListener() {

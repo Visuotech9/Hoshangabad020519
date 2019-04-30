@@ -66,8 +66,10 @@ public class Ad_samitee_member extends RecyclerView.Adapter<Ad_samitee_member.My
         holder.tv_mobile.setText(list.get(i).getMember_mobile());
         holder.tv_period.setText(list.get(i).getEle_sam_dutyfrom()+" - "+list.get(i).getEle_sam_dutyto());
 
-        if (i%2!=0){
+        if((i % 2 != 0)){
             holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }else{
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
         holder.lay_call.setOnClickListener(new View.OnClickListener() {

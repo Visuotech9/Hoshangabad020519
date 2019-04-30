@@ -71,9 +71,12 @@ public class Ad_Vidhansabha extends RecyclerView.Adapter<Ad_Vidhansabha.MyViewHo
 //        holder.tv_email.setText(list.get(i).getCom_email());
         holder.tv_resp.setText(list.get(i).getCom_responsibility());
 
-        if (i%2!=0){
+        if((i % 2 != 0)){
             holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }else{
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
+
         holder.lay_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

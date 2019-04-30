@@ -71,9 +71,12 @@ public class Ad_services extends RecyclerView.Adapter<Ad_services.MyViewHolder> 
         holder.tv_lat.setText(list.get(i).getOther_services_lat());
         holder.tv_long.setText(list.get(i).getOther_services_long());
 
-        if (i%2!=0){
+        if((i % 2 != 0)){
             holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }else{
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
+
         holder.tv_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +84,11 @@ public class Ad_services extends RecyclerView.Adapter<Ad_services.MyViewHolder> 
                 if (holder.tv_lat.getText().toString().equals("") && holder.tv_long.getText().toString().equals("")){
 //                    Toast.makeText(context,"Location is not available for this service",Toast.LENGTH_SHORT).show();
                     Snackbar.make(holder.lin_layout, "Location is not available for this service", Snackbar.LENGTH_LONG).show();
-                }else{
+                }
+                if (holder.tv_lat.getText().toString().equals("-") && holder.tv_long.getText().toString().equals("-")){
+//                    Toast.makeText(context,"Location is not available for this service",Toast.LENGTH_SHORT).show();
+                    Snackbar.make(holder.lin_layout, "Location is not available for this service", Snackbar.LENGTH_LONG).show();
+                } else{
                     Intent intent=new Intent(context, MapActivity.class);
                     intent.putExtra("LAT",holder.tv_lat.getText().toString());
                     intent.putExtra("LOG",holder.tv_long.getText().toString());

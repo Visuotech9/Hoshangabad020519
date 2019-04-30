@@ -3,8 +3,10 @@ package com.visuotech.hoshangabad_election.Model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 @SuppressWarnings("unused")
-public class PollingBooth {
+public class PollingBooth implements Serializable {
 
     @SerializedName("creation_date")
     private String mCreationDate;
@@ -74,6 +76,31 @@ public class PollingBooth {
     private String mElectionId;
     @SerializedName("user_id")
     private String mUserId;
+    String ele_wc_cctv,ele_wc_cctv_name,ele_wc_cctv_mobile;
+
+    public String getEle_wc_cctv() {
+        return ele_wc_cctv;
+    }
+
+    public void setEle_wc_cctv(String ele_wc_cctv) {
+        this.ele_wc_cctv = ele_wc_cctv;
+    }
+
+    public String getEle_wc_cctv_name() {
+        return ele_wc_cctv_name;
+    }
+
+    public void setEle_wc_cctv_name(String ele_wc_cctv_name) {
+        this.ele_wc_cctv_name = ele_wc_cctv_name;
+    }
+
+    public String getEle_wc_cctv_mobile() {
+        return ele_wc_cctv_mobile;
+    }
+
+    public void setEle_wc_cctv_mobile(String ele_wc_cctv_mobile) {
+        this.ele_wc_cctv_mobile = ele_wc_cctv_mobile;
+    }
 
     public String getCreationDate() {
         return mCreationDate;

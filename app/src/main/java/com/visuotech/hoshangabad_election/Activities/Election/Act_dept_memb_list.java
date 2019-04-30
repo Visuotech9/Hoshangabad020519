@@ -131,7 +131,7 @@ public class Act_dept_memb_list extends AppCompatActivity {
         } else {
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
             String Json;
-            Json = sessionParam.getJson(samitee_name,context);
+            Json = sessionParam.getJson(key,context);
             try {
                 if (Json!=null){
                     JSONObject jsonObject = new JSONObject(Json);
@@ -186,6 +186,7 @@ public class Act_dept_memb_list extends AppCompatActivity {
                     Apigetsam_mem_list(key);
                     mSwipeRefreshLayout.setRefreshing(false);
                 }else{
+                    mSwipeRefreshLayout.setRefreshing(false);
                     Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();       }
 
 

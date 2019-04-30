@@ -63,14 +63,14 @@ public class Ad_responsibility extends RecyclerView.Adapter<Ad_responsibility.My
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int i) {
 
         holder.tv_resp.setText(list.get(i).getNodal_responsibility());
         holder.tv_resp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(context, Act_district_officers.class);
-                intent.putExtra("key",holder.tv_resp.getText().toString());
+                intent.putExtra("key",holder.tv_resp.getText().toString()+i);
                 intent.putExtra("NAME",holder.tv_resp.getText().toString());
                 context.startActivity(intent);
             }

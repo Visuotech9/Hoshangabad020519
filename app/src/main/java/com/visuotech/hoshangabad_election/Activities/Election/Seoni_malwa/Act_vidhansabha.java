@@ -23,8 +23,11 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.visuotech.hoshangabad_election.Activities.Election.Act_election;
+import com.visuotech.hoshangabad_election.Adapter.Ad_Vidhansabha;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
+import com.visuotech.hoshangabad_election.Model.Departments;
 import com.visuotech.hoshangabad_election.Model.Designation_Details;
+import com.visuotech.hoshangabad_election.Model.Vidhanasabha_list;
 import com.visuotech.hoshangabad_election.Model.Vidhansabha_Design;
 import com.visuotech.hoshangabad_election.NetworkConnection;
 import com.visuotech.hoshangabad_election.R;
@@ -47,10 +50,10 @@ public class Act_vidhansabha extends AppCompatActivity implements AdapterView.On
     String station, designation, booth_name, mobile, name, desig, lat, log;
     Button btn_cancel, btn_submit;
     int designation_no;
-    ArrayList<Vidhansabha_Design> designation_list1;
+    ArrayList<Vidhansabha_Design> designation_list1=new ArrayList<>();
     ArrayList<Designation_Details> desi_details_list1;
     ArrayList<String> designation_list = new ArrayList<String>();
-    String AC;
+    String AC,key;
     Context context;
     Activity activity;
     SessionParam sessionParam;
@@ -93,6 +96,7 @@ public class Act_vidhansabha extends AppCompatActivity implements AdapterView.On
         Intent intent=getIntent();
         AC=intent.getStringExtra("CITY");
 
+
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,7 +104,7 @@ public class Act_vidhansabha extends AppCompatActivity implements AdapterView.On
                     Intent i = new Intent(Act_vidhansabha.this, Act_vidhansabha_details_list.class);
                     i.putExtra("designation", designation);
                     i.putExtra("CITY", AC);
-//                    i.putExtra("LATITUDE",lat);
+                    i.putExtra("key",designation);
 //                    i.putExtra("LONGITUDE",log);
                     startActivity(i);
 
@@ -114,6 +118,40 @@ public class Act_vidhansabha extends AppCompatActivity implements AdapterView.On
             ApigetDesiglist();
         } else {
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+            String Json;
+            Json = sessionParam.getJson(AC+"vidhansabha",context);
+            try {
+                if (Json!=null) {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    JSONArray jsonArray = jsonObject.optJSONArray("user");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        Vidhansabha_Design notificationss = new Vidhansabha_Design();
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        String designation = jsonObject1.optString("designation");
+
+                        notificationss.setDesignation(designation);
+
+                        designation_list1.add(notificationss);
+
+                    }
+
+                    for (int i=0;i<designation_list1.size();i++){
+                        designation_list.add(designation_list1.get(i).getDesignation());
+//                       department_id.add(department_list1.get(i).getDepartment_id());
+                    }
+                    ArrayAdapter adapter_designation = new ArrayAdapter(context,android.R.layout.simple_spinner_item,designation_list);
+                    adapter_designation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_designation.setAdapter(adapter_designation);
+
+
+                }else {
+                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -266,13 +304,14 @@ public class Act_vidhansabha extends AppCompatActivity implements AdapterView.On
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),AC+"vidhansabha",context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     designation_list1=baseRequest.getDataList(jsonArray,Vidhansabha_Design.class);
 
                     for (int i=0;i<designation_list1.size();i++){
                         designation_list.add(designation_list1.get(i).getDesignation());
-//                       department_id.add(department_list1.get(i).getDepartment_id());
+                        ApigetVidhan_detail_list(designation_list1.get(i).getDesignation(),designation_list1.get(i).getDesignation());
                     }
                     ArrayAdapter adapter_designation = new ArrayAdapter(context,android.R.layout.simple_spinner_item,designation_list);
                     adapter_designation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -300,6 +339,39 @@ public class Act_vidhansabha extends AppCompatActivity implements AdapterView.On
         String remainingUrl2="/Election/Api2.php?apicall=vidhansabha_desg_list"+"&ac="+AC;
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
+
+    private void ApigetVidhan_detail_list(final String key, String designation){
+        baseRequest = new BaseRequest(context);
+        baseRequest.setBaseRequestListner(new RequestReciever() {
+            @Override
+            public void onSuccess(int requestCode, String Json, Object object) {
+                try {
+
+                    JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),key,context);
+                    JSONArray jsonArray=jsonObject.optJSONArray("user");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int requestCode, String errorCode, String message) {
+
+            }
+            @Override
+            public void onNetworkFailure(int requestCode, String message) {
+
+            }
+        });
+        String remainingUrl2="/Election/Api2.php?apicall=vidhansabha_list"+"&ac="+AC+"&designation="+designation;
+        baseRequest.callAPIGETData(1, remainingUrl2);
+    }
+
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
        finish();

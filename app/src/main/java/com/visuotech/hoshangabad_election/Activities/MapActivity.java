@@ -201,38 +201,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         finish();
     }
 
-    public void grabLocation() {
-        // TODO Auto-generated method stub
-        GPSTracker gpsTracker = new GPSTracker(MapActivity.this);
-
-        if (gpsTracker.canGetLocation()) {
-            lat_current = String.valueOf(gpsTracker.getLatitude());
-            lon_current = String.valueOf(gpsTracker.getLongitude());
-            if (lat_serviec.equals("0.0") && lon_service.equals("0.0")) {
-                gpsTracker.showSettingsAlert();
-            } else {
-                try {
-                    Geocoder geocoder = new Geocoder(MapActivity.this, Locale.getDefault());
-                    addresses = geocoder.getFromLocation(Double.parseDouble(lat_serviec), Double.parseDouble(lon_service), 1);
-                    add_booth = addresses.get(0).getAddressLine(0);
-                    // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                    String city = addresses.get(0).getLocality();
-                    String state = addresses.get(0).getAdminArea();
-                    String country = addresses.get(0).getCountryName();
-                    String postalCode = addresses.get(0).getPostalCode();
-                    String knownName = addresses.get(0).getFeatureName();
-
-                    String add=city + " , " + state + " , " + country;
-
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            }
-        } else {
-            gpsTracker.showSettingsAlert();
-        }
-    }
 
 
 

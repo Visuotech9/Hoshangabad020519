@@ -73,8 +73,13 @@ public class Ad_voters_urls extends RecyclerView.Adapter<Ad_voters_urls.MyViewHo
         String htmlString="<u>"+list.get(i).getVoterUrl()+"</u>";
         holder.tv_link.setText(Html.fromHtml(htmlString));
 //        holder.tv_email.setText(list.get(i).getCom_email());
-        if (i%2!=0){
+//        if (i%2!=0){
+//            holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+//        }
+        if((i % 2 != 0)){
             holder.lin_layout.setBackgroundColor(Color.parseColor("#efefef"));
+        }else{
+            holder.lin_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
         holder.tv_link.setOnClickListener(new View.OnClickListener() {

@@ -136,7 +136,7 @@ public class Act_district_officers extends AppCompatActivity {
         } else {
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
             String Json;
-            Json = sessionParam.getJson(Resp_name,context);
+            Json = sessionParam.getJson(key,context);
             try {
                 if (Json!=null) {
                     JSONObject jsonObject = new JSONObject(Json);
@@ -157,11 +157,11 @@ public class Act_district_officers extends AppCompatActivity {
 
 
                             vd.setOfficer_name(officer_name);
-                            vd.setOfficer_email(officer_responsibility);
+                            vd.setOfficer_email(officer_email);
                             vd.setOfficer_mobile(officer_mobile);
                             vd.setOfficer_phone(officer_phone);
-                            vd.setOfficer_post(officer_email);
-                            vd.setOfficer_responsibility(officer_post);
+                            vd.setOfficer_post(officer_post);
+                            vd.setOfficer_responsibility(officer_responsibility);
 
                             district_officers_list1.add(vd);
 
@@ -326,7 +326,7 @@ public class Act_district_officers extends AppCompatActivity {
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
                     JSONObject jsonObject = new JSONObject(Json);
-                    sessionParam.saveJson(Json.toString(),key,context);
+//                    sessionParam.saveJson(Json.toString(),key,context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
 
                     district_officers_list1=baseRequest.getDataList(jsonArray,District_officers.class);

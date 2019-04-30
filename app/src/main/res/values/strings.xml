@@ -9,6 +9,8 @@
     <string name="update_message">New version of this application is available, Update now?</string>
     <string name="update_now">ok</string>
     <string name="cancel">no</string>
+    <string name="Internet_connection">We can not detect any internet connectivity. Please check your internet connection and try again.</string>
+
     <!--&lt;!&ndash;FCm&ndash;&gt;23:9D:3D:ED:D7:C2:21:DA:7F:80:9E:57:BC:DE:E8:18:3C:35:CC:69-->
     <!--23:9D:3D:ED:D7:C2:21:DA:7F:80:9E:57:BC:DE:E8:18:3C:35:CC:69-->
     <string name="FCM_PREF">com.visuotect.hoshangabad_election.fcm_pref</string>

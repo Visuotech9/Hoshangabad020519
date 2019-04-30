@@ -15,10 +15,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-
+import android.widget.TextView;
 import com.visuotech.hoshangabad_election.Activities.Election.Act_election;
 import com.visuotech.hoshangabad_election.R;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,8 +25,11 @@ import java.util.Map;
 
 public class Act_seoni_malwa extends AppCompatActivity {
     LinearLayout lay1,lay2,lay3,lay4,lay5,lay6;
+    TextView tv_wave,tv_cctv,tv_all;
     LinearLayout container;
     String AC = "136- Seoni malwa";
+    String CONST_CCTV = "Web Casting";
+    String CONST_WEB = "CCTV";
     public boolean datafinish = false;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
     @Override
@@ -48,21 +50,43 @@ public class Act_seoni_malwa extends AppCompatActivity {
         permission();
 
         lay1=rowView.findViewById(R.id.lay1);
-        lay2=rowView.findViewById(R.id.lay2);
-        lay3=rowView.findViewById(R.id.lay3);
+        tv_all=rowView.findViewById(R.id.tv_all);
+        tv_wave=rowView.findViewById(R.id.tv_wave);
+        tv_cctv=rowView.findViewById(R.id.tv_cctv);
+        lay4=rowView.findViewById(R.id.lay4);
 
         container.addView(rowView, container.getChildCount());
 
-        lay1.setOnClickListener(new View.OnClickListener() {
+        tv_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Act_seoni_malwa.this, Act_polling_station.class);
                 i.putExtra("CITY",AC);
+                i.putExtra("CONST","");
                 startActivity(i);
 
             }
         });
-        lay2.setOnClickListener(new View.OnClickListener() {
+        tv_wave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Act_seoni_malwa.this, Act_polling_station2.class);
+                i.putExtra("CITY",AC);
+                i.putExtra("CONST",CONST_WEB);
+                startActivity(i);
+
+            }
+        });
+        tv_cctv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Act_seoni_malwa.this, Act_polling_station.class);
+                i.putExtra("CITY",AC);
+                i.putExtra("CONST",CONST_CCTV);
+                startActivity(i);
+            }
+        });
+        lay4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Act_seoni_malwa.this, Act_vidhansabha.class);
@@ -70,6 +94,7 @@ public class Act_seoni_malwa extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
 
     }
 

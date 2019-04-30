@@ -23,10 +23,12 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.visuotech.hoshangabad_election.Adapter.Ad_services;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
 import com.visuotech.hoshangabad_election.Model.Departments;
 import com.visuotech.hoshangabad_election.Model.Designation_Details;
 import com.visuotech.hoshangabad_election.Model.Samities;
+import com.visuotech.hoshangabad_election.Model.ServiceList;
 import com.visuotech.hoshangabad_election.Model.ServiceType;
 import com.visuotech.hoshangabad_election.NetworkConnection;
 import com.visuotech.hoshangabad_election.R;
@@ -153,6 +155,8 @@ public class Act_other_services extends AppCompatActivity implements AdapterView
         }
 
     }
+
+
 
     private void permission() {
         datafinish = true;
@@ -313,8 +317,10 @@ public class Act_other_services extends AppCompatActivity implements AdapterView
 
                     for (int i=0;i<serviceTypes_list1.size();i++){
                         serviceTypes_list.add(serviceTypes_list1.get(i).getType());
+                        Apigetsam_mem_list(serviceTypes_list1.get(i).getType(),serviceTypes_list1.get(i).getType());
 //                       department_id.add(department_list1.get(i).getDepartment_id());
                     }
+
                     ArrayAdapter adapter_service = new ArrayAdapter(context,android.R.layout.simple_spinner_item,serviceTypes_list);
                     adapter_service.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_services.setAdapter(adapter_service);
@@ -341,6 +347,39 @@ public class Act_other_services extends AppCompatActivity implements AdapterView
         String remainingUrl2="/Election/Api2.php?apicall=other_services_type_list";
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
+
+
+    private void Apigetsam_mem_list(final String key, String type){
+        baseRequest = new BaseRequest();
+        baseRequest.setBaseRequestListner(new RequestReciever() {
+            @Override
+            public void onSuccess(int requestCode, String Json, Object object) {
+                try {
+                    JSONObject jsonObject = new JSONObject(Json);
+                    sessionParam.saveJson(Json.toString(),key,context);
+                    JSONArray jsonArray=jsonObject.optJSONArray("user");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(int requestCode, String errorCode, String message) {
+
+            }
+            @Override
+            public void onNetworkFailure(int requestCode, String message) {
+
+            }
+        });
+        String remainingUrl2="/Election/Api2.php?apicall=other_services_list"+"&type="+type;
+        baseRequest.callAPIGETData(1, remainingUrl2);
+    }
+
+
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i = new Intent(Act_other_services.this, Act_election.class);
         startActivity(i);

@@ -119,17 +119,23 @@
             <!--android:layout_alignParentTop="true"/>-->
 
 
-
         <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background_border"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:weightSum="1"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/lay1"
+                android:id="@+id/lay1"
             android:background="@drawable/bg_home"
             android:paddingTop="10dp"
-            android:layout_marginTop="10dp"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -138,7 +144,6 @@
             <LinearLayout
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:id="@+id/lay_image"
                 android:gravity="center_horizontal"
                 android:background="@drawable/bg_circular_imageview"
                 android:layout_gravity="center_horizontal">
@@ -153,18 +158,7 @@
 
             </LinearLayout>
 
-
-            <!--<me.biubiubiu.justifytext.library.JustifyTextView-->
-                <!--android:id="@+id/tv_resp"-->
-                <!--android:text="Polling Station wise communication plan"-->
-                <!--android:textColor="@color/White"-->
-                <!--android:layout_gravity="center_vertical"-->
-                <!--android:textSize="18dp"-->
-                <!--android:paddingLeft="10dp"                android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content" />-->
-
             <TextView
-                android:id="@+id/tv_resp"
                 android:layout_width="match_parent"
                 android:text="Polling Station wise communication plan"
                 android:textColor="@color/White"
@@ -176,11 +170,71 @@
         </LinearLayout>
 
 
+            <TextView
+                android:id="@+id/tv_all"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:text="All"
+                android:textColor="@color/Black"
+                android:layout_gravity="center_vertical"
+                android:textSize="15dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/lightgrey"
+                android:layout_height="1dp"></View>
+
+            <TextView
+                android:id="@+id/tv_cctv"
+                android:layout_width="match_parent"
+                android:text="Web Casting"
+                android:textColor="@color/Black"
+                android:layout_gravity="center_vertical"
+                android:textSize="15dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/lightgrey"
+                android:layout_height="1dp"></View>
+
+            <TextView
+                android:id="@+id/tv_wave"
+                android:layout_width="match_parent"
+                android:text="CCTV"
+                android:textColor="@color/Black"
+                android:layout_gravity="center_vertical"
+                android:textSize="15dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/lightgrey"
+                android:layout_height="1dp"></View>
+
+
+
+
+        </LinearLayout>
+
+
++
+
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:weightSum="1"
-            android:id="@+id/lay2"
+            android:id="@+id/lay4"
             android:background="@drawable/bg_home"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
@@ -220,7 +274,6 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>
