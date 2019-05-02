@@ -2,6 +2,7 @@ package com.visuotech.hoshangabad_election.Activities.Election.Seoni_malwa;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,23 +14,28 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
-import com.visuotech.hoshangabad_election.Adapter.SimpleArrayListAdapter;
-import com.visuotech.hoshangabad_election.Adapter.SimpleListAdapter;
+import com.visuotech.hoshangabad_election.Adapter.Ad_polling_station;
 import com.visuotech.hoshangabad_election.MarshMallowPermission;
 import com.visuotech.hoshangabad_election.Model.Block;
 import com.visuotech.hoshangabad_election.Model.PollingBooth;
@@ -37,6 +43,7 @@ import com.visuotech.hoshangabad_election.Model.Sector;
 import com.visuotech.hoshangabad_election.Model.Tehsil;
 import com.visuotech.hoshangabad_election.NetworkConnection;
 import com.visuotech.hoshangabad_election.R;
+import com.visuotech.hoshangabad_election.RecyclerTouchListener;
 import com.visuotech.hoshangabad_election.SessionParam;
 import com.visuotech.hoshangabad_election.retrofit.BaseRequest;
 import com.visuotech.hoshangabad_election.retrofit.RequestReciever;
@@ -50,17 +57,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import gr.escsoft.michaelprimez.searchablespinner.interfaces.IStatusListener;
-import gr.escsoft.michaelprimez.searchablespinner.interfaces.OnItemSelectedListener;
-
 
 public class Act_polling_station extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     LinearLayout container;
     Spinner spinner_tehsil,spinner_block,spinner_sector;
     SearchableSpinner spinner_station;
     SearchableSpinner spinner_station2;
-    String station,station_id,station_id2,election_id,election_id2, station2, tehsil, block, sector, desig, lat, log,lat2, log2;
+    String station,station_id,station_id2,election_id,election_id2, station2 = "", tehsil = "", block = "", sector = "", desig, lat, log,lat2, log2;
     Button btn_submit,btn_submit2;
+    TextView tv_station1,tv_tehsil,tv_block,tv_sector,tv_station2;
     int designation_no;
     ArrayList<PollingBooth> booth_list1=new ArrayList<>();
     ArrayList<String> booth_list = new ArrayList<String>();
@@ -77,6 +82,8 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
     ArrayList<Tehsil> tehsils_list1=new ArrayList<>();
     ArrayList<String> tehsils_list = new ArrayList<String>();
 
+    ArrayList<String>members_list2=new ArrayList<>();
+
 
     Context context;
     String AC;
@@ -92,16 +99,11 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
     LinearLayout lin_spl_layout;
     SwipeRefreshLayout mSwipeRefreshLayout;
     ProgressBar progressBar;
-
+    int post;
     String CONST;
 
 
-    private gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner mSearchableSpinner;
-    private gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner mSearchableSpinner1;
-    private gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner mSearchableSpinner2;
-    private gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner mSearchableSpinner3;
-    private SimpleListAdapter mSimpleListAdapter;
-    private SimpleArrayListAdapter mSimpleArrayListAdapter;
+
     private final ArrayList<String> mStrings = new ArrayList<>();
 
     @Override
@@ -139,7 +141,12 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
         spinner_sector = rowView.findViewById(R.id.spinner_sector);
         btn_submit2 = rowView.findViewById(R.id.btn_submit2);
         btn_submit = rowView.findViewById(R.id.btn_submit);
-        progressBar=rowView.findViewById(R.id.progressBar);
+//        progressBar=rowView.findViewById(R.id.progressBar);
+        tv_station1=rowView.findViewById(R.id.tv_station1);
+        tv_tehsil=rowView.findViewById(R.id.tv_tehsil);
+        tv_block=rowView.findViewById(R.id.tv_block);
+        tv_station2=rowView.findViewById(R.id.tv_station2);
+        tv_sector=rowView.findViewById(R.id.tv_sector);
 
         container.addView(rowView, container.getChildCount());
         spinner_station.setOnItemSelectedListener(this);
@@ -156,14 +163,120 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
 
 
         lin_spl_layout=rowView.findViewById(R.id.lin_spl_layout);
+
+        getDataList();
+
+        tv_station1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sucessDialog1(context,tv_station1,booth_list);
+            }
+        });
+        tv_tehsil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sucessDialog2(context,tv_tehsil, tehsils_list,tv_block,tv_sector,tv_station2);
+            }
+        });
+
+        tv_block.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!tv_tehsil.getText().toString().equals("")){
+                    sucessDialog3(context,tv_block,blocks_list,tv_sector,tv_station2);
+                }
+
+            }
+        });
+
+
+        tv_sector.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!tv_tehsil.getText().toString().equals("") && !tv_block.getText().toString().equals("")){
+                    sucessDialog4(context,tv_sector, sectors_list,tv_station2);
+                }
+
+            }
+        });
+        tv_station2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!tv_tehsil.getText().toString().equals("") && !tv_block.getText().toString().equals("") && !tv_sector.getText().toString().equals("")){
+                    sucessDialog5(context,tv_station2,booth_list22);
+                }
+
+
+            }
+        });
+
+
+
+
+
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (booth_list1 != null) {
+                    Intent i = new Intent(Act_polling_station.this, Act_Polling_list.class);
+
+                    i.putExtra("NAME", station);
+                    i.putExtra("key", station+station_id);
+                    i.putExtra("CITY", AC);
+                    i.putExtra("STATION_ID", station_id);
+                    i.putExtra("ELECTION_ID", election_id);
+                    i.putExtra("LATITUDE",lat);
+                    i.putExtra("LONGITUDE",log);
+                    i.putExtra("ARRAY",booth_list1);
+
+//                    Bundle bundle=new Bundle();
+//                    bundle.putSerializable("ARRAY",booth_list1);
+//                    bundle.putString("NAME", station);
+//                    bundle.putString("key", station+station_id);
+//                    bundle.putString("CITY", AC);
+//                    bundle.putString("STATION_ID", station_id);
+//                    bundle.putString("ELECTION_ID", election_id);
+//                    bundle.putString("LATITUDE",lat);
+//                    bundle.putString("LONGITUDE",log);
+//                    i.putExtras(bundle);
+                    startActivity(i);
+
+
+                }
+            }
+        });
+
+        btn_submit2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (booth_list2 != null) {
+                    Intent i = new Intent(Act_polling_station.this, Act_Polling_list.class);
+
+                    i.putExtra("NAME", station2);
+                    i.putExtra("key", station2+station_id2);
+                    i.putExtra("CITY", AC);
+                    i.putExtra("STATION_ID", station_id2);
+                    i.putExtra("ELECTION_ID", election_id2);
+                    i.putExtra("LATITUDE",lat2);
+                    i.putExtra("LONGITUDE",log2);
+                    i.putExtra("ARRAY",booth_list2);
+                    startActivity(i);
+
+
+                }
+            }
+        });
+
+
+
         if (NetworkConnection.checkNetworkStatus(context) == true) {
             Apigetboothlist();
             ApigettehsilList();
 
 
         } else {
-            lin_spl_layout.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
+//            lin_spl_layout.setVisibility(View.VISIBLE);
+//            progressBar.setVisibility(View.GONE);
             Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
             String Json;
             Json = sessionParam.getJson(AC+"station",context);
@@ -321,62 +434,12 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
         }
 
 
-        btn_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (booth_list1 != null) {
-                    Intent i = new Intent(Act_polling_station.this, Act_Polling_list.class);
-
-                    i.putExtra("NAME", station);
-                    i.putExtra("key", station+station_id);
-                    i.putExtra("CITY", AC);
-                    i.putExtra("STATION_ID", station_id);
-                    i.putExtra("ELECTION_ID", election_id);
-                    i.putExtra("LATITUDE",lat);
-                    i.putExtra("LONGITUDE",log);
-                    i.putExtra("ARRAY",booth_list1);
-
-//                    Bundle bundle=new Bundle();
-//                    bundle.putSerializable("ARRAY",booth_list1);
-//                    bundle.putString("NAME", station);
-//                    bundle.putString("key", station+station_id);
-//                    bundle.putString("CITY", AC);
-//                    bundle.putString("STATION_ID", station_id);
-//                    bundle.putString("ELECTION_ID", election_id);
-//                    bundle.putString("LATITUDE",lat);
-//                    bundle.putString("LONGITUDE",log);
-//                    i.putExtras(bundle);
-                    startActivity(i);
-
-
-                }
-            }
-        });
-
-        btn_submit2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (booth_list2 != null) {
-                    Intent i = new Intent(Act_polling_station.this, Act_Polling_list.class);
-
-                    i.putExtra("NAME", station2);
-                    i.putExtra("key", station2+station_id2);
-                    i.putExtra("CITY", AC);
-                    i.putExtra("STATION_ID", station_id2);
-                    i.putExtra("ELECTION_ID", election_id2);
-                    i.putExtra("LATITUDE",lat2);
-                    i.putExtra("LONGITUDE",log2);
-                    i.putExtra("ARRAY",booth_list2);
-                    startActivity(i);
-
-
-                }
-            }
-        });
 
 
 
+    }
 
+    private void getDataList() {
 
 
     }
@@ -509,81 +572,81 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        switch(adapterView.getId()){
-            case R.id.spinner_station :
-                //Your Action Here.
-
-                station=booth_list1.get(i).getEleBoothName();
-                station_id=booth_list1.get(i).getEleBoothno();
-                election_id=booth_list1.get(i).getElectionId();
-                lat=booth_list1.get(i).getEleLatitude();
-                log=booth_list1.get(i).getEleLongitude();
-                break;
-
-            case R.id.spinner_tehsil :
-                //Your Action Here.
-                tehsil=tehsils_list1.get(i).getTehsil_name();
-                blocks_list.clear();
-                blocks_list1.clear();
-//                callApigetblock(tehsil);
-
-                if (NetworkConnection.checkNetworkStatus(context) == true) {
-                    ApigetBlockList(tehsil);
-                }else {
-                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
-                    callApigetblock(tehsil);
-                }
-
-                break;
-
-            case R.id.spinner_block :
-                //Your Action Here.
-                block=blocks_list1.get(i).getBlock_name();
-                sectors_list.clear();
-                sectors_list1.clear();
-                String p= String.valueOf(i);
-                String keyy=block+tehsil+AC;
-//                callApigetsector(keyy);
-
-                if (NetworkConnection.checkNetworkStatus(context) == true) {
-                    ApigetSectorList(keyy);
-                }else {
-                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
-                    callApigetsector(keyy);
-                }
-                break;
-
-            case R.id.spinner_sector :
-                //Your Action Here.
-                sector=sectors_list1.get(i).getSector_name();
-                booth_list22.clear();
-                booth_list2.clear();
-//                callApigetbooth(sector+block);
-
-
-                if (NetworkConnection.checkNetworkStatus(context) == true) {
-                    Apigetboothlist2(sector+block);
-                }else {
-                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
-                    callApigetbooth(sector+block);
-                }
-
-                break;
-
-            case R.id.spinner_station2 :
-                //Your Action Here.
-                station2=booth_list2.get(i).getEleBoothName();
-                station_id2=booth_list2.get(i).getEleBoothno();
-                election_id2=booth_list2.get(i).getElectionId();
-                lat2=booth_list2.get(i).getEleLatitude();
-                log2=booth_list2.get(i).getEleLongitude();
-                break;
-        }
+//        switch(adapterView.getId()){
+//            case R.id.spinner_station :
+//                //Your Action Here.
+//
+//                station=booth_list1.get(i).getEleBoothName();
+//                station_id=booth_list1.get(i).getEleBoothno();
+//                election_id=booth_list1.get(i).getElectionId();
+//                lat=booth_list1.get(i).getEleLatitude();
+//                log=booth_list1.get(i).getEleLongitude();
+//                break;
+//
+//            case R.id.spinner_tehsil :
+//                //Your Action Here.
+//                tehsil=tehsils_list1.get(i).getTehsil_name();
+//                blocks_list.clear();
+//                blocks_list1.clear();
+////                callApigetblock(tehsil);
+//
+//                if (NetworkConnection.checkNetworkStatus(context) == true) {
+//                    ApigetBlockList(tehsil);
+//                }else {
+//                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+//                    callApigetblock(tehsil);
+//                }
+//
+//                break;
+//
+//            case R.id.spinner_block :
+//                //Your Action Here.
+//                block=blocks_list1.get(i).getBlock_name();
+//                sectors_list.clear();
+//                sectors_list1.clear();
+//                String p= String.valueOf(i);
+//                String keyy=block+tehsil+AC;
+////                callApigetsector(keyy);
+//
+//                if (NetworkConnection.checkNetworkStatus(context) == true) {
+//                    ApigetSectorList(keyy);
+//                }else {
+//                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+//                    callApigetsector(keyy);
+//                }
+//                break;
+//
+//            case R.id.spinner_sector :
+//                //Your Action Here.
+//                sector=sectors_list1.get(i).getSector_name();
+//                booth_list22.clear();
+//                booth_list2.clear();
+////                callApigetbooth(sector+block);
+//
+//
+//                if (NetworkConnection.checkNetworkStatus(context) == true) {
+//                    Apigetboothlist2(sector+block);
+//                }else {
+//                    Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+//                    callApigetbooth(sector+block);
+//                }
+//
+//                break;
+//
+//            case R.id.spinner_station2 :
+//                //Your Action Here.
+//                station2=booth_list2.get(i).getEleBoothName();
+//                station_id2=booth_list2.get(i).getEleBoothno();
+//                election_id2=booth_list2.get(i).getElectionId();
+//                lat2=booth_list2.get(i).getEleLatitude();
+//                log2=booth_list2.get(i).getEleLongitude();
+//                break;
+//        }
 
     }
 
 
-    private void callApigetbooth(String key) {
+    private void callApigetbooth(String key, TextView tv_station2) {
 
         String Json;
         Json = sessionParam.getJson(key,context);
@@ -674,7 +737,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
                     booth_list22.add(booth_list2.get(i).getEleBoothno()+"- "+booth_list2.get(i).getEleBoothName());
 //                       department_id.add(department_list1.get(i).getDepartment_id());
                 }
-
+                tv_station2.setText("");
 
                 adapter_booth2 = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list22);
                 adapter_booth2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -691,7 +754,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
 
     }
 
-    private void callApigetsector(String key) {
+    private void callApigetsector(String key, TextView tv_sector, TextView tv_station2) {
         String Json;
         Json = sessionParam.getJson(key,context);
         try {
@@ -710,6 +773,8 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
                     int j=i+1;
                     sectors_list.add(j+"- "+sectors_list1.get(i).getSector_name());
                 }
+                tv_sector.setText("");
+                tv_station2.setText("");
 
                 adapter_sector = new ArrayAdapter(context,android.R.layout.simple_spinner_item,sectors_list);
                 adapter_sector.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -726,7 +791,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
 
     }
 
-    private void callApigetblock(String key) {
+    private void callApigetblock(String key, TextView tv_block, TextView tv_sector, TextView tv_station2) {
 
         String Json;
         Json = sessionParam.getJson(key,context);
@@ -747,6 +812,9 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
                     int j=i+1;
                     blocks_list.add(j+"- "+blocks_list1.get(i).getBlock_name());
                 }
+                tv_block.setText("");
+                tv_sector.setText("");
+                tv_station2.setText("");
 
                 adapter_block = new ArrayAdapter(context,android.R.layout.simple_spinner_item,blocks_list);
                 adapter_block.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -777,8 +845,8 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
             @Override
             public void onSuccess(int requestCode, String Json, Object object) {
                 try {
-                    progressBar.setVisibility(View.GONE);
-                    lin_spl_layout.setVisibility(View.VISIBLE);
+//                    progressBar.setVisibility(View.GONE);
+//                    lin_spl_layout.setVisibility(View.VISIBLE);
                     JSONObject jsonObject = new JSONObject(Json);
                     sessionParam.saveJson(Json.toString(),AC+"station",context);
                     JSONArray jsonArray=jsonObject.optJSONArray("user");
@@ -841,33 +909,9 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (!mSearchableSpinner.isInsideSearchEditText(event)) {
-            mSearchableSpinner.hideEdit();
-        }
-//        if (!mSearchableSpinner1.isInsideSearchEditText(event)) {
-//            mSearchableSpinner1.hideEdit();
-//        }
-//        if (!mSearchableSpinner2.isInsideSearchEditText(event)) {
-//            mSearchableSpinner2.hideEdit();
-//        }
-        return super.onTouchEvent(event);
-    }
 
-    private OnItemSelectedListener mOnItemSelectedListener = new OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(View view, int position, long id) {
-            Toast.makeText(Act_polling_station.this, "Item on position " + position + " : " + mSimpleListAdapter.getItem(position) + " Selected", Toast.LENGTH_SHORT).show();
-        }
 
-        @Override
-        public void onNothingSelected() {
-            Toast.makeText(Act_polling_station.this, "Nothing Selected", Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    private void Apigetboothlist2(final String key){
+    private void Apigetboothlist2(final String key, final TextView tv_station2){
         baseRequest = new BaseRequest();
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
@@ -884,6 +928,9 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
                         booth_list22.add(booth_list2.get(i).getEleBoothno()+"- "+booth_list2.get(i).getEleBoothName());
 //                       department_id.add(department_list1.get(i).getDepartment_id());
                     }
+
+                    tv_station2.setText("");
+
                      adapter_booth2 = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list22);
                      adapter_booth2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                      spinner_station2.setAdapter(adapter_booth2);
@@ -1005,7 +1052,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
         baseRequest.callAPIGETData(1, remainingUrl2);
     }
 
-    private void ApigetBlockList(final String key){
+    private void ApigetBlockList(final String key, final TextView tv_block, final TextView tv_sector, final TextView tv_station2){
         baseRequest = new BaseRequest();
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
@@ -1022,6 +1069,10 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
                         int j=i+1;
                         blocks_list.add(j+"- "+blocks_list1.get(i).getBlock_name());
                     }
+
+                    tv_block.setText("");
+                    tv_sector.setText("");
+                    tv_station2.setText("");
 
                     adapter_block = new ArrayAdapter(context,android.R.layout.simple_spinner_item,blocks_list);
                     adapter_block.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -1095,7 +1146,7 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
     }
 
 
-    private void ApigetSectorList(final String key){
+    private void ApigetSectorList(final String key, String block, final TextView tv_sector, final TextView tv_station2){
         baseRequest = new BaseRequest();
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
@@ -1113,6 +1164,11 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
                         sectors_list.add(j+"- "+sectors_list1.get(i).getSector_name());
 //                       department_id.add(department_list1.get(i).getDepartment_id());
                     }
+
+                    tv_sector.setText("");
+                    tv_station2.setText("");
+
+
 //                    ArrayAdapter adapter_booth = new ArrayAdapter(context,android.R.layout.simple_spinner_item,booth_list);
 //                    adapter_booth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //                    spinner_station.setAdapter(adapter_booth);
@@ -1271,6 +1327,574 @@ public class Act_polling_station extends AppCompatActivity implements AdapterVie
 //            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 //        }
 //    }
+
+
+
+    public void sucessDialog1(Context context, final TextView tv_station1, final ArrayList<String> booth_list) {
+//        textView.setText(getResources().getString(R.string.txt_hello));
+
+        final Dialog mDialog=new Dialog(context);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);  //without extar space of title
+        mDialog.setContentView(R.layout.search_layout_dialog);
+        mDialog.setCanceledOnTouchOutside(true);
+
+        LinearLayoutManager linearLayoutManager;
+        RecyclerView rv;
+        TextView tv_retry;
+        EditText inputSearch;
+        final Ad_polling_station adapter;
+        rv= mDialog.findViewById(R.id.rv_list);
+        tv_retry= mDialog.findViewById(R.id.tv_retry);
+        inputSearch =  mDialog.findViewById(R.id.inputSearch);
+        TextView tv_title= mDialog.findViewById(R.id.tv_title);
+        tv_title.setText("Select Polling Station");
+
+        linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.setItemAnimator(new DefaultItemAnimator());
+        adapter=new Ad_polling_station(context,booth_list,tv_station1);
+        rv.setAdapter(adapter);
+
+        rv.addOnItemTouchListener(new RecyclerTouchListener(context, rv, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                int j=position+1;
+
+                if (members_list2.size()!=0){
+                    tv_station1.setText(members_list2.get(position));
+                    for (int i=0;i<booth_list1.size();i++){
+                        String name = booth_list1.get(i).getEleBoothno()+"- "+booth_list1.get(i).getEleBoothName();
+                        if (name.equals(members_list2.get(position))){
+                            post=i;
+                        }
+                    }
+                    members_list2.clear();
+                    station = booth_list1.get(post).getEleBoothName();
+                    station_id=booth_list1.get(post).getEleBoothno();
+                    election_id=booth_list1.get(post).getElectionId();
+                    lat=booth_list1.get(post).getEleLatitude();
+                    log=booth_list1.get(post).getEleLongitude();
+                    mDialog.cancel();
+
+                }else {
+                    tv_station1.setText(booth_list.get(position));
+                    station = booth_list1.get(position).getEleBoothName();
+                    station_id=booth_list1.get(position).getEleBoothno();
+                    election_id=booth_list1.get(position).getElectionId();
+                    lat=booth_list1.get(position).getEleLatitude();
+                    log=booth_list1.get(position).getEleLongitude();
+                    mDialog.cancel();
+                }
+//                tv_station1.setText(booth_list.get(position));
+//                station = booth_list1.get(position).getEleBoothName();
+//                station_id=booth_list1.get(position).getEleBoothno();
+//                election_id=booth_list1.get(position).getElectionId();
+//                lat=booth_list1.get(position).getEleLatitude();
+//                log=booth_list1.get(position).getEleLongitude();
+//                mDialog.cancel();
+
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+        inputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //after the change calling the method and passing the search input
+                filter(editable.toString(),adapter,booth_list);
+            }
+        });
+
+
+        tv_retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.cancel();
+
+
+            }
+        });
+        mDialog.show();
+
+
+    }
+
+    public void sucessDialog2(final Context context, final TextView tv_tehsil, final ArrayList<String> tehsils_list, final TextView tv_block, final TextView tv_sector, final TextView tv_station2) {
+//        textView.setText(getResources().getString(R.string.txt_hello));
+
+        final Dialog mDialog=new Dialog(context);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);  //without extar space of title
+        mDialog.setContentView(R.layout.search_layout_dialog);
+        mDialog.setCanceledOnTouchOutside(true);
+
+        LinearLayoutManager linearLayoutManager;
+        RecyclerView rv;
+        TextView tv_retry;
+        EditText inputSearch;
+        final Ad_polling_station adapter;
+        rv= mDialog.findViewById(R.id.rv_list);
+        tv_retry= mDialog.findViewById(R.id.tv_retry);
+        inputSearch =  mDialog.findViewById(R.id.inputSearch);
+        TextView tv_title= mDialog.findViewById(R.id.tv_title);
+        tv_title.setText("Select Tehsil");
+
+        linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.setItemAnimator(new DefaultItemAnimator());
+        adapter=new Ad_polling_station(context,tehsils_list, tv_tehsil);
+        rv.setAdapter(adapter);
+
+        final String tehsill = tehsil;
+        Log.e("TEHSIL>>>",tehsill);
+
+        rv.addOnItemTouchListener(new RecyclerTouchListener(context, rv, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                int j=position+1;
+
+                if (members_list2.size()!=0){
+                    tv_tehsil.setText(members_list2.get(position));
+                    for (int i=0;i<tehsils_list1.size();i++){
+                        String name = j+"- "+tehsils_list1.get(i).getTehsil_name();
+                        if (name.equals(members_list2.get(position))){
+                            post=i;
+                        }
+                    }
+                    members_list2.clear();
+                    tehsil=tehsils_list1.get(post).getTehsil_name();
+                    blocks_list.clear();
+                    blocks_list1.clear();
+                    if (NetworkConnection.checkNetworkStatus(context) == true) {
+                        ApigetBlockList(tehsil,tv_block,tv_sector,tv_station2);
+                    }else {
+                        Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                        callApigetblock(tehsil,tv_block,tv_sector,tv_station2);
+                    }
+                    mDialog.cancel();
+
+                }else {
+                    tv_tehsil.setText(tehsils_list.get(position));
+                    tehsil=tehsils_list1.get(position).getTehsil_name();
+                    blocks_list.clear();
+                    blocks_list1.clear();
+                    if (NetworkConnection.checkNetworkStatus(context) == true) {
+                        ApigetBlockList(tehsil,tv_block,tv_sector,tv_station2);
+                    }else {
+                        Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                        callApigetblock(tehsil,tv_block,tv_sector,tv_station2);
+                    }
+                    mDialog.cancel();
+                }
+
+
+
+
+
+
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+        inputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //after the change calling the method and passing the search input
+                filter(editable.toString(),adapter,tehsils_list);
+            }
+        });
+
+
+        tv_retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.cancel();
+
+
+            }
+        });
+        mDialog.show();
+
+
+    }
+
+    public void sucessDialog3(final Context context, final TextView tv_block, final ArrayList<String> blocks_list, final TextView tv_sector, final TextView tv_station2) {
+//        textView.setText(getResources().getString(R.string.txt_hello));
+
+        final Dialog mDialog=new Dialog(context);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);  //without extar space of title
+        mDialog.setContentView(R.layout.search_layout_dialog);
+        mDialog.setCanceledOnTouchOutside(true);
+
+        LinearLayoutManager linearLayoutManager;
+        RecyclerView rv;
+        TextView tv_retry;
+        EditText inputSearch;
+        final Ad_polling_station adapter;
+        rv= mDialog.findViewById(R.id.rv_list);
+        tv_retry= mDialog.findViewById(R.id.tv_retry);
+        inputSearch =  mDialog.findViewById(R.id.inputSearch);
+        TextView tv_title= mDialog.findViewById(R.id.tv_title);
+        tv_title.setText("Select Block");
+
+        linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.setItemAnimator(new DefaultItemAnimator());
+
+        adapter=new Ad_polling_station(context, blocks_list, tv_block);
+        rv.setAdapter(adapter);
+
+        final String blockkk = block;
+        Log.e("BLOCK>>>",blockkk);
+
+
+        rv.addOnItemTouchListener(new RecyclerTouchListener(context, rv, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                int j=position+1;
+
+                if (members_list2.size()!=0){
+                    tv_block.setText(members_list2.get(position));
+                    for (int i=0;i<blocks_list1.size();i++){
+                        String name = j+"- "+blocks_list1.get(i).getBlock_name();
+                        if (name.equals(members_list2.get(position))){
+                            post=i;
+                        }
+                    }
+                    members_list2.clear();
+                    block=blocks_list1.get(post).getBlock_name();
+                    sectors_list.clear();
+                    sectors_list1.clear();
+                    String p= String.valueOf(post);
+                    String keyy=block+tehsil+AC;
+//                callApigetsector(keyy);
+
+                    if (NetworkConnection.checkNetworkStatus(context) == true) {
+                        ApigetSectorList(keyy,block,tv_sector,tv_station2);
+                    }else {
+                        Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                        callApigetsector(keyy,tv_sector,tv_station2);
+                    }
+
+                    mDialog.cancel();
+
+                }else {
+                    tv_block.setText(blocks_list.get(position));
+                    block=blocks_list1.get(position).getBlock_name();
+                    sectors_list.clear();
+                    sectors_list1.clear();
+                    String p= String.valueOf(position);
+                    String keyy=block+tehsil+AC;
+//                callApigetsector(keyy);
+
+                    if (NetworkConnection.checkNetworkStatus(context) == true) {
+                        ApigetSectorList(keyy,block,tv_sector,tv_station2);
+                    }else {
+                        Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                        callApigetsector(keyy,tv_sector,tv_station2);
+                    }
+
+                    mDialog.cancel();
+                }
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+        inputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //after the change calling the method and passing the search input
+                filter(editable.toString(),adapter, Act_polling_station.this.blocks_list);
+            }
+        });
+
+
+        tv_retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.cancel();
+
+
+            }
+        });
+        mDialog.show();
+
+
+    }
+
+    public void sucessDialog4(final Context context, final TextView tv_sector, final ArrayList<String> sectors_list, final TextView tv_station2) {
+//        textView.setText(getResources().getString(R.string.txt_hello));
+
+        final Dialog mDialog=new Dialog(context);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);  //without extar space of title
+        mDialog.setContentView(R.layout.search_layout_dialog);
+        mDialog.setCanceledOnTouchOutside(true);
+
+        LinearLayoutManager linearLayoutManager;
+        RecyclerView rv;
+        TextView tv_retry;
+        EditText inputSearch;
+        final Ad_polling_station adapter;
+        rv= mDialog.findViewById(R.id.rv_list);
+        tv_retry= mDialog.findViewById(R.id.tv_retry);
+        inputSearch =  mDialog.findViewById(R.id.inputSearch);
+        TextView tv_title= mDialog.findViewById(R.id.tv_title);
+        tv_title.setText("Select Sector");
+
+        linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.setItemAnimator(new DefaultItemAnimator());
+        adapter=new Ad_polling_station(context,sectors_list, tv_sector);
+        rv.setAdapter(adapter);
+
+        rv.addOnItemTouchListener(new RecyclerTouchListener(context, rv, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                int j=position+1;
+
+                if (members_list2.size()!=0){
+                    tv_sector.setText(members_list2.get(position));
+                    for (int i=0;i<sectors_list1.size();i++){
+                        String name = j+"- "+sectors_list1.get(i).getSector_name();
+                        if (name.equals(members_list2.get(position))){
+                            post=i;
+                        }
+                    }
+                    members_list2.clear();
+                    sector=sectors_list1.get(post).getSector_name();
+                    booth_list22.clear();
+                    booth_list2.clear();
+//                callApigetbooth(sector+block);
+
+
+                    if (NetworkConnection.checkNetworkStatus(context) == true) {
+                        Apigetboothlist2(sector+block,tv_station2);
+                    }else {
+                        Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                        callApigetbooth(sector+block,tv_station2);
+                    }
+                    mDialog.cancel();
+
+                }else {
+                    tv_sector.setText(sectors_list.get(position));
+                    sector=sectors_list1.get(position).getSector_name();
+                    booth_list22.clear();
+                    booth_list2.clear();
+//                callApigetbooth(sector+block);
+
+
+                    if (NetworkConnection.checkNetworkStatus(context) == true) {
+                        Apigetboothlist2(sector+block,tv_station2);
+                    }else {
+                        Snackbar.make(lin_spl_layout, "No internet connection", Snackbar.LENGTH_LONG).show();
+                        callApigetbooth(sector+block,tv_station2);
+                    }
+                    mDialog.cancel();
+                }
+
+
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+        inputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //after the change calling the method and passing the search input
+                filter(editable.toString(),adapter,sectors_list);
+            }
+        });
+
+
+        tv_retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.cancel();
+
+
+            }
+        });
+        mDialog.show();
+
+
+    }
+
+    public void sucessDialog5(Context context, final TextView tv_station2, final ArrayList<String> booth_list22) {
+//        textView.setText(getResources().getString(R.string.txt_hello));
+
+        final Dialog mDialog=new Dialog(context);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);  //without extar space of title
+        mDialog.setContentView(R.layout.search_layout_dialog);
+        mDialog.setCanceledOnTouchOutside(true);
+
+        LinearLayoutManager linearLayoutManager;
+        RecyclerView rv;
+        TextView tv_retry;
+        EditText inputSearch;
+        final Ad_polling_station adapter;
+        rv= mDialog.findViewById(R.id.rv_list);
+        tv_retry= mDialog.findViewById(R.id.tv_retry);
+        inputSearch =  mDialog.findViewById(R.id.inputSearch);
+        TextView tv_title= mDialog.findViewById(R.id.tv_title);
+        tv_title.setText("Select Polling Station");
+
+        linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        rv.setLayoutManager(linearLayoutManager);
+        rv.setItemAnimator(new DefaultItemAnimator());
+        adapter=new Ad_polling_station(context,booth_list22, tv_station2);
+        rv.setAdapter(adapter);
+
+        rv.addOnItemTouchListener(new RecyclerTouchListener(context, rv, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                int j=position+1;
+
+                if (members_list2.size()!=0){
+                    tv_station2.setText(members_list2.get(position));
+                    for (int i=0;i<booth_list2.size();i++){
+                        String name = booth_list2.get(i).getEleBoothno()+"- "+booth_list2.get(i).getEleBoothName();
+                        if (name.equals(members_list2.get(position))){
+                            post=i;
+                        }
+                    }
+                    members_list2.clear();
+                    station2 = booth_list2.get(post).getEleBoothName();
+                    station_id2=booth_list2.get(post).getEleBoothno();
+                    election_id2=booth_list2.get(post).getElectionId();
+                    lat2=booth_list2.get(post).getEleLatitude();
+                    log2=booth_list2.get(post).getEleLongitude();
+                    mDialog.cancel();
+
+                }else {
+                    tv_station2.setText(booth_list22.get(position));
+                    station2 = booth_list2.get(position).getEleBoothName();
+                    station_id2=booth_list2.get(position).getEleBoothno();
+                    election_id2=booth_list2.get(position).getElectionId();
+                    lat2=booth_list2.get(position).getEleLatitude();
+                    log2=booth_list2.get(position).getEleLongitude();
+                    mDialog.cancel();
+                }
+
+
+
+//                tv_station2.setText(booth_list22.get(position));
+//
+//                station2=booth_list2.get(position).getEleBoothName();
+//                station_id2=booth_list2.get(position).getEleBoothno();
+//                election_id2=booth_list2.get(position).getElectionId();
+//                lat2=booth_list2.get(position).getEleLatitude();
+//                log2=booth_list2.get(position).getEleLongitude();
+//                mDialog.cancel();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+        inputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //after the change calling the method and passing the search input
+                filter(editable.toString(),adapter,booth_list22);
+            }
+        });
+
+
+        tv_retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.cancel();
+
+
+            }
+        });
+        mDialog.show();
+
+
+    }
+
+
+
+    private void filter(String text, Ad_polling_station adapter, ArrayList<String> booth_list) {
+
+        members_list2.clear();
+        for (int i = 0; i<booth_list.size(); i++) {
+            if (booth_list.get(i).toLowerCase().contains(text.toLowerCase())) {
+                members_list2.add(booth_list.get(i));
+            }
+        }
+        adapter.filterList(members_list2);
+    }
 
 
 
